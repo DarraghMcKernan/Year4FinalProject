@@ -14,6 +14,7 @@
 
 #include "globals.h"
 #include "TileGrid.h"
+#include "Player.h"
 
 void main()
 {
@@ -28,6 +29,8 @@ void main()
 
 	TileGrid myTileGrid;
 	myTileGrid.init();
+	Player myPlayer;
+	myPlayer.init();
 
 	while (window.isOpen())
 	{
@@ -59,12 +62,16 @@ void main()
 				viewport.move(4, 0);
 			}
 
-			window.clear(sf::Color::Black);
+			window.clear(sf::Color(50,50,50));
 
 			window.setView(viewport);
 
 			myTileGrid.update();
+			myPlayer.setPosition(myTileGrid.currentPlayerTarget());
+			myPlayer.update();
+			
 			myTileGrid.render(window);
+			myPlayer.render(window);
 
 			window.display();
 
