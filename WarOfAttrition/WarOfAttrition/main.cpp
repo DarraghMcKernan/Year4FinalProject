@@ -19,6 +19,8 @@ void main()
 {
 	sf::RenderWindow window(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "War of Attrition");
 
+	sf::View viewport(sf::FloatRect((SCREEN_WIDTH / 2) - VIEWPORT_WIDTH/2, (SCREEN_HEIGHT / 2) - VIEWPORT_HEIGHT/2, VIEWPORT_WIDTH, VIEWPORT_HEIGHT));//center the viewport on the map
+
 	sf::Time timePerFrame = sf::seconds(1.0f / 60.0f);
 	sf::Time timeSinceLastUpdate = sf::Time::Zero;
 	sf::Clock clock;
@@ -40,7 +42,26 @@ void main()
 
 		if (timeSinceLastUpdate > timePerFrame)
 		{
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))//move viewport around the screen
+			{
+				viewport.move(0, -4 );
+			}
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) 
+			{
+				viewport.move(0, 4);
+			}
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+			{
+				viewport.move(-4, 0);
+			}
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) 
+			{
+				viewport.move(4, 0);
+			}
+
 			window.clear(sf::Color::Black);
+
+			window.setView(viewport);
 
 			myTileGrid.update();
 			myTileGrid.render(window);
