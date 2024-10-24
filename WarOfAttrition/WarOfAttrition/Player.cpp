@@ -25,7 +25,7 @@ void Player::update()
 	if (tempPlayer.getPosition() != targetPosition)
 	{
 		sf::Vector2f vectorToTarget = targetPosition - tempPlayer.getPosition();
-		float distance = sqrt((vectorToTarget.x * vectorToTarget.x) + (vectorToTarget.y, vectorToTarget.y));
+		float distance = sqrt((vectorToTarget.x * vectorToTarget.x) + (vectorToTarget.y* vectorToTarget.y));
 		vectorToTarget = { vectorToTarget.x / distance,vectorToTarget.y / distance };
 
 		if (distance < 1)//lock player to target once close enough
@@ -68,4 +68,5 @@ void Player::setPosition(int t_cellNum)
 	targetPosition = { (t_cellNum % TILE_COLUMNS) * TILE_SIZE, (t_cellNum / TILE_COLUMNS) * TILE_SIZE };//the tile that the player wants to move to
 	targetPosition = { targetPosition.x + (TILE_SIZE / 2) , targetPosition.y + (TILE_SIZE / 2) };//center the target on a tile
 	std::cout << "target X: " + std::to_string(targetPosition.x) + "    target Y:" + std::to_string(targetPosition.y) + "\n";//debugging
+	std::cout << "player X: " + std::to_string(tempPlayer.getPosition().x) + "    player Y:" + std::to_string(tempPlayer.getPosition().y) + "\n";//debugging
 }
