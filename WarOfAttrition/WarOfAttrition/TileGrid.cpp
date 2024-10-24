@@ -5,8 +5,8 @@ void TileGrid::init()
 	Tile newTile;
 	for (int index = 0; index < (TILE_ROWS * TILE_COLUMNS); index++)
 	{
-		tiles.push_back(newTile);
-		tiles[index].init({ (index % TILE_COLUMNS) * TILE_SIZE,(index / TILE_COLUMNS) * TILE_SIZE } , index);
+		tiles.push_back(newTile);//add new tile to list
+		tiles[index].init({ (index % TILE_COLUMNS) * TILE_SIZE,(index / TILE_COLUMNS) * TILE_SIZE } , index);//place new tile in position relative to its number
 	}
 }
 
@@ -26,11 +26,13 @@ void TileGrid::update()
 
 		int temp = row * TILE_COLUMNS + column;
 
-		if (temp > 0 || temp < (TILE_ROWS * TILE_COLUMNS))
+		if (temp > 0 || temp < (TILE_ROWS * TILE_COLUMNS))//ensure new tile is within the list
 		{
 			currentTile = temp;
 		}
-		tiles[currentTile].setTarget(true);
+		tiles[currentTile].setTarget(true);//update target
+
+		positionUpdated = true;//allow new position to be given to player
 
 		clickCooldown = 10;
 	}
@@ -50,5 +52,6 @@ void TileGrid::render(sf::RenderWindow& t_window)
 
 int TileGrid::currentPlayerTarget()
 {
+	std::cout << "mouse X: " + std::to_string(mousePosViewPort.x) + "    mouse Y:" + std::to_string(mousePosViewPort.y) + "\n";
 	return currentTile;
 }

@@ -13,6 +13,7 @@ public:
 private:
 	sf::CircleShape tempPlayer;
 
+	sf::Vector2f targetPosition;
 	sf::Text strengthValueText;
 	sf::Font font;
 

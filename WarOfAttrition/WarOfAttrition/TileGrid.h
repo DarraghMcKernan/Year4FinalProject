@@ -9,6 +9,8 @@ public:
 	void render(sf::RenderWindow& t_window);
 	int currentPlayerTarget();
 
+	bool positionUpdated = false;
+
 private:
 	std::vector<Tile> tiles;
 	sf::Vector2i mousePos;

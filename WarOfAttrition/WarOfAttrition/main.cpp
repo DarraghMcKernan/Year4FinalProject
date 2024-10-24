@@ -67,7 +67,11 @@ void main()
 			window.setView(viewport);
 
 			myTileGrid.update();
-			myPlayer.setPosition(myTileGrid.currentPlayerTarget());
+			if (myTileGrid.positionUpdated == true)
+			{
+				myPlayer.setPosition(myTileGrid.currentPlayerTarget());
+				myTileGrid.positionUpdated = false;
+			}
 			myPlayer.update();
 			
 			myTileGrid.render(window);
