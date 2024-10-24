@@ -15,6 +15,7 @@
 #include "globals.h"
 #include "TileGrid.h"
 #include "Player.h"
+#include "Enemy.h"
 
 void main()
 {
@@ -31,6 +32,8 @@ void main()
 	myTileGrid.init();
 	Player myPlayer;
 	myPlayer.init();
+	Enemy myEnemy;
+	myEnemy.init();
 
 	while (window.isOpen())
 	{
@@ -72,7 +75,7 @@ void main()
 				myTileGrid.findTargetedTile();
 				if (myTileGrid.positionUpdated == true)
 				{
-					myPlayer.setPosition(myTileGrid.currentPlayerTarget());
+					myPlayer.setTargetPosition(myTileGrid.currentPlayerTarget());
 					myTileGrid.positionUpdated = false;
 				}
 			}
@@ -82,9 +85,19 @@ void main()
 				myTileGrid.deactiveateTile();
 				myPlayer.arrivedAtTarget = false;
 			}
+			myEnemy.update();
+
+			if (myPlayer.getPlayerShape().getGlobalBounds().intersects(myEnemy.getEnemyShape().getGlobalBounds()))
+			{
+				int tempDamage = myPlayer.getStrength();
+				myPlayer.takeDamage(myEnemy.getStrength());
+				myEnemy.takeDamage(tempDamage);
+			}
+
 			
 			myTileGrid.render(window);
 			myPlayer.render(window);
+			myEnemy.render(window);
 
 			window.display();
 

@@ -8,7 +8,10 @@ public:
 	void update();
 	void render(sf::RenderWindow& t_window);
 	void takeDamage(int t_damage);
-	void setPosition(int t_cellNum);
+	void setTargetPosition(int t_cellNum);
+	int getStrength();
+	sf::CircleShape getPlayerShape();
+
 	bool playerActive = false;
 	bool arrivedAtTarget = false;
 

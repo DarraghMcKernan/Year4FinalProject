@@ -82,13 +82,23 @@ void Player::takeDamage(int t_damage)
 	{
 		strength = 0;
 	}
-	strengthValueText.setFont(font);
+	strengthValueText.setString(std::to_string(strength));
 }
 
-void Player::setPosition(int t_cellNum)
+void Player::setTargetPosition(int t_cellNum)
 {
 	targetPosition = { (t_cellNum % TILE_COLUMNS) * TILE_SIZE, (t_cellNum / TILE_COLUMNS) * TILE_SIZE };//the tile that the player wants to move to
 	targetPosition = { targetPosition.x + (TILE_SIZE / 2) , targetPosition.y + (TILE_SIZE / 2) };//center the target on a tile
 	//std::cout << "target X: " + std::to_string(targetPosition.x) + "    target Y:" + std::to_string(targetPosition.y) + "\n";//debugging
 	//std::cout << "player X: " + std::to_string(tempPlayer.getPosition().x) + "    player Y:" + std::to_string(tempPlayer.getPosition().y) + "\n";//debugging
+}
+
+int Player::getStrength()
+{
+	return strength;
+}
+
+sf::CircleShape Player::getPlayerShape()
+{
+	return tempPlayer;
 }
