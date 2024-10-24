@@ -44,8 +44,8 @@ void Player::update()
 		sf::Vector2f vectorToTarget = targetPosition - tempPlayer.getPosition();
 		float distance = sqrt((vectorToTarget.x * vectorToTarget.x) + (vectorToTarget.y* vectorToTarget.y));
 		vectorToTarget = { vectorToTarget.x / distance,vectorToTarget.y / distance };
-
-		if (distance < 1)//lock player to target once close enough
+		std::cout << std::to_string(distance) + "\n";
+		if (distance <= 2.1)//lock player to target once close enough
 		{
 			arrivedAtTarget = true;
 			playerActive = false;
