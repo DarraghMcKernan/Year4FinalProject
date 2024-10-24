@@ -12,13 +12,19 @@ void TileGrid::init()
 
 void TileGrid::update()
 {
+	
+}
+
+void TileGrid::findTargetedTile()
+{
 	if (clickCooldown > 0)
 	{
 		clickCooldown--;
 	}
 
-	if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && clickCooldown <= 0)
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && clickCooldown <= 0 && targetMoving == false)
 	{
+		targetMoving = true;
 		tiles[currentTile].setTarget(false);//unset previous target
 
 		int column = mousePosViewPort.x / TILE_SIZE;
@@ -36,7 +42,12 @@ void TileGrid::update()
 
 		clickCooldown = 10;
 	}
+}
 
+void TileGrid::deactiveateTile()
+{
+	targetMoving = false;
+	tiles[currentTile].setTarget(false);//unset previous target
 }
 
 void TileGrid::render(sf::RenderWindow& t_window)
@@ -52,6 +63,6 @@ void TileGrid::render(sf::RenderWindow& t_window)
 
 int TileGrid::currentPlayerTarget()
 {
-	std::cout << "mouse X: " + std::to_string(mousePosViewPort.x) + "    mouse Y:" + std::to_string(mousePosViewPort.y) + "\n";
+	//std::cout << "mouse X: " + std::to_string(mousePosViewPort.x) + "    mouse Y:" + std::to_string(mousePosViewPort.y) + "\n";
 	return currentTile;
 }

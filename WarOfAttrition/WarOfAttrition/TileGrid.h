@@ -7,9 +7,12 @@ public:
 	void init();
 	void update();
 	void render(sf::RenderWindow& t_window);
+	void findTargetedTile();
+	void deactiveateTile();
 	int currentPlayerTarget();
 
 	bool positionUpdated = false;
+	bool targetMoving = false;
 
 private:
 	std::vector<Tile> tiles;

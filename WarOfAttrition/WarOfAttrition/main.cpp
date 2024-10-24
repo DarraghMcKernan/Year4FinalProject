@@ -67,12 +67,21 @@ void main()
 			window.setView(viewport);
 
 			myTileGrid.update();
-			if (myTileGrid.positionUpdated == true)
+			if(myPlayer.playerActive == true)
 			{
-				myPlayer.setPosition(myTileGrid.currentPlayerTarget());
-				myTileGrid.positionUpdated = false;
+				myTileGrid.findTargetedTile();
+				if (myTileGrid.positionUpdated == true)
+				{
+					myPlayer.setPosition(myTileGrid.currentPlayerTarget());
+					myTileGrid.positionUpdated = false;
+				}
 			}
 			myPlayer.update();
+			if (myPlayer.arrivedAtTarget == true)
+			{
+				myTileGrid.deactiveateTile();
+				myPlayer.arrivedAtTarget = false;
+			}
 			
 			myTileGrid.render(window);
 			myPlayer.render(window);
