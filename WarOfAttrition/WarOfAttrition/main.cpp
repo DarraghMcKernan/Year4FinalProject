@@ -35,6 +35,8 @@ void main()
 	Enemy myEnemy;
 	myEnemy.init();
 
+	int enemyRandTimer = 600;
+
 	while (window.isOpen())
 	{
 		sf::Event event;
@@ -86,6 +88,12 @@ void main()
 				myPlayer.arrivedAtTarget = false;
 			}
 			myEnemy.update();
+			enemyRandTimer--;
+			if (enemyRandTimer < 0)
+			{
+				myEnemy.setTargetPos(rand() % (TILE_ROWS * TILE_COLUMNS));
+				enemyRandTimer = 600;
+			}
 
 			if (myPlayer.getPlayerShape().getGlobalBounds().intersects(myEnemy.getEnemyShape().getGlobalBounds()))
 			{

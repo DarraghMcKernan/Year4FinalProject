@@ -8,7 +8,7 @@ void Player::init()
 	}
 
 	tempPlayer.setRadius(20);
-	tempPlayer.setFillColor(sf::Color(255, 255, 255, 150));
+	tempPlayer.setFillColor(sf::Color(0, 0, 255, 150));
 	tempPlayer.setOutlineColor(sf::Color::Black);
 	tempPlayer.setOutlineThickness(1.5);
 	tempPlayer.setOrigin(tempPlayer.getRadius(),tempPlayer.getRadius());
@@ -39,7 +39,7 @@ void Player::update()
 		activeTimer = 20;
 	}
 
-	if (tempPlayer.getPosition() != targetPosition)
+	if (tempPlayer.getPosition() != targetPosition && strength > 0)
 	{
 		sf::Vector2f vectorToTarget = targetPosition - tempPlayer.getPosition();
 		float distance = sqrt((vectorToTarget.x * vectorToTarget.x) + (vectorToTarget.y* vectorToTarget.y));
@@ -49,13 +49,17 @@ void Player::update()
 		{
 			arrivedAtTarget = true;
 			playerActive = false;
-			tempPlayer.setFillColor(sf::Color(255, 255, 255, 150));
+			tempPlayer.setFillColor(sf::Color(0, 0, 255, 150));
 			tempPlayer.setPosition(targetPosition);
 			strengthValueText.setPosition((tempPlayer.getPosition().x - tempPlayer.getRadius() / 1.625), (tempPlayer.getPosition().y - tempPlayer.getRadius() / 1.625));
 		}
 		else
 		{
-			if (distance < 200)//prevent player from slowing too much
+			if (distance > 500)//cap speed
+			{
+				distance = 500;
+			}
+			else if (distance < 200)//prevent player from slowing too much
 			{
 				distance = 200;
 			}
