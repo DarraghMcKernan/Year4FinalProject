@@ -72,7 +72,7 @@ void main()
 			window.setView(viewport);
 
 			myTileGrid.update();
-			if(myPlayer.playerActive == true)
+			if(myPlayer.targetNeeded == true)
 			{
 				myTileGrid.findTargetedTile();
 				if (myTileGrid.positionUpdated == true)
@@ -88,19 +88,19 @@ void main()
 				myPlayer.arrivedAtTarget = false;
 			}
 			myEnemy.update();
-			enemyRandTimer--;
+			/*enemyRandTimer--;
 			if (enemyRandTimer < 0)
 			{
 				myEnemy.setTargetPos(rand() % (TILE_ROWS * TILE_COLUMNS));
 				enemyRandTimer = 600;
-			}
+			}*/
 
-			if (myPlayer.getPlayerShape().getGlobalBounds().intersects(myEnemy.getEnemyShape().getGlobalBounds()))
+			/*if (myPlayer.getPlayerShape().getGlobalBounds().intersects(myEnemy.getEnemyShape().getGlobalBounds()))
 			{
 				int tempDamage = myPlayer.getStrength();
 				myPlayer.takeDamage(myEnemy.getStrength());
 				myEnemy.takeDamage(tempDamage);
-			}
+			}*/
 
 			
 			myTileGrid.render(window);
