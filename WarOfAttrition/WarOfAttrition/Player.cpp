@@ -1,6 +1,6 @@
 #include "Player.h"
 
-void Player::init()
+void Player::init(int t_teamNum)
 {
 	if (!font.loadFromFile("ASSETS/FONTS/BebasNeue.otf"))
 	{
@@ -11,8 +11,9 @@ void Player::init()
 	for (int index = 0; index < playerSquadsCount; index++)
 	{
 		playersSquads.push_back(newSquad);
-		sf::Vector2f startPos = { ((150 + index) % TILE_COLUMNS) * TILE_SIZE, ((150 + index) / TILE_COLUMNS) * TILE_SIZE };
-		playersSquads[index].init(100 + (index * 25),startPos);
+		sf::Vector2f startPos = { ((150 + index) % TILE_COLUMNS) * TILE_SIZE, ((150 + index + t_teamNum) / TILE_COLUMNS) * TILE_SIZE };
+		startPos.y += t_teamNum * (TILE_SIZE * 3);
+		playersSquads[index].init(100,startPos,t_teamNum);
 	}
 }
 
@@ -68,4 +69,17 @@ void Player::setTargetPosition(int t_cellNum)
 			playersSquads[index].setTargetPosition(targetPosition);
 		}
 	}
+}
+
+int Player::collisionChecker(sf::CircleShape targetToCheck,int t_strength)
+{
+	for (int index = 0; index < playerSquadsCount; index++)
+	{
+		if (playersSquads[index].getTroopContainter().getGlobalBounds().intersects(targetToCheck.getGlobalBounds()))
+		{
+			playersSquads[index].setStrength(playersSquads[index].getStrength() - t_strength);
+			return playersSquads[index].getStrength() - t_strength;
+		}
+	}
+	return 0;
 }

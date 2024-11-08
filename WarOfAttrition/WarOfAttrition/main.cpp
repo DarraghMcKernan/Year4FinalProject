@@ -31,9 +31,15 @@ void main()
 	TileGrid myTileGrid;
 	myTileGrid.init();
 	Player myPlayer;
-	myPlayer.init();
-	Enemy myEnemy;
-	myEnemy.init();
+	myPlayer.init(0);
+	//Enemy myEnemy;
+	//myEnemy.init();
+
+	//multiplayer section
+	Player myPlayer2;//for multiplayer, player 2 is identical in function to player 1
+	myPlayer2.init(1);
+	int numOfPlayers = 2;
+	int whosTurn = 1;
 
 	int enemyRandTimer = 600;
 
@@ -66,28 +72,78 @@ void main()
 			{
 				viewport.move(4, 0);
 			}
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+			{
+				viewport.zoom(0.99);
+			}
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+			{
+				viewport.zoom(1.01);
+			}
+			/*if (event.type == sf::Event::MouseWheelScrolled)
+			{
+				if (event.mouseWheelScroll.delta > 0)
+				{
+					viewport.zoom(1.01);
+				}
+				if (event.mouseWheelScroll.delta < 0)
+				{
+					viewport.zoom(0.99);
+				}
+			}*/
 
 			window.clear(sf::Color(50,50,50));
 
 			window.setView(viewport);
 
 			myTileGrid.update();
-			if(myPlayer.targetNeeded == true)
+
+			if (whosTurn == 1)
 			{
-				myTileGrid.findTargetedTile();
-				if (myTileGrid.positionUpdated == true)
+				if (myPlayer.targetNeeded == true)
 				{
-					myPlayer.setTargetPosition(myTileGrid.currentPlayerTarget());
-					myTileGrid.positionUpdated = false;
+					myTileGrid.findTargetedTile();
+					if (myTileGrid.positionUpdated == true)
+					{
+						myPlayer.setTargetPosition(myTileGrid.currentPlayerTarget());
+						myTileGrid.positionUpdated = false;
+					}
+				}
+				myPlayer.update();
+				if (myPlayer.arrivedAtTarget == true)
+				{
+					myTileGrid.deactiveateTile();
+					myPlayer.arrivedAtTarget = false;
+					whosTurn++;
 				}
 			}
-			myPlayer.update();
-			if (myPlayer.arrivedAtTarget == true)
+			
+
+			if (whosTurn == 2)
 			{
-				myTileGrid.deactiveateTile();
-				myPlayer.arrivedAtTarget = false;
+				if (myPlayer2.targetNeeded == true)
+				{
+					myTileGrid.findTargetedTile();
+					if (myTileGrid.positionUpdated == true)
+					{
+						myPlayer2.setTargetPosition(myTileGrid.currentPlayerTarget());
+						myTileGrid.positionUpdated = false;
+					}
+				}
+				myPlayer2.update();
+				if (myPlayer2.arrivedAtTarget == true)
+				{
+					myTileGrid.deactiveateTile();
+					myPlayer2.arrivedAtTarget = false;
+					whosTurn++;
+					if (whosTurn > numOfPlayers)
+					{
+						whosTurn = 1;
+					}
+				}
 			}
-			myEnemy.update();
+			
+			//myEnemy.update();
 			/*enemyRandTimer--;
 			if (enemyRandTimer < 0)
 			{
@@ -105,7 +161,8 @@ void main()
 			
 			myTileGrid.render(window);
 			myPlayer.render(window);
-			myEnemy.render(window);
+			myPlayer2.render(window);
+			//myEnemy.render(window);
 
 			window.display();
 

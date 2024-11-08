@@ -5,10 +5,11 @@
 class Player
 {
 public:
-	void init();
+	void init(int t_teamNum);
 	void update();
 	void render(sf::RenderWindow& t_window);
-	void setTargetPosition(int t_cellNum);
+	void setTargetPosition(int t_cellNum);//assign the cell set in worldTile to the squad currently being assigned
+	int collisionChecker(sf::CircleShape targetToCheck,int t_strength);//return damage dealt if any
 
 	bool targetNeeded = false;
 	bool arrivedAtTarget = false;
