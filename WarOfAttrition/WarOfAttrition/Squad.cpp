@@ -5,10 +5,10 @@ void Squad::init(int t_squadStrength, sf::Vector2f t_startingPos,int t_teamNum)
 	squadStrength = t_squadStrength;
 	teamNum = t_teamNum;
 
-	if (!font.loadFromFile("ASSETS/FONTS/BebasNeue.otf"))
+	/*if (!font.loadFromFile("ASSETS/FONTS/BebasNeue.otf"))
 	{
 		std::cout << "Error loading BebasNeue.otf from file\n";
-	}
+	}*/
 
 	resetColour();
 
@@ -19,12 +19,12 @@ void Squad::init(int t_squadStrength, sf::Vector2f t_startingPos,int t_teamNum)
 	troopContainer.setPosition(t_startingPos.x - (TILE_SIZE / 2), t_startingPos.y - (TILE_SIZE / 2));//spawn player in the center of the map
 	targetPosition = troopContainer.getPosition();
 
-	debugStrengthDisplay.setFont(font);
-	debugStrengthDisplay.setString(std::to_string(squadStrength));
-	debugStrengthDisplay.setCharacterSize(100);//increase size and then downscale to prevent blurred text
-	debugStrengthDisplay.setFillColor(sf::Color::Black);
-	debugStrengthDisplay.setScale(0.2, 0.2);
-	debugStrengthDisplay.setPosition((troopContainer.getPosition().x - troopContainer.getRadius() / 1.625), (troopContainer.getPosition().y - troopContainer.getRadius() / 1.625));
+	//debugStrengthDisplay.setFont(font);
+	//debugStrengthDisplay.setString("test");
+	//debugStrengthDisplay.setCharacterSize(100);//increase size and then downscale to prevent blurred text
+	//debugStrengthDisplay.setFillColor(sf::Color::Black);
+	//debugStrengthDisplay.setScale(0.2, 0.2);
+	//debugStrengthDisplay.setPosition((troopContainer.getPosition().x - troopContainer.getRadius() / 1.625), (troopContainer.getPosition().y - troopContainer.getRadius() / 1.625));
 }
 
 void Squad::update()
@@ -40,7 +40,7 @@ void Squad::update()
 			if (distance <= 2.1)//lock player to target once close enough
 			{
 				troopContainer.setPosition(targetPosition);
-				debugStrengthDisplay.setPosition((troopContainer.getPosition().x - troopContainer.getRadius() / 1.625), (troopContainer.getPosition().y - troopContainer.getRadius() / 1.625));
+				//debugStrengthDisplay.setPosition((troopContainer.getPosition().x - troopContainer.getRadius() / 1.625), (troopContainer.getPosition().y - troopContainer.getRadius() / 1.625));
 				movementAllowed = false;
 				targetReached = true;
 				resetColour();
@@ -58,7 +58,7 @@ void Squad::update()
 				vectorToTarget = vectorToTarget * (distance / 100);//slow down as we get closer to the target
 
 				troopContainer.move(vectorToTarget);
-				debugStrengthDisplay.setPosition((troopContainer.getPosition().x - troopContainer.getRadius() / 1.625), (troopContainer.getPosition().y - troopContainer.getRadius() / 1.625));
+				//debugStrengthDisplay.setPosition((troopContainer.getPosition().x - troopContainer.getRadius() / 1.625), (troopContainer.getPosition().y - troopContainer.getRadius() / 1.625));
 			}
 		}
 	}

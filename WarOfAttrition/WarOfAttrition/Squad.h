@@ -23,6 +23,6 @@ private:
 	
 	int teamNum=0;
 	int squadStrength = 100;
-	sf::Text debugStrengthDisplay;
-	sf::Font font;
+	/*sf::Text debugStrengthDisplay;
+	sf::Font font;*/
 };

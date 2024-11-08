@@ -38,8 +38,41 @@ void main()
 	//multiplayer section
 	Player myPlayer2;//for multiplayer, player 2 is identical in function to player 1
 	myPlayer2.init(1);
-	int numOfPlayers = 2;
+
+	sf::View fixedWindow;
+	fixedWindow = window.getView();
+
+	Player myPlayer3;
+	myPlayer3.init(2);
+	Player myPlayer4;
+	myPlayer4.init(3);
+
+	int numOfPlayers = 4;
 	int whosTurn = 1;
+
+	sf::RectangleShape hudBacking;
+	hudBacking.setSize({ SCREEN_WIDTH,SCREEN_HEIGHT/ 5 });
+	hudBacking.setOrigin({ SCREEN_WIDTH / 2,(SCREEN_HEIGHT / 5) });
+	hudBacking.setPosition({ SCREEN_WIDTH/2,SCREEN_HEIGHT + (SCREEN_HEIGHT / 5)/2 });
+	hudBacking.setFillColor(sf::Color(200, 200, 200));
+	hudBacking.setOutlineColor(sf::Color::Black);
+	hudBacking.setOutlineThickness(5);
+	sf::Font font;
+	sf::Text playerTurnDisplay;
+
+	if (!font.loadFromFile("ASSETS/FONTS/BebasNeue.otf"))
+	{
+		std::cout << "Error loading BebasNeue.otf from file\n";
+	}
+
+	playerTurnDisplay.setFont(font);
+	playerTurnDisplay.setString("Player " + std::to_string(whosTurn) + "'s Turn");
+	playerTurnDisplay.setCharacterSize(100);//increase size and then downscale to prevent blurred text
+	playerTurnDisplay.setFillColor(sf::Color(0, 0, 255));
+	playerTurnDisplay.setOutlineThickness(2);
+	playerTurnDisplay.setScale(0.75, 0.75);
+	playerTurnDisplay.setOrigin(0, 10);
+	playerTurnDisplay.setPosition(0, SCREEN_HEIGHT - (SCREEN_HEIGHT / 5)/2);
 
 	int enemyRandTimer = 600;
 
@@ -115,6 +148,8 @@ void main()
 					myTileGrid.deactiveateTile();
 					myPlayer.arrivedAtTarget = false;
 					whosTurn++;
+					playerTurnDisplay.setFillColor(sf::Color(255, 0, 0));
+					playerTurnDisplay.setString("Player " + std::to_string(whosTurn) + "'s Turn");
 				}
 			}
 			
@@ -136,13 +171,66 @@ void main()
 					myTileGrid.deactiveateTile();
 					myPlayer2.arrivedAtTarget = false;
 					whosTurn++;
+					playerTurnDisplay.setFillColor(sf::Color(0, 255, 255));					
 					if (whosTurn > numOfPlayers)
 					{
 						whosTurn = 1;
 					}
+					playerTurnDisplay.setString("Player " + std::to_string(whosTurn) + "'s Turn");
 				}
 			}
 			
+			if (whosTurn == 3)
+			{
+				if (myPlayer3.targetNeeded == true)
+				{
+					myTileGrid.findTargetedTile();
+					if (myTileGrid.positionUpdated == true)
+					{
+						myPlayer3.setTargetPosition(myTileGrid.currentPlayerTarget());
+						myTileGrid.positionUpdated = false;
+					}
+				}
+				myPlayer3.update();
+				if (myPlayer3.arrivedAtTarget == true)
+				{
+					myTileGrid.deactiveateTile();
+					myPlayer3.arrivedAtTarget = false;
+					whosTurn++;
+					playerTurnDisplay.setFillColor(sf::Color(255, 0, 255));			
+					if (whosTurn > numOfPlayers)
+					{
+						whosTurn = 1;
+					}
+					playerTurnDisplay.setString("Player " + std::to_string(whosTurn) + "'s Turn");
+				}
+			}
+
+			if (whosTurn == 4)
+			{
+				if (myPlayer4.targetNeeded == true)
+				{
+					myTileGrid.findTargetedTile();
+					if (myTileGrid.positionUpdated == true)
+					{
+						myPlayer4.setTargetPosition(myTileGrid.currentPlayerTarget());
+						myTileGrid.positionUpdated = false;
+					}
+				}
+				myPlayer4.update();
+				if (myPlayer4.arrivedAtTarget == true)
+				{
+					myTileGrid.deactiveateTile();
+					myPlayer4.arrivedAtTarget = false;
+					whosTurn++;
+					playerTurnDisplay.setFillColor(sf::Color(0, 0, 255));
+					if (whosTurn > numOfPlayers)
+					{
+						whosTurn = 1;
+					}
+					playerTurnDisplay.setString("Player " + std::to_string(whosTurn) + "'s Turn");
+				}
+			}
 			//myEnemy.update();
 			/*enemyRandTimer--;
 			if (enemyRandTimer < 0)
@@ -162,7 +250,15 @@ void main()
 			myTileGrid.render(window);
 			myPlayer.render(window);
 			myPlayer2.render(window);
+
+			myPlayer3.render(window);
+			myPlayer4.render(window);
 			//myEnemy.render(window);
+
+			window.setView(fixedWindow);
+
+			window.draw(hudBacking);
+			window.draw(playerTurnDisplay);
 
 			window.display();
 

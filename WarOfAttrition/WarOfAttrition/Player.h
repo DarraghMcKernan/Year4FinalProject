@@ -16,10 +16,11 @@ public:
 
 private:
 	std::vector<Squad> playersSquads;
+	std::vector<sf::Text> playersSquadsStrenghts;
 	sf::CircleShape tempPlayer;
 	sf::Vector2f mousePos;
 	sf::Vector2f targetPosition;
-	sf::Text strengthValueText;
+	//sf::Text strengthValueText;
 	sf::Font font;
 
 	int playerSquadsCount = 4;

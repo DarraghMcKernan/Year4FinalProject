@@ -8,12 +8,21 @@ void Player::init(int t_teamNum)
 	}
 
 	Squad newSquad;
+	sf::Text newText;
 	for (int index = 0; index < playerSquadsCount; index++)
 	{
 		playersSquads.push_back(newSquad);
 		sf::Vector2f startPos = { ((150 + index) % TILE_COLUMNS) * TILE_SIZE, ((150 + index + t_teamNum) / TILE_COLUMNS) * TILE_SIZE };
 		startPos.y += t_teamNum * (TILE_SIZE * 3);
-		playersSquads[index].init(100,startPos,t_teamNum);
+		playersSquads[index].init(100 + (25*index), startPos, t_teamNum);
+
+		playersSquadsStrenghts.push_back(newText);
+		playersSquadsStrenghts[index].setFont(font);
+		playersSquadsStrenghts[index].setString(std::to_string(playersSquads[index].getStrength()));
+		playersSquadsStrenghts[index].setCharacterSize(100);//increase size and then downscale to prevent blurred text
+		playersSquadsStrenghts[index].setFillColor(sf::Color::Black);
+		playersSquadsStrenghts[index].setScale(0.2, 0.2);
+		playersSquadsStrenghts[index].setPosition((playersSquads[index].getTroopContainter().getPosition().x - playersSquads[index].getTroopContainter().getRadius() / 1.625), (playersSquads[index].getTroopContainter().getPosition().y - playersSquads[index].getTroopContainter().getRadius() / 1.625));
 	}
 }
 
@@ -42,6 +51,7 @@ void Player::update()
 			arrivedAtTarget = true;
 		}
 		playersSquads[index].update();
+		playersSquadsStrenghts[index].setPosition((playersSquads[index].getTroopContainter().getPosition().x - playersSquads[index].getTroopContainter().getRadius() / 1.625), (playersSquads[index].getTroopContainter().getPosition().y - playersSquads[index].getTroopContainter().getRadius() / 1.625));
 	}
 }
 
@@ -52,6 +62,7 @@ void Player::render(sf::RenderWindow& t_window)
 	for (int index = 0; index < playerSquadsCount; index++)
 	{
 		playersSquads[index].render(t_window);
+		t_window.draw(playersSquadsStrenghts[index]);
 	}
 }
 
