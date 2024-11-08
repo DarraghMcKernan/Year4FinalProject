@@ -9,21 +9,24 @@ public:
 	void update();
 	void render(sf::RenderWindow& t_window);
 	void setTargetPosition(int t_cellNum);//assign the cell set in worldTile to the squad currently being assigned
-	int collisionChecker(sf::CircleShape targetToCheck,int t_strength);//return damage dealt if any
+	int collisionCheckerDamage(sf::CircleShape targetToCheck,int t_strength);//return damage dealt if any
+	bool checkIfContained(sf::Vector2f t_pointToCheck);//check if given coordinates is on a tile shared by one of the squads
 
-	bool targetNeeded = false;
-	bool arrivedAtTarget = false;
+	bool targetNeeded = false;//do we need a target for a squad
+	bool arrivedAtTarget = false;//has the squad reached its target
 
 private:
-	std::vector<Squad> playersSquads;
-	std::vector<sf::Text> playersSquadsStrenghts;
-	sf::CircleShape tempPlayer;
+	std::vector<Squad> playersSquads;//vector to hold the players squads
+	std::vector<sf::Text> playersSquadsStrenghts;//used for debugging to display strengths on squads
+	sf::CircleShape tempPlayer;//used to represent the squad visually
 	sf::Vector2f mousePos;
-	sf::Vector2f targetPosition;
+	sf::Vector2f targetPosition;//position that the squad is to move to
+	sf::RectangleShape tileForColliding;//used to check the cell a squad is on regardless of its shape as this will be 1 tile big
 	//sf::Text strengthValueText;
 	sf::Font font;
 
-	int playerSquadsCount = 4;
-	int strength = 100;
-	int activeTargetTimer = 0;
+	int squadBeingControlled = -1;//which squad is allowed to move
+	int playerSquadsCount = 4;//how many squads does player have
+	int strength = 100;//how strong is this unit
+	int activeTargetTimer = 0;//a cooldown to prevent the player from trying to select the tile its on
 };

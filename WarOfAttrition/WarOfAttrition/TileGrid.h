@@ -10,6 +10,7 @@ public:
 	void findTargetedTile();
 	void deactiveateTile();
 	int currentPlayerTarget();
+	sf::Vector2f tileHoveredOver();
 
 	bool positionUpdated = false;
 	bool targetMoving = false;

@@ -136,9 +136,15 @@ void main()
 				if (myPlayer.targetNeeded == true)
 				{
 					myTileGrid.findTargetedTile();
-					if (myTileGrid.positionUpdated == true)
+					std::cout << myPlayer.checkIfContained(myTileGrid.tileHoveredOver()) << "\n";
+					if (myTileGrid.positionUpdated == true && myPlayer.checkIfContained(myTileGrid.tileHoveredOver()) == false)
 					{
 						myPlayer.setTargetPosition(myTileGrid.currentPlayerTarget());
+						myTileGrid.positionUpdated = false;
+					}
+					else
+					{
+						myTileGrid.deactiveateTile();
 						myTileGrid.positionUpdated = false;
 					}
 				}
@@ -159,9 +165,15 @@ void main()
 				if (myPlayer2.targetNeeded == true)
 				{
 					myTileGrid.findTargetedTile();
-					if (myTileGrid.positionUpdated == true)
+					std::cout << myPlayer2.checkIfContained(myTileGrid.tileHoveredOver()) << "\n";
+					if (myTileGrid.positionUpdated == true && myPlayer2.checkIfContained(myTileGrid.tileHoveredOver()) == false)
 					{
 						myPlayer2.setTargetPosition(myTileGrid.currentPlayerTarget());
+						myTileGrid.positionUpdated = false;
+					}
+					else
+					{
+						myTileGrid.deactiveateTile();
 						myTileGrid.positionUpdated = false;
 					}
 				}
@@ -185,9 +197,15 @@ void main()
 				if (myPlayer3.targetNeeded == true)
 				{
 					myTileGrid.findTargetedTile();
-					if (myTileGrid.positionUpdated == true)
+					std::cout << myPlayer3.checkIfContained(myTileGrid.tileHoveredOver()) << "\n";
+					if (myTileGrid.positionUpdated == true && myPlayer3.checkIfContained(myTileGrid.tileHoveredOver()) == false)
 					{
 						myPlayer3.setTargetPosition(myTileGrid.currentPlayerTarget());
+						myTileGrid.positionUpdated = false;
+					}
+					else
+					{
+						myTileGrid.deactiveateTile();
 						myTileGrid.positionUpdated = false;
 					}
 				}
@@ -211,9 +229,15 @@ void main()
 				if (myPlayer4.targetNeeded == true)
 				{
 					myTileGrid.findTargetedTile();
-					if (myTileGrid.positionUpdated == true)
+					std::cout << myPlayer4.checkIfContained(myTileGrid.tileHoveredOver()) << "\n";
+					if (myTileGrid.positionUpdated == true && myPlayer4.checkIfContained(myTileGrid.tileHoveredOver()) == false)
 					{
 						myPlayer4.setTargetPosition(myTileGrid.currentPlayerTarget());
+						myTileGrid.positionUpdated = false;
+					}
+					else
+					{
+						myTileGrid.deactiveateTile();
 						myTileGrid.positionUpdated = false;
 					}
 				}

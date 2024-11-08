@@ -66,3 +66,8 @@ int TileGrid::currentPlayerTarget()
 	//std::cout << "mouse X: " + std::to_string(mousePosViewPort.x) + "    mouse Y:" + std::to_string(mousePosViewPort.y) + "\n";
 	return currentTile;
 }
+
+sf::Vector2f TileGrid::tileHoveredOver()
+{
+	return mousePosViewPort;
+}

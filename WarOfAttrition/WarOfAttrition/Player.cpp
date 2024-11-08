@@ -24,6 +24,9 @@ void Player::init(int t_teamNum)
 		playersSquadsStrenghts[index].setScale(0.2, 0.2);
 		playersSquadsStrenghts[index].setPosition((playersSquads[index].getTroopContainter().getPosition().x - playersSquads[index].getTroopContainter().getRadius() / 1.625), (playersSquads[index].getTroopContainter().getPosition().y - playersSquads[index].getTroopContainter().getRadius() / 1.625));
 	}
+
+	tileForColliding.setSize(sf::Vector2f(TILE_SIZE +3, TILE_SIZE+3));//used for making sure player cant select a tile that its own squads are on
+	tileForColliding.setOrigin(sf::Vector2f(TILE_SIZE / 2, TILE_SIZE / 2));
 }
 
 void Player::update()
@@ -39,8 +42,9 @@ void Player::update()
 
 	for (int index = 0; index < playerSquadsCount; index++)
 	{
-		if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && playersSquads[index].getTroopContainter().getGlobalBounds().contains(mousePos) && activeTargetTimer == 0)
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && playersSquads[index].getTroopContainter().getGlobalBounds().contains(mousePos) && activeTargetTimer == 0 && squadBeingControlled == -1)
 		{
+			squadBeingControlled = index;
 			playersSquads[index].unlockMovement(true); 
 			activeTargetTimer = 30;
 			//targetNeeded = true;
@@ -49,6 +53,7 @@ void Player::update()
 		{
 			playersSquads[index].targetReached = false;
 			arrivedAtTarget = true;
+			squadBeingControlled = -1;
 		}
 		playersSquads[index].update();
 		playersSquadsStrenghts[index].setPosition((playersSquads[index].getTroopContainter().getPosition().x - playersSquads[index].getTroopContainter().getRadius() / 1.625), (playersSquads[index].getTroopContainter().getPosition().y - playersSquads[index].getTroopContainter().getRadius() / 1.625));
@@ -82,7 +87,7 @@ void Player::setTargetPosition(int t_cellNum)
 	}
 }
 
-int Player::collisionChecker(sf::CircleShape targetToCheck,int t_strength)
+int Player::collisionCheckerDamage(sf::CircleShape targetToCheck,int t_strength)
 {
 	for (int index = 0; index < playerSquadsCount; index++)
 	{
@@ -93,4 +98,17 @@ int Player::collisionChecker(sf::CircleShape targetToCheck,int t_strength)
 		}
 	}
 	return 0;
+}
+
+bool Player::checkIfContained(sf::Vector2f t_pointToCheck)
+{
+	for (int index = 0; index < playerSquadsCount; index++)
+	{
+		tileForColliding.setPosition(playersSquads[index].getTroopContainter().getPosition());
+		if (tileForColliding.getGlobalBounds().contains(t_pointToCheck))
+		{
+			return true;
+		}
+	}
+	return false;
 }
