@@ -32,6 +32,7 @@ private:
 	sf::RectangleShape hudBacking;//a temporary square to hold basic UI
 	sf::Font font;//default font
 	sf::Text playerTurnDisplay;//text to shows whos turn it is
+	sf::Text framerateText;
 
 	int whosTurn = 1;//used to keep track of which player currently gets to play
 };

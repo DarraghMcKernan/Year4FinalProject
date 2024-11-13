@@ -34,6 +34,8 @@ void GameManager::startGame()//setup variables needed before the game starts
 	playerTurnDisplay.setOrigin(0, 10);
 	playerTurnDisplay.setPosition(0, SCREEN_HEIGHT - (SCREEN_HEIGHT / 5) / 2);
 
+	framerateText.setFont(font);
+
 	updateLoop();
 }
 
@@ -44,18 +46,26 @@ void GameManager::updateLoop()
 	sf::View fixedWindow;
 	fixedWindow = window.getView();
 
+	int framerate = 0;
+	int frameCount = 0;
+	float elapsedTime = 0.0f;
+
 	while (window.isOpen())
 	{
-		sf::Event event;
-		while (window.pollEvent(event))
-		{
-			if (event.type == sf::Event::Closed)
-				window.close();
-		}
-
 		sf::Time deltaTime = clock.restart();
 		timeSinceLastUpdate += deltaTime;
 		timeSinceLastFixedUpdate += deltaTime;
+
+		//debugging - will end up as a setting later
+		frameCount++;//count how many frames have passed since last second
+		elapsedTime += deltaTime.asSeconds();
+		if (elapsedTime >= 1.0f)//if 1 second has passed
+		{
+			framerateText.setString(std::to_string(frameCount));
+			frameCount = 0;//reset the frames passed
+			elapsedTime = 0.0f;//reset time since last check
+		}
+		
 
 		displayClean(window, viewport);
 
@@ -175,6 +185,7 @@ void GameManager::displayHUD(sf::RenderWindow& t_window,sf::View& t_fixedWindow)
 
 	t_window.draw(hudBacking);
 	t_window.draw(playerTurnDisplay);
+	t_window.draw(framerateText);
 
 	t_window.display();
 }
