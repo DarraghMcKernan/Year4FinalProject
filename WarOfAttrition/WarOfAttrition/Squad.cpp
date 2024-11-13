@@ -36,11 +36,9 @@ void Squad::update()
 			sf::Vector2f vectorToTarget = targetPosition - troopContainer.getPosition();
 			float distance = sqrt((vectorToTarget.x * vectorToTarget.x) + (vectorToTarget.y * vectorToTarget.y));
 			vectorToTarget = { vectorToTarget.x / distance,vectorToTarget.y / distance };
-			std::cout << std::to_string(distance) + "\n";
 			if (distance <= 2.1)//lock player to target once close enough
 			{
 				troopContainer.setPosition(targetPosition);
-				//debugStrengthDisplay.setPosition((troopContainer.getPosition().x - troopContainer.getRadius() / 1.625), (troopContainer.getPosition().y - troopContainer.getRadius() / 1.625));
 				movementAllowed = false;
 				targetReached = true;
 				resetColour();
@@ -58,7 +56,6 @@ void Squad::update()
 				vectorToTarget = vectorToTarget * (distance / 100);//slow down as we get closer to the target
 
 				troopContainer.move(vectorToTarget);
-				//debugStrengthDisplay.setPosition((troopContainer.getPosition().x - troopContainer.getRadius() / 1.625), (troopContainer.getPosition().y - troopContainer.getRadius() / 1.625));
 			}
 		}
 	}
@@ -67,7 +64,6 @@ void Squad::update()
 void Squad::render(sf::RenderWindow& t_window)
 {
 	t_window.draw(troopContainer);
-	//t_window.draw(debugStrengthDisplay);
 }
 
 void Squad::unlockMovement(bool t_allowed)
