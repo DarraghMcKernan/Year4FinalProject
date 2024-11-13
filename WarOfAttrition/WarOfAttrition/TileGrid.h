@@ -5,7 +5,7 @@ class TileGrid
 {
 public:
 	void init();
-	void update();
+	void update(sf::Time& t_deltaTime);
 	void render(sf::RenderWindow& t_window);
 	void findTargetedTile();
 	void deactiveateTile();

@@ -6,7 +6,8 @@ class Player
 {
 public:
 	void init(int t_teamNum);
-	void update();
+	void update(sf::Time& t_deltaTime);
+	void fixedUpdate();
 	void render(sf::RenderWindow& t_window);
 	void setTargetPosition(int t_cellNum);//assign the cell set in worldTile to the squad currently being assigned
 	int collisionCheckerDamage(sf::CircleShape targetToCheck,int t_strength);//return damage dealt if any

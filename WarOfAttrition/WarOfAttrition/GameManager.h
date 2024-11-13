@@ -11,8 +11,8 @@ public:
 
 private:
 	void updateLoop();//the loop that manages the game, should always be running
-	void updatePlayers();//update all players
-	void userControls(sf::View& t_viewport);//handle all user inputs
+	void updatePlayers(sf::Time& t_deltaTime);//update all players
+	void userControls(sf::View& t_viewport,sf::Time& t_deltaTime);//handle all user inputs
 	void displayClean(sf::RenderWindow& t_window,sf::View& t_viewport);//reset the display
 	void display(sf::RenderWindow& t_window);//reneder all game elements
 	void displayHUD(sf::RenderWindow& t_window,sf::View& t_fixedWindow);//render all HUD elements
@@ -24,8 +24,9 @@ private:
 	Player player[MAX_PLAYERS];//create as many instances of player as is needed
 	TileGrid worldTiles;//create an instance of the world tiles
 
-	sf::Time timePerFrame;//used to limit fps to 60
+	sf::Time timePerFrame;
 	sf::Time timeSinceLastUpdate;
+	sf::Time timeSinceLastFixedUpdate;
 	sf::Clock clock;
 
 	sf::RectangleShape hudBacking;//a temporary square to hold basic UI

@@ -27,7 +27,7 @@ void Squad::init(int t_squadStrength, sf::Vector2f t_startingPos,int t_teamNum)
 	//debugStrengthDisplay.setPosition((troopContainer.getPosition().x - troopContainer.getRadius() / 1.625), (troopContainer.getPosition().y - troopContainer.getRadius() / 1.625));
 }
 
-void Squad::update()
+void Squad::update(sf::Time t_deltaTime)
 {
 	if (movementAllowed == true)
 	{
@@ -45,7 +45,7 @@ void Squad::update()
 			}
 			else
 			{
-				if (distance > 500)//cap speed
+				if (distance > 500)//artificially cap speed
 				{
 					distance = 500;
 				}
@@ -53,9 +53,9 @@ void Squad::update()
 				{
 					distance = 200;
 				}
-				vectorToTarget = vectorToTarget * (distance / 100);//slow down as we get closer to the target
+				vectorToTarget = vectorToTarget * (distance / moveSpeed);//slow down as we get closer to the target
 
-				troopContainer.move(vectorToTarget);
+				troopContainer.move((vectorToTarget.x * t_deltaTime.asSeconds()) * moveSpeed, (vectorToTarget.y * t_deltaTime.asSeconds())* moveSpeed);
 			}
 		}
 	}

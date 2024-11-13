@@ -22,24 +22,16 @@ void Player::init(int t_teamNum)
 		playersSquadsStrenghts[index].setCharacterSize(100);//increase size and then downscale to prevent blurred text
 		playersSquadsStrenghts[index].setFillColor(sf::Color::Black);
 		playersSquadsStrenghts[index].setScale(0.2, 0.2);
-		playersSquadsStrenghts[index].setPosition((playersSquads[index].getTroopContainter().getPosition().x - playersSquads[index].getTroopContainter().getRadius() / 1.625), (playersSquads[index].getTroopContainter().getPosition().y - playersSquads[index].getTroopContainter().getRadius() / 1.625));
+		playersSquadsStrenghts[index].setPosition((playersSquads[index].getTroopContainter().getPosition().x - playersSquads[index].getTroopContainter().getRadius() / 1.625)
+			, (playersSquads[index].getTroopContainter().getPosition().y - playersSquads[index].getTroopContainter().getRadius() / 1.625));
 	}
 
 	tileForColliding.setSize(sf::Vector2f(TILE_SIZE +3, TILE_SIZE+3));//used for making sure player cant select a tile that its own squads are on
 	tileForColliding.setOrigin(sf::Vector2f(TILE_SIZE / 2, TILE_SIZE / 2));
 }
 
-void Player::update()
+void Player::update(sf::Time& t_deltaTime)
 {
-	if (activeTargetTimer > 0)
-	{
-		if (activeTargetTimer == 1)
-		{
-			targetNeeded = true;
-		}
-		activeTargetTimer--;
-	}
-
 	for (int index = 0; index < playerSquadsCount; index++)
 	{
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && playersSquads[index].getTroopContainter().getGlobalBounds().contains(mousePos) && activeTargetTimer == 0 && squadBeingControlled == -1)
@@ -55,8 +47,21 @@ void Player::update()
 			arrivedAtTarget = true;
 			squadBeingControlled = -1;
 		}
-		playersSquads[index].update();
-		playersSquadsStrenghts[index].setPosition((playersSquads[index].getTroopContainter().getPosition().x - playersSquads[index].getTroopContainter().getRadius() / 1.625), (playersSquads[index].getTroopContainter().getPosition().y - playersSquads[index].getTroopContainter().getRadius() / 1.625));
+		playersSquads[index].update(t_deltaTime);
+		playersSquadsStrenghts[index].setPosition((playersSquads[index].getTroopContainter().getPosition().x - playersSquads[index].getTroopContainter().getRadius() / 1.625)
+			, (playersSquads[index].getTroopContainter().getPosition().y - playersSquads[index].getTroopContainter().getRadius() / 1.625));
+	}
+}
+
+void Player::fixedUpdate()
+{
+	if (activeTargetTimer > 0)
+	{
+		if (activeTargetTimer == 1)
+		{
+			targetNeeded = true;
+		}
+		activeTargetTimer--;
 	}
 }
 

@@ -4,6 +4,7 @@ void GameManager::startGame()//setup variables needed before the game starts
 {
 	timePerFrame = sf::seconds(1.0f / 60.0f);
 	timeSinceLastUpdate = sf::Time::Zero;
+	timeSinceLastFixedUpdate = sf::Time::Zero;
 	clock.restart();
 
 	worldTiles.init();
@@ -52,27 +53,34 @@ void GameManager::updateLoop()
 				window.close();
 		}
 
-		timeSinceLastUpdate += clock.restart();
+		sf::Time deltaTime = clock.restart();
+		timeSinceLastUpdate += deltaTime;
+		timeSinceLastFixedUpdate += deltaTime;
 
-		if (timeSinceLastUpdate > timePerFrame)
+		displayClean(window, viewport);
+
+		//worldTiles.update(deltaTime);
+
+		userControls(viewport,deltaTime);
+
+		updatePlayers(deltaTime);
+
+		display(window);
+		displayHUD(window, fixedWindow);
+
+		while (timeSinceLastFixedUpdate >= timePerFrame)//60fps cap for timers and collisions
 		{
-			displayClean(window, viewport);
-
-			worldTiles.update();
-
-			userControls(viewport);
-
-			updatePlayers();
-
-			display(window);
-			displayHUD(window, fixedWindow);
-
-			timeSinceLastUpdate = sf::Time::Zero;
+			for (int index = 0; index < MAX_PLAYERS; index++)
+			{
+				player[index].fixedUpdate();
+			}
+			handleCollisions();
+			timeSinceLastFixedUpdate -= timePerFrame;
 		}
 	}
 }
 
-void GameManager::updatePlayers()
+void GameManager::updatePlayers(sf::Time& t_deltaTime)
 {
 	for (int index = 0; index < MAX_PLAYERS; index++)
 	{
@@ -93,7 +101,7 @@ void GameManager::updatePlayers()
 					worldTiles.positionUpdated = false;
 				}
 			}
-			player[index].update();
+			player[index].update(t_deltaTime);
 			if (player[index].arrivedAtTarget == true)
 			{
 				worldTiles.deactiveateTile();
@@ -110,31 +118,39 @@ void GameManager::updatePlayers()
 	}
 }
 
-void GameManager::userControls(sf::View& t_viewport)
+void GameManager::userControls(sf::View& t_viewport,sf::Time& t_deltaTime)
 {
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))//move viewport around the screen
 	{
-		t_viewport.move(0, -4);
+		t_viewport.move(0, -400*t_deltaTime.asSeconds());
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
 	{
-		t_viewport.move(0, 4);
+		t_viewport.move(0, 400 * t_deltaTime.asSeconds());
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 	{
-		t_viewport.move(-4, 0);
+		t_viewport.move(-400 * t_deltaTime.asSeconds(), 0);
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 	{
-		t_viewport.move(4, 0);
+		t_viewport.move(400 * t_deltaTime.asSeconds(), 0);
 	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)&& sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))//fast zoom
 	{
 		t_viewport.zoom(0.99);
 	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))//standard zoom
+	{
+		t_viewport.zoom(0.999);
+	}
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) && sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
 	{
 		t_viewport.zoom(1.01);
+	}
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+	{
+		t_viewport.zoom(1.001);
 	}
 }
 

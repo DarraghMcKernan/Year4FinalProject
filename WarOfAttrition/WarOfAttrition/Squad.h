@@ -5,7 +5,7 @@ class Squad
 {
 public:
 	void init(int t_squadStrength,sf::Vector2f t_startingPos,int t_teamNum);
-	void update();
+	void update(sf::Time t_deltaTime);
 	void render(sf::RenderWindow& t_window);
 	void unlockMovement(bool t_allowed);
 	sf::CircleShape getTroopContainter();
@@ -21,6 +21,7 @@ private:
 
 	bool movementAllowed = false;
 	
+	int moveSpeed = 100;
 	int teamNum=0;
 	int squadStrength = 100;
 	/*sf::Text debugStrengthDisplay;
