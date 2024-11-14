@@ -10,6 +10,8 @@ public:
 	void setType(int t_type);//0 default, 1 wall
 	int getType();//0 default, 1 wall
 	bool tileSetAsTarget = false;
+	void clearTile();
+	void setHighlight();
 private:
 	int cellNumber = 0;
 	sf::RectangleShape cellShape;

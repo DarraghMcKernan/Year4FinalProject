@@ -25,4 +25,5 @@ private:
 
 	int currentTile = 0;
 	int clickCooldown = 0;
+	int lastCellHovered = 0;
 };

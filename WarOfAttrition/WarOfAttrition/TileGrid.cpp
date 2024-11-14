@@ -21,7 +21,13 @@ void TileGrid::init()
 
 void TileGrid::update(sf::Time& t_deltaTime)
 {
-	
+	tiles[lastCellHovered].clearTile();
+	int column = mousePosViewPort.x / TILE_SIZE;
+	int row = mousePosViewPort.y / TILE_SIZE;
+
+	lastCellHovered = row * TILE_COLUMNS + column;
+
+	tiles[lastCellHovered].setHighlight();
 }
 
 void TileGrid::findTargetedTile()

@@ -75,6 +75,8 @@ void GameManager::updateLoop()
 
 		updatePlayers(deltaTime);
 
+		worldTiles.update(deltaTime);
+
 		display(window);
 		displayHUD(window, fixedWindow);
 
