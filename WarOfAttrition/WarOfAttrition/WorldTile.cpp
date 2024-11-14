@@ -31,3 +31,14 @@ void Tile::setTarget(bool t_active)
 		cellShape.setFillColor(sf::Color(255, 0, 0, 100));
 	}
 }
+
+void Tile::setType(int t_type)
+{
+	tileType = t_type;
+	cellShape.setFillColor(sf::Color(0, 0, 0));
+}
+
+int Tile::getType()
+{
+	return tileType;
+}

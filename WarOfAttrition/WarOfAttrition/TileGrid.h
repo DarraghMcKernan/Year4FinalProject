@@ -12,12 +12,14 @@ public:
 	int currentPlayerTarget(int t_turnNum);
 	sf::Vector2f tileHoveredOver();
 	void resetTiles();
+	bool checkIfWall(int t_tileNum);
 
 	bool positionUpdated = false;
 	bool targetMoving = false;
 	int tilesSelected[MAX_MOVES_PER_TURN];
 private:
 	std::vector<Tile> tiles;
+	std::vector<int> tileSetAsWalls;
 	sf::Vector2i mousePos;
 	sf::Vector2f mousePosViewPort;
 

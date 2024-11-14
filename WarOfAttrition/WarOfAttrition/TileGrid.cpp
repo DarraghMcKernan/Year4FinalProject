@@ -8,6 +8,15 @@ void TileGrid::init()
 		tiles.push_back(newTile);//add new tile to list
 		tiles[index].init({ (index % TILE_COLUMNS) * TILE_SIZE,(index / TILE_COLUMNS) * TILE_SIZE } , index);//place new tile in position relative to its number
 	}
+	for (int index = 0; index < 5; index++)//would eventually be read from a file
+	{
+		tileSetAsWalls.push_back(105 + index);
+	}
+
+	for (int index = 0; index < tileSetAsWalls.size(); index++)
+	{
+		tiles[tileSetAsWalls.at(index)].setType(1);//1 is a wall type
+	}
 }
 
 void TileGrid::update(sf::Time& t_deltaTime)
@@ -36,7 +45,7 @@ void TileGrid::findTargetedTile()
 		{
 			for (int index = 0; index < MAX_MOVES_PER_TURN; index++)
 			{
-				if (temp == tilesSelected[index])//if any of the tiles are already taken
+				if (temp == tilesSelected[index] || checkIfWall(temp) == true)//if any of the tiles are already taken
 				{
 					tileInvalid++;
 				}
@@ -100,4 +109,16 @@ void TileGrid::resetTiles()
 	//	tiles[tilesSelected[index]].tileSetAsTarget = false;
 	//	tilesSelected[index] = 0;
 	//}
+}
+
+bool TileGrid::checkIfWall(int t_tileNum)
+{
+	for (int index = 0; index < tileSetAsWalls.size(); index++)
+	{
+		if (tiles[tileSetAsWalls.at(index)].getType() == 1 && tileSetAsWalls.at(index) == t_tileNum)
+		{
+			return true;
+		}
+	}
+	return false;
 }
