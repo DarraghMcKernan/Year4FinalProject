@@ -19,6 +19,13 @@ void GameManager::startGame()//setup variables needed before the game starts
 	hudBacking.setFillColor(sf::Color(200, 200, 200));
 	hudBacking.setOutlineColor(sf::Color::Black);
 	hudBacking.setOutlineThickness(5);
+
+	endTurnButton.setSize({ hudBacking.getSize().x / 6, hudBacking.getSize().y / 3 });
+	endTurnButton.setOrigin({ endTurnButton.getSize().x / 2 ,endTurnButton.getSize().y / 2 });
+	endTurnButton.setPosition({ SCREEN_WIDTH / 2,SCREEN_HEIGHT - (SCREEN_HEIGHT / 10) /2 });
+	endTurnButton.setFillColor(sf::Color(100, 200, 100));
+	endTurnButton.setOutlineColor(sf::Color::Black);
+	endTurnButton.setOutlineThickness(3);
 	
 	if (!font.loadFromFile("ASSETS/FONTS/BebasNeue.otf"))
 	{
@@ -27,12 +34,20 @@ void GameManager::startGame()//setup variables needed before the game starts
 
 	playerTurnDisplay.setFont(font);
 	playerTurnDisplay.setString("Player " + std::to_string(whosTurn) + "'s Turn");
-	playerTurnDisplay.setCharacterSize(100);//increase size and then downscale to prevent blurred text
+	playerTurnDisplay.setCharacterSize(60);//increase size and then downscale to prevent blurred text
 	playerTurnDisplay.setFillColor(sf::Color(0, 0, 255));
 	playerTurnDisplay.setOutlineThickness(2);
 	playerTurnDisplay.setScale(0.75, 0.75);
 	playerTurnDisplay.setOrigin(0, 10);
-	playerTurnDisplay.setPosition(0, SCREEN_HEIGHT - (SCREEN_HEIGHT / 5) / 2);
+	playerTurnDisplay.setPosition(SCREEN_WIDTH/50, SCREEN_HEIGHT - (SCREEN_HEIGHT / 6.5) / 2);
+
+	endTurnText.setFont(font);
+	endTurnText.setString("End Turn");
+	endTurnText.setCharacterSize(50);//increase size and then downscale to prevent blurred text
+	endTurnText.setFillColor(sf::Color(0, 0, 0));
+	endTurnText.setScale(0.75, 0.75);
+	endTurnText.setOrigin({ (endTurnText.getGlobalBounds().getSize().x / 2) + 15,(endTurnText.getGlobalBounds().getSize().y / 2) + 15 });
+	endTurnText.setPosition(endTurnButton.getPosition());
 
 	framerateText.setFont(font);
 
@@ -87,6 +102,7 @@ void GameManager::updateLoop()
 				player[index].fixedUpdate();
 			}
 			handleCollisions();
+			menuInteractions();
 			timeSinceLastFixedUpdate -= timePerFrame;
 		}
 	}
@@ -174,6 +190,7 @@ void GameManager::displayClean(sf::RenderWindow& t_window, sf::View& t_viewport)
 
 void GameManager::display(sf::RenderWindow& t_window)
 {
+	mousePos = sf::Mouse::getPosition(t_window);
 	worldTiles.render(t_window);
 	for (int index = 0; index < MAX_PLAYERS; index++)
 	{
@@ -186,7 +203,9 @@ void GameManager::displayHUD(sf::RenderWindow& t_window,sf::View& t_fixedWindow)
 	t_window.setView(t_fixedWindow);
 
 	t_window.draw(hudBacking);
+	t_window.draw(endTurnButton);
 	t_window.draw(playerTurnDisplay);
+	t_window.draw(endTurnText);
 	t_window.draw(framerateText);
 
 	t_window.display();
@@ -199,7 +218,21 @@ void GameManager::handleCollisions()
 
 void GameManager::menuInteractions()
 {
-
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && endTurnButton.getGlobalBounds().contains({ static_cast<float>(mousePos.x),static_cast<float>(mousePos.y) }))
+	{
+		endTurnButton.setFillColor(sf::Color(100, 150, 100));
+		clickTimer = 30;
+		player[whosTurn-1].attemptEndTurn();
+	}
+	clickTimer--;
+	if (clickTimer < 0)
+	{
+		clickTimer = 0;
+	}
+	if (clickTimer == 10)
+	{
+		endTurnButton.setFillColor(sf::Color(100, 200, 100));
+	}
 }
 
 void GameManager::setPlayerTurnColour()

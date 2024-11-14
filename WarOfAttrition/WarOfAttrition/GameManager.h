@@ -31,10 +31,14 @@ private:
 	sf::Clock clock;
 
 	sf::RectangleShape hudBacking;//a temporary square to hold basic UI
+	sf::RectangleShape endTurnButton;//button to allow player to end their turn
+	sf::Vector2i mousePos;
 	sf::Font font;//default font
 	sf::Text playerTurnDisplay;//text to shows whos turn it is
+	sf::Text endTurnText;//text to shows whos turn it is
 	sf::Text framerateText;
 
 	int whosTurn = 1;//used to keep track of which player currently gets to play
 	int currentTileSelected = 0;
+	int clickTimer = 0;
 };

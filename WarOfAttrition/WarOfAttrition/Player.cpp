@@ -62,7 +62,7 @@ void Player::update(sf::Time& t_deltaTime)
 			, (playersSquads[index].getTroopContainter().getPosition().y - playersSquads[index].getTroopContainter().getRadius() / 1.625));//used to move the unit strength text with the unit
 	}
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))//if space is pressed allow all squads to move
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) || endTurnActive == true)//if space is pressed allow all squads to move
 	{
 		for (int index = 0; index < playerSquadsCount; index++)
 		{
@@ -80,7 +80,7 @@ void Player::update(sf::Time& t_deltaTime)
 		}
 	}
 
-	if (checkIfAllMoved == playerSquadsCount)//if all squads that were allowed to move have moved
+	if (checkIfAllMoved == playerSquadsCount)//if all squads that were allowed to move have moved end turn
 	{
 		for (int index = 0; index < playerSquadsCount; index++)
 		{
@@ -90,11 +90,21 @@ void Player::update(sf::Time& t_deltaTime)
 		arrivedAtTarget = true;
 		turnEnded = false;
 		unitsMoved = 0;
+		timerForEnd = 0;
+		endTurnActive = false;
 	}
 }
 
 void Player::fixedUpdate()
 {
+	if (timerForEnd > 0)
+	{
+		timerForEnd--;
+		if (timerForEnd == 1)
+		{
+			endTurnActive = false;
+		}
+	}
 	if (activeTargetTimer > 0)
 	{
 		if (activeTargetTimer == 1)
@@ -154,4 +164,10 @@ bool Player::checkIfContained(sf::Vector2f t_pointToCheck)
 		}
 	}
 	return false;
+}
+
+void Player::attemptEndTurn()
+{
+	endTurnActive = true;
+	timerForEnd = 120;
 }
