@@ -34,4 +34,6 @@ private:
 	int playerSquadsCount = 4;//how many squads does player have
 	int strength = 100;//how strong is this unit
 	int activeTargetTimer = 0;//a cooldown to prevent the player from trying to select the tile its on
+
+	bool squadSet = false;
 };
