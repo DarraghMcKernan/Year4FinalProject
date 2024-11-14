@@ -25,4 +25,9 @@ void Tile::setTarget(bool t_active)
 	else {
 		cellShape.setFillColor(sf::Color(0, (cellNumber % TILE_COLUMNS) * 5, (cellNumber % TILE_COLUMNS) * 5, 200));
 	}
+
+	if (tileSetAsTarget == true)
+	{
+		cellShape.setFillColor(sf::Color(255, 0, 0, 100));
+	}
 }

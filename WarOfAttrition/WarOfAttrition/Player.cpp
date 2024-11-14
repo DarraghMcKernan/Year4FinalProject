@@ -62,10 +62,16 @@ void Player::update(sf::Time& t_deltaTime)
 	{
 		for (int index = 0; index < playerSquadsCount; index++)
 		{
-			if (playersSquads[index].movingAllowed() == true)
+			if (playersSquads[index].movingAllowed() == true && playersSquads[index].targetSet == true)
 			{
 				playersSquads[index].turnEnded = true;
 				turnEnded = true;
+			}
+			else if (playersSquads[index].movingAllowed() == true && playersSquads[index].targetSet != true)
+			{
+				playersSquads[index].unlockMovement(false);
+				playersSquads[index].targetReached = false;
+				playersSquads[index].resetColour();
 			}
 		}
 	}

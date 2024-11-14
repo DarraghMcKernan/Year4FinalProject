@@ -102,19 +102,19 @@ void GameManager::updatePlayers(sf::Time& t_deltaTime)
 				//std::cout << player[index].checkIfContained(worldTiles.tileHoveredOver()) << "\n";
 				if (worldTiles.positionUpdated == true && player[index].checkIfContained(worldTiles.tileHoveredOver()) == false)
 				{
-					player[index].setTargetPosition(worldTiles.currentPlayerTarget());
+					player[index].setTargetPosition(worldTiles.currentPlayerTarget(player[index].unitsMoved));
 					worldTiles.positionUpdated = false;
 				}
 				else
 				{
-					worldTiles.deactiveateTile();
+					//worldTiles.deactiveateTile();
 					worldTiles.positionUpdated = false;
 				}
 			}
 			player[index].update(t_deltaTime);
 			if (player[index].arrivedAtTarget == true)
 			{
-				worldTiles.deactiveateTile();
+				worldTiles.resetTiles();
 				player[index].arrivedAtTarget = false;
 				whosTurn++;
 				if (whosTurn > MAX_PLAYERS)

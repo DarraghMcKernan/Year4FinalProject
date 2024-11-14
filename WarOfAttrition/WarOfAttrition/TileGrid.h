@@ -9,7 +9,7 @@ public:
 	void render(sf::RenderWindow& t_window);
 	void findTargetedTile();
 	void deactiveateTile();
-	int currentPlayerTarget();
+	int currentPlayerTarget(int t_turnNum);
 	sf::Vector2f tileHoveredOver();
 	void resetTiles();
 

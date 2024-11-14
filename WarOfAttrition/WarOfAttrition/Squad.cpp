@@ -43,6 +43,7 @@ void Squad::update(sf::Time t_deltaTime)
 				targetReached = true;
 				resetColour();
 				turnEnded = false;
+				targetSet = false;
 			}
 			else
 			{
@@ -80,6 +81,7 @@ sf::CircleShape Squad::getTroopContainter()
 
 void Squad::setTargetPosition(sf::Vector2f t_targetPos)
 {
+	targetSet = true;
 	targetPosition = t_targetPos;
 }
 

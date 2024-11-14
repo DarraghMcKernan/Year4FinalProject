@@ -16,6 +16,7 @@ public:
 	int getStrength();
 	void setStrength(int t_strength);
 	bool turnEnded = false;
+	bool targetSet = false;
 private:
 	sf::CircleShape troopContainer;
 	sf::Vector2f targetPosition;
