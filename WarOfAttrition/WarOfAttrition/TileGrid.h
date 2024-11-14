@@ -11,10 +11,11 @@ public:
 	void deactiveateTile();
 	int currentPlayerTarget();
 	sf::Vector2f tileHoveredOver();
+	void resetTiles();
 
 	bool positionUpdated = false;
 	bool targetMoving = false;
-
+	int tilesSelected[MAX_MOVES_PER_TURN];
 private:
 	std::vector<Tile> tiles;
 	sf::Vector2i mousePos;

@@ -121,7 +121,7 @@ void GameManager::updatePlayers(sf::Time& t_deltaTime)
 				{
 					whosTurn = 1;
 				}
-				playerTurnDisplay.setFillColor(sf::Color(255, 0, 0));
+				setPlayerTurnColour();
 				playerTurnDisplay.setString("Player " + std::to_string(whosTurn) + "'s Turn");
 			}
 		}
@@ -198,4 +198,24 @@ void GameManager::handleCollisions()
 void GameManager::menuInteractions()
 {
 
+}
+
+void GameManager::setPlayerTurnColour()
+{
+	if (whosTurn == 1)
+	{
+		playerTurnDisplay.setFillColor(sf::Color(0, 0, 255));
+	}
+	else if (whosTurn == 2)
+	{
+		playerTurnDisplay.setFillColor(sf::Color(255, 0, 0));
+	}
+	else if (whosTurn == 3)
+	{
+		playerTurnDisplay.setFillColor(sf::Color(0, 255, 255));
+	}
+	else if (whosTurn == 4)
+	{
+		playerTurnDisplay.setFillColor(sf::Color(255, 0, 255));
+	}
 }

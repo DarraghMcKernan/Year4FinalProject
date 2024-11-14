@@ -12,3 +12,5 @@ const float TILE_SIZE = 50.0f;//define the size of the square tiles that make up
 
 const int TILE_ROWS = SCREEN_HEIGHT / TILE_SIZE;
 const int TILE_COLUMNS = SCREEN_WIDTH / TILE_SIZE;
+
+const int MAX_MOVES_PER_TURN = 3;

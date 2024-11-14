@@ -22,9 +22,8 @@ void TileGrid::findTargetedTile()
 		clickCooldown--;
 	}
 
-	if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && clickCooldown <= 0 && targetMoving == false)
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && clickCooldown <= 0)
 	{
-		targetMoving = true;
 		tiles[currentTile].setTarget(false);//unset previous target
 
 		int column = mousePosViewPort.x / TILE_SIZE;
@@ -46,7 +45,6 @@ void TileGrid::findTargetedTile()
 
 void TileGrid::deactiveateTile()
 {
-	targetMoving = false;
 	tiles[currentTile].setTarget(false);//unset previous target
 }
 
@@ -70,4 +68,9 @@ int TileGrid::currentPlayerTarget()
 sf::Vector2f TileGrid::tileHoveredOver()
 {
 	return mousePosViewPort;
+}
+
+void TileGrid::resetTiles()
+{
+
 }

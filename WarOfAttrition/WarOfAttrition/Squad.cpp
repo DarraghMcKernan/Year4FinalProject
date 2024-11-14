@@ -31,7 +31,7 @@ void Squad::update(sf::Time t_deltaTime)
 {
 	if (movementAllowed == true)
 	{
-		if (troopContainer.getPosition() != targetPosition && squadStrength > 0)
+		if (troopContainer.getPosition() != targetPosition && squadStrength > 0 && turnEnded == true)
 		{
 			sf::Vector2f vectorToTarget = targetPosition - troopContainer.getPosition();
 			float distance = sqrt((vectorToTarget.x * vectorToTarget.x) + (vectorToTarget.y * vectorToTarget.y));
@@ -42,6 +42,7 @@ void Squad::update(sf::Time t_deltaTime)
 				movementAllowed = false;
 				targetReached = true;
 				resetColour();
+				turnEnded = false;
 			}
 			else
 			{

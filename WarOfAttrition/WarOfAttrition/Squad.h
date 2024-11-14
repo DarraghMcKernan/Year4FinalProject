@@ -15,6 +15,7 @@ public:
 	void resetColour();
 	int getStrength();
 	void setStrength(int t_strength);
+	bool turnEnded = false;
 private:
 	sf::CircleShape troopContainer;
 	sf::Vector2f targetPosition;
@@ -24,6 +25,4 @@ private:
 	int moveSpeed = 100;
 	int teamNum=0;
 	int squadStrength = 100;
-	/*sf::Text debugStrengthDisplay;
-	sf::Font font;*/
 };

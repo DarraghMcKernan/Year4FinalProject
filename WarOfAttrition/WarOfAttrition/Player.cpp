@@ -32,24 +32,54 @@ void Player::init(int t_teamNum)
 
 void Player::update(sf::Time& t_deltaTime)
 {
+	int checkIfAllMoved = 0;
 	for (int index = 0; index < playerSquadsCount; index++)
 	{
-		if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && playersSquads[index].getTroopContainter().getGlobalBounds().contains(mousePos) && activeTargetTimer == 0 && squadBeingControlled == -1)
+		if (playersSquads[index].targetReached == true && turnEnded == true)//all have reached their targets
 		{
-			squadBeingControlled = index;
-			playersSquads[index].unlockMovement(true); 
-			activeTargetTimer = 30;
-			//targetNeeded = true;
+			checkIfAllMoved++;
 		}
-		if (playersSquads[index].targetReached == true)
+		else if (playersSquads[index].movingAllowed() == false && turnEnded == true)//if they have not been set to move at all ignore them
 		{
-			playersSquads[index].targetReached = false;
-			arrivedAtTarget = true;
-			squadBeingControlled = -1;
+			checkIfAllMoved++;
+		}
+
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && playersSquads[index].getTroopContainter().getGlobalBounds().contains(mousePos)
+			&& activeTargetTimer == 0 && turnEnded == false && unitsMoved < MAX_MOVES_PER_TURN)
+		{
+			unitsMoved++;
+			playersSquads[squadBeingControlled].resetColour();
+			squadBeingControlled = index;
+			playersSquads[index].unlockMovement(true);
+			activeTargetTimer = 10;
 		}
 		playersSquads[index].update(t_deltaTime);
 		playersSquadsStrenghts[index].setPosition((playersSquads[index].getTroopContainter().getPosition().x - playersSquads[index].getTroopContainter().getRadius() / 1.625)
-			, (playersSquads[index].getTroopContainter().getPosition().y - playersSquads[index].getTroopContainter().getRadius() / 1.625));
+			, (playersSquads[index].getTroopContainter().getPosition().y - playersSquads[index].getTroopContainter().getRadius() / 1.625));//used to move the unit strength text with the unit
+	}
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))//if space is pressed allow all squads to move
+	{
+		for (int index = 0; index < playerSquadsCount; index++)
+		{
+			if (playersSquads[index].movingAllowed() == true)
+			{
+				playersSquads[index].turnEnded = true;
+				turnEnded = true;
+			}
+		}
+	}
+
+	if (checkIfAllMoved == playerSquadsCount)//if all squads that were allowed to move have moved
+	{
+		for (int index = 0; index < playerSquadsCount; index++)
+		{
+			playersSquads[index].targetReached = false;
+		}
+		squadBeingControlled = 1;
+		arrivedAtTarget = true;
+		turnEnded = false;
+		unitsMoved = 0;
 	}
 }
 
@@ -83,11 +113,11 @@ void Player::setTargetPosition(int t_cellNum)
 	targetPosition = { (t_cellNum % TILE_COLUMNS) * TILE_SIZE, (t_cellNum / TILE_COLUMNS) * TILE_SIZE };//the tile that the player wants to move to
 	targetPosition = { targetPosition.x + (TILE_SIZE / 2) , targetPosition.y + (TILE_SIZE / 2) };//center the target on a tile
 
-	for (int index = 0; index < playerSquadsCount; index++)
+	//for (int index = 0; index < playerSquadsCount; index++)
 	{
-		if (playersSquads[index].movingAllowed() == true)
+		if (playersSquads[squadBeingControlled].movingAllowed() == true)
 		{
-			playersSquads[index].setTargetPosition(targetPosition);
+			playersSquads[squadBeingControlled].setTargetPosition(targetPosition);
 		}
 	}
 }

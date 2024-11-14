@@ -15,6 +15,10 @@ public:
 
 	bool targetNeeded = false;//do we need a target for a squad
 	bool arrivedAtTarget = false;//has the squad reached its target
+	int movementsPerTurn = 0;//how many units can the player move per turn
+	bool turnEnded = false;//used to show that the player has ended their turn
+	int squadTargetSet[MAX_MOVES_PER_TURN];
+	int unitsMoved = 0;
 
 private:
 	std::vector<Squad> playersSquads;//vector to hold the players squads
@@ -26,7 +30,7 @@ private:
 	//sf::Text strengthValueText;
 	sf::Font font;
 
-	int squadBeingControlled = -1;//which squad is allowed to move
+	int squadBeingControlled = 1;//which squad is allowed to move
 	int playerSquadsCount = 4;//how many squads does player have
 	int strength = 100;//how strong is this unit
 	int activeTargetTimer = 0;//a cooldown to prevent the player from trying to select the tile its on

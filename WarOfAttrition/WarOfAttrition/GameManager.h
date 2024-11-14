@@ -18,6 +18,7 @@ private:
 	void displayHUD(sf::RenderWindow& t_window,sf::View& t_fixedWindow);//render all HUD elements
 	void handleCollisions();//work out all collisions between any hitboxes
 	void menuInteractions();//handle all menu interactions
+	void setPlayerTurnColour();//set the text to the correct colour
 
 	static const int MAX_PLAYERS = 4;//maximum players in a game
 
@@ -35,4 +36,5 @@ private:
 	sf::Text framerateText;
 
 	int whosTurn = 1;//used to keep track of which player currently gets to play
+	int currentTileSelected = 0;
 };
