@@ -13,6 +13,7 @@ public:
 	int collisionCheckerDamage(sf::CircleShape targetToCheck,int t_strength);//return damage dealt if any
 	bool checkIfContained(sf::Vector2f t_pointToCheck);//check if given coordinates is on a tile shared by one of the squads
 	void attemptEndTurn();
+	bool squadDistanceValid(sf::Vector2f t_hoveredTile);
 
 	bool targetNeeded = false;//do we need a target for a squad
 	bool arrivedAtTarget = false;//has the squad reached its target
@@ -21,6 +22,7 @@ public:
 	int squadTargetSet[MAX_MOVES_PER_TURN];
 	int unitsMoved = 0;
 
+	sf::Vector2f getSquadPosition();
 private:
 	std::vector<Squad> playersSquads;//vector to hold the players squads
 	std::vector<sf::Text> playersSquadsStrenghts;//used for debugging to display strengths on squads

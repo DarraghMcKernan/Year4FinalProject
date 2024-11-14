@@ -114,11 +114,12 @@ void GameManager::updatePlayers(sf::Time& t_deltaTime)
 	{
 		if ((whosTurn - 1) == index)
 		{
+			worldTiles.hightlightTiles(player[index].squadDistanceValid(worldTiles.tileHoveredOver()));
 			if (player[index].targetNeeded == true)
 			{
 				worldTiles.findTargetedTile();
 				//std::cout << player[index].checkIfContained(worldTiles.tileHoveredOver()) << "\n";
-				if (worldTiles.positionUpdated == true && player[index].checkIfContained(worldTiles.tileHoveredOver()) == false)
+				if (worldTiles.positionUpdated == true && player[index].checkIfContained(worldTiles.mousePosViewport()) == false)
 				{
 					player[index].setTargetPosition(worldTiles.currentPlayerTarget(player[index].unitsMoved));
 					worldTiles.positionUpdated = false;

@@ -21,13 +21,18 @@ void TileGrid::init()
 
 void TileGrid::update(sf::Time& t_deltaTime)
 {
+	
+}
+
+void TileGrid::hightlightTiles(bool t_valid)
+{
 	tiles[lastCellHovered].clearTile();
 	int column = mousePosViewPort.x / TILE_SIZE;
 	int row = mousePosViewPort.y / TILE_SIZE;
 
 	lastCellHovered = row * TILE_COLUMNS + column;
 
-	tiles[lastCellHovered].setHighlight();
+	tiles[lastCellHovered].setHighlight(t_valid);
 }
 
 void TileGrid::findTargetedTile()
@@ -98,9 +103,22 @@ int TileGrid::currentPlayerTarget(int t_turnNum)
 	return currentTile;
 }
 
-sf::Vector2f TileGrid::tileHoveredOver()
+sf::Vector2f TileGrid::mousePosViewport()
 {
 	return mousePosViewPort;
+}
+
+sf::Vector2f TileGrid::tileHoveredOver()
+{
+	sf::Vector2f temp = mousePosViewport();
+	for (int index = 0; index < (TILE_ROWS * TILE_COLUMNS); index++)
+	{
+		if (tiles[index].getTileShape().getGlobalBounds().contains(temp))
+		{
+			return tiles[index].getTileShape().getPosition();
+		}
+	}
+	return sf::Vector2f(0,0);
 }
 
 void TileGrid::resetTiles()

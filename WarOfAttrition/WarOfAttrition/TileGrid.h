@@ -6,10 +6,12 @@ class TileGrid
 public:
 	void init();
 	void update(sf::Time& t_deltaTime);
+	void hightlightTiles(bool t_valid);
 	void render(sf::RenderWindow& t_window);
 	void findTargetedTile();
 	void deactiveateTile();
 	int currentPlayerTarget(int t_turnNum);
+	sf::Vector2f mousePosViewport();
 	sf::Vector2f tileHoveredOver();
 	void resetTiles();
 	bool checkIfWall(int t_tileNum);

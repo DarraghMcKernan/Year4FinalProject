@@ -171,3 +171,19 @@ void Player::attemptEndTurn()
 	endTurnActive = true;
 	timerForEnd = 120;
 }
+
+bool Player::squadDistanceValid(sf::Vector2f t_hoveredTile)
+{
+	sf::Vector2f temp = t_hoveredTile - getSquadPosition();
+	float distance = sqrt((temp.x * temp.x) + (temp.y * temp.y));
+	if (distance < (playersSquads[squadBeingControlled].maxMoveDistance + 2) * TILE_SIZE)
+	{
+		return true;
+	}
+	return false;
+}
+
+sf::Vector2f Player::getSquadPosition()
+{
+	return playersSquads.at(squadBeingControlled).getTroopContainter().getPosition();
+}

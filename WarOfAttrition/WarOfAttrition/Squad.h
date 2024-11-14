@@ -17,6 +17,7 @@ public:
 	void setStrength(int t_strength);
 	bool turnEnded = false;
 	bool targetSet = false;
+	int maxMoveDistance = 5;
 private:
 	sf::CircleShape troopContainer;
 	sf::Vector2f targetPosition;

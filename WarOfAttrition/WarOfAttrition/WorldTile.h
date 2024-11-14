@@ -11,9 +11,11 @@ public:
 	int getType();//0 default, 1 wall
 	bool tileSetAsTarget = false;
 	void clearTile();
-	void setHighlight();
+	void setHighlight(bool t_valid);
+
+	sf::RectangleShape getTileShape();
 private:
-	int cellNumber = 0;
-	sf::RectangleShape cellShape;
+	int tileNumber = 0;
+	sf::RectangleShape tileShape;
 	int tileType = 0;
 };
