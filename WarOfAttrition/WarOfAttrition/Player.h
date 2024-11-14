@@ -19,6 +19,7 @@ public:
 	bool arrivedAtTarget = false;//has the squad reached its target
 	int movementsPerTurn = 0;//how many units can the player move per turn
 	bool turnEnded = false;//used to show that the player has ended their turn
+	bool distanceOK = false;
 	int squadTargetSet[MAX_MOVES_PER_TURN];
 	int unitsMoved = 0;
 

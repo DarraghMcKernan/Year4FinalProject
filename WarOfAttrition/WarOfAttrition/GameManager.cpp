@@ -119,7 +119,7 @@ void GameManager::updatePlayers(sf::Time& t_deltaTime)
 			{
 				worldTiles.findTargetedTile();
 				//std::cout << player[index].checkIfContained(worldTiles.tileHoveredOver()) << "\n";
-				if (worldTiles.positionUpdated == true && player[index].checkIfContained(worldTiles.mousePosViewport()) == false)
+				if (worldTiles.positionUpdated == true && player[index].checkIfContained(worldTiles.mousePosViewport()) == false && player[index].distanceOK == true)
 				{
 					player[index].setTargetPosition(worldTiles.currentPlayerTarget(player[index].unitsMoved));
 					worldTiles.positionUpdated = false;
