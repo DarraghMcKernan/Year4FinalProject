@@ -1,6 +1,6 @@
 #include "Player.h"
 
-void Player::init(int t_teamNum)
+void Player::init(int t_teamNum, int t_unitType)
 {
 	if (!font.loadFromFile("ASSETS/FONTS/BebasNeue.otf"))
 	{
@@ -183,6 +183,11 @@ bool Player::squadDistanceValid(sf::Vector2f t_hoveredTile)
 		return true;
 	}
 	return false;
+}
+
+void Player::generateNewUnit(int t_teamNum, int t_unitType)
+{
+
 }
 
 sf::Vector2f Player::getSquadPosition()

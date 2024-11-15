@@ -5,7 +5,7 @@
 class Player
 {
 public:
-	void init(int t_teamNum);
+	void init(int t_teamNum, int t_unitType);
 	void update(sf::Time& t_deltaTime);
 	void fixedUpdate();
 	void render(sf::RenderWindow& t_window);
@@ -14,6 +14,7 @@ public:
 	bool checkIfContained(sf::Vector2f t_pointToCheck);//check if given coordinates is on a tile shared by one of the squads
 	void attemptEndTurn();
 	bool squadDistanceValid(sf::Vector2f t_hoveredTile);
+	void generateNewUnit(int t_teamNum, int t_unitType);
 
 	bool targetNeeded = false;//do we need a target for a squad
 	bool arrivedAtTarget = false;//has the squad reached its target
