@@ -10,7 +10,7 @@ void GameManager::startGame()//setup variables needed before the game starts
 	worldTiles.init();
 	for (int index = 0; index < MAX_PLAYERS; index++)
 	{
-		player[index].init(index);
+		player[index].init(index, 0);
 	}
 
 	hudBacking.setSize({ SCREEN_WIDTH,SCREEN_HEIGHT / 5 });//the HUD element that shows player turn
