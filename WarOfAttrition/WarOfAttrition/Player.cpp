@@ -62,7 +62,7 @@ void Player::update(sf::Time& t_deltaTime)
 			, (playersSquads[index].getTroopContainter().getPosition().y - playersSquads[index].getTroopContainter().getRadius() / 1.625));//used to move the unit strength text with the unit
 	}
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) || endTurnActive == true)//if space is pressed allow all squads to move
+	if (endTurnActive == true)//if space is pressed allow all squads to move
 	{
 		for (int index = 0; index < playerSquadsCount; index++)
 		{

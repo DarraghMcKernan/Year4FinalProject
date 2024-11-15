@@ -219,7 +219,7 @@ void GameManager::handleCollisions()
 
 void GameManager::menuInteractions()
 {
-	if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && endTurnButton.getGlobalBounds().contains({ static_cast<float>(mousePos.x),static_cast<float>(mousePos.y) }))
+	if ((sf::Mouse::isButtonPressed(sf::Mouse::Left) && endTurnButton.getGlobalBounds().contains({ static_cast<float>(mousePos.x),static_cast<float>(mousePos.y) })) || sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
 	{
 		endTurnButton.setFillColor(sf::Color(100, 150, 100));
 		clickTimer = 30;
