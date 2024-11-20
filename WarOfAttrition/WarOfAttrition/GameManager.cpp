@@ -147,7 +147,7 @@ void GameManager::updatePlayers(sf::Time& t_deltaTime)
 {
 	for (int index = 0; index < MAX_PLAYERS; index++)
 	{
-		if ((whosTurn - 1) == index)
+		if ((whosTurn - 1) == index && openCreateUnitMenu == false)
 		{
 			worldTiles.hightlightTiles(player[index].squadDistanceValid(worldTiles.tileHoveredOver()));
 			if (player[index].targetNeeded == true)
@@ -283,7 +283,6 @@ void GameManager::menuInteractions()
 		openUnitMenuButton.setFillColor(sf::Color(100, 100, 150));
 		clickTimer = 30;
 		openCreateUnitMenu = true;
-		//player[whosTurn - 1].generateNewUnit(whosTurn-1, 1, {100.0f,100.0f});
 	}
 	else if ((sf::Mouse::isButtonPressed(sf::Mouse::Left) && openUnitMenuButton.getGlobalBounds().contains({ static_cast<float>(mousePos.x),static_cast<float>(mousePos.y) })) && openCreateUnitMenu == true &&clickTimer == 0)
 	{

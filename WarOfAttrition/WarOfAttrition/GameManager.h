@@ -32,11 +32,11 @@ private:
 
 	sf::RectangleShape hudBacking;//a temporary square to hold basic UI
 	sf::RectangleShape endTurnButton;//button to allow player to end their turn
-	sf::RectangleShape openUnitMenuButton;
-	sf::RectangleShape unitMenuBacking;
-	sf::RectangleShape createDefaultUnit;
+	sf::RectangleShape openUnitMenuButton;//button that brings up the menu to create units
+	sf::RectangleShape unitMenuBacking;//just a background ui for the buttons to create units
+	sf::RectangleShape createDefaultUnit;//placeholder button to create the default unit type
 
-	sf::CircleShape unitPlacementHighlight;
+	sf::CircleShape unitPlacementHighlight;//a circular highlight to show where your placed unit will go
 
 	sf::Vector2i mousePos;
 	sf::Font font;//default font
@@ -49,6 +49,6 @@ private:
 	int currentTileSelected = 0;
 	int clickTimer = 0;
 
-	bool openCreateUnitMenu = false;
-	bool createUnitActive = false;
+	bool openCreateUnitMenu = false;//toggles the create unit menu
+	bool createUnitActive = false;//allows a unit to be created after a type is selected
 };
