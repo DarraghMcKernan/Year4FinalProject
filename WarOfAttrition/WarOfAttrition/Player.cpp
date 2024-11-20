@@ -58,8 +58,8 @@ void Player::update(sf::Time& t_deltaTime)
 			activeTargetTimer = 10;
 		}
 		playersSquads[index].update(t_deltaTime);
-		playersSquadsStrenghts[index].setPosition((playersSquads[index].getTroopContainter().getPosition().x - playersSquads[index].getTroopContainter().getRadius() / 1.625)
-			, (playersSquads[index].getTroopContainter().getPosition().y - playersSquads[index].getTroopContainter().getRadius() / 1.625));//used to move the unit strength text with the unit
+		//playersSquadsStrenghts[index].setPosition((playersSquads[index].getTroopContainter().getPosition().x - playersSquads[index].getTroopContainter().getRadius() / 1.625)
+		//	, (playersSquads[index].getTroopContainter().getPosition().y - playersSquads[index].getTroopContainter().getRadius() / 1.625));//used to move the unit strength text with the unit
 	}
 
 	if (endTurnActive == true)//if space is pressed allow all squads to move
@@ -122,7 +122,7 @@ void Player::render(sf::RenderWindow& t_window)
 	for (int index = 0; index < playerSquadsCount; index++)
 	{
 		playersSquads[index].render(t_window);
-		t_window.draw(playersSquadsStrenghts[index]);
+		//t_window.draw(playersSquadsStrenghts[index]);
 	}
 }
 
@@ -185,9 +185,17 @@ bool Player::squadDistanceValid(sf::Vector2f t_hoveredTile)
 	return false;
 }
 
-void Player::generateNewUnit(int t_teamNum, int t_unitType)
+void Player::generateNewUnit(int t_teamNum, int t_unitType, sf::Vector2f t_unitSpawnPos)
 {
+	Squad newSquad;
 
+	int strength = 100;//will be determined based on type
+	sf::Vector2f positionWithOffset = {t_unitSpawnPos.x + TILE_SIZE/2,t_unitSpawnPos.y + TILE_SIZE/2};
+	newSquad.init(strength, positionWithOffset, t_teamNum);
+
+	playersSquads.push_back(newSquad);
+
+	playerSquadsCount++;
 }
 
 sf::Vector2f Player::getSquadPosition()

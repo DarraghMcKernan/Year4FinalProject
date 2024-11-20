@@ -26,6 +26,33 @@ void GameManager::startGame()//setup variables needed before the game starts
 	endTurnButton.setFillColor(sf::Color(100, 200, 100));
 	endTurnButton.setOutlineColor(sf::Color::Black);
 	endTurnButton.setOutlineThickness(3);
+
+	openUnitMenuButton.setSize({ hudBacking.getSize().x / 6, hudBacking.getSize().y / 3 });
+	openUnitMenuButton.setOrigin({ openUnitMenuButton.getSize().x / 2 ,openUnitMenuButton.getSize().y / 2 });
+	openUnitMenuButton.setPosition({ SCREEN_WIDTH - (SCREEN_WIDTH / 10),SCREEN_HEIGHT - (SCREEN_HEIGHT / 10) / 2 });
+	openUnitMenuButton.setFillColor(sf::Color(100, 100, 200));
+	openUnitMenuButton.setOutlineColor(sf::Color::Black);
+	openUnitMenuButton.setOutlineThickness(3);
+
+	unitMenuBacking.setSize({ SCREEN_WIDTH/ 4, SCREEN_HEIGHT / 2 });
+	unitMenuBacking.setOrigin({ unitMenuBacking.getSize().x / 2 ,unitMenuBacking.getSize().y / 2 });
+	unitMenuBacking.setPosition({ SCREEN_WIDTH - (SCREEN_WIDTH / 7),SCREEN_HEIGHT - (SCREEN_HEIGHT / 2.65) });
+	unitMenuBacking.setFillColor(sf::Color(125, 125, 125));
+	unitMenuBacking.setOutlineColor(sf::Color::Black);
+	unitMenuBacking.setOutlineThickness(3);
+
+	createDefaultUnit.setSize({ SCREEN_WIDTH / 15, SCREEN_HEIGHT / 12 });
+	createDefaultUnit.setOrigin({ createDefaultUnit.getSize().x / 2 ,createDefaultUnit.getSize().y / 2 });
+	createDefaultUnit.setPosition({ unitMenuBacking.getPosition().x - unitMenuBacking.getSize().x/4,unitMenuBacking.getPosition().y - unitMenuBacking.getSize().y / 3 });
+	createDefaultUnit.setFillColor(sf::Color(200, 200, 100));
+	createDefaultUnit.setOutlineColor(sf::Color::Black);
+	createDefaultUnit.setOutlineThickness(3);
+
+	unitPlacementHighlight.setRadius(20);
+	unitPlacementHighlight.setOutlineColor(sf::Color::Green);
+	unitPlacementHighlight.setOutlineThickness(2);
+	unitPlacementHighlight.setOrigin(unitPlacementHighlight.getRadius(), unitPlacementHighlight.getRadius());
+	unitPlacementHighlight.setFillColor(sf::Color::Transparent);
 	
 	if (!font.loadFromFile("ASSETS/FONTS/BebasNeue.otf"))
 	{
@@ -48,6 +75,14 @@ void GameManager::startGame()//setup variables needed before the game starts
 	endTurnText.setScale(0.75, 0.75);
 	endTurnText.setOrigin({ (endTurnText.getGlobalBounds().getSize().x / 2) + 15,(endTurnText.getGlobalBounds().getSize().y / 2) + 15 });
 	endTurnText.setPosition(endTurnButton.getPosition());
+
+	createUnitText.setFont(font);
+	createUnitText.setString("Create Unit");
+	createUnitText.setCharacterSize(50);//increase size and then downscale to prevent blurred text
+	createUnitText.setFillColor(sf::Color(0, 0, 0));
+	createUnitText.setScale(0.75, 0.75);
+	createUnitText.setOrigin({ (endTurnText.getGlobalBounds().getSize().x / 2) +40,(endTurnText.getGlobalBounds().getSize().y / 2) + 15 });
+	createUnitText.setPosition(openUnitMenuButton.getPosition());
 
 	framerateText.setFont(font);
 
@@ -181,6 +216,11 @@ void GameManager::userControls(sf::View& t_viewport,sf::Time& t_deltaTime)
 	{
 		t_viewport.zoom(1.001);
 	}
+
+	if (createUnitActive == true)
+	{
+		unitPlacementHighlight.setPosition(worldTiles.tileHoveredOver());
+	}
 }
 
 void GameManager::displayClean(sf::RenderWindow& t_window, sf::View& t_viewport)
@@ -197,6 +237,11 @@ void GameManager::display(sf::RenderWindow& t_window)
 	{
 		player[index].render(t_window);
 	}
+
+	if (createUnitActive == true)
+	{
+		t_window.draw(unitPlacementHighlight);
+	}
 }
 
 void GameManager::displayHUD(sf::RenderWindow& t_window,sf::View& t_fixedWindow)
@@ -205,9 +250,17 @@ void GameManager::displayHUD(sf::RenderWindow& t_window,sf::View& t_fixedWindow)
 
 	t_window.draw(hudBacking);
 	t_window.draw(endTurnButton);
+	t_window.draw(openUnitMenuButton);
 	t_window.draw(playerTurnDisplay);
 	t_window.draw(endTurnText);
+	t_window.draw(createUnitText);
 	t_window.draw(framerateText);
+
+	if (openCreateUnitMenu == true)
+	{
+		t_window.draw(unitMenuBacking);
+		t_window.draw(createDefaultUnit);
+	}
 
 	t_window.display();
 }
@@ -219,12 +272,35 @@ void GameManager::handleCollisions()
 
 void GameManager::menuInteractions()
 {
-	if ((sf::Mouse::isButtonPressed(sf::Mouse::Left) && endTurnButton.getGlobalBounds().contains({ static_cast<float>(mousePos.x),static_cast<float>(mousePos.y) })) || sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+	if ((sf::Mouse::isButtonPressed(sf::Mouse::Left) && endTurnButton.getGlobalBounds().contains({ static_cast<float>(mousePos.x),static_cast<float>(mousePos.y) })) || sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && clickTimer == 0)
 	{
 		endTurnButton.setFillColor(sf::Color(100, 150, 100));
 		clickTimer = 30;
 		player[whosTurn-1].attemptEndTurn();
 	}
+	else if ((sf::Mouse::isButtonPressed(sf::Mouse::Left) && openUnitMenuButton.getGlobalBounds().contains({ static_cast<float>(mousePos.x),static_cast<float>(mousePos.y) })) && openCreateUnitMenu == false && clickTimer == 0)
+	{
+		openUnitMenuButton.setFillColor(sf::Color(100, 100, 150));
+		clickTimer = 30;
+		openCreateUnitMenu = true;
+		//player[whosTurn - 1].generateNewUnit(whosTurn-1, 1, {100.0f,100.0f});
+	}
+	else if ((sf::Mouse::isButtonPressed(sf::Mouse::Left) && openUnitMenuButton.getGlobalBounds().contains({ static_cast<float>(mousePos.x),static_cast<float>(mousePos.y) })) && openCreateUnitMenu == true &&clickTimer == 0)
+	{
+		openUnitMenuButton.setFillColor(sf::Color(100, 100, 150));
+		clickTimer = 30;
+		openCreateUnitMenu = false;
+	}
+	else if ((sf::Mouse::isButtonPressed(sf::Mouse::Left) && createDefaultUnit.getGlobalBounds().contains({ static_cast<float>(mousePos.x),static_cast<float>(mousePos.y) })) && openCreateUnitMenu == true && clickTimer == 0)
+	{
+		createUnitActive = true;
+	}
+	else if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && createUnitActive == true && clickTimer == 0)
+	{
+		player[whosTurn - 1].generateNewUnit(whosTurn - 1, 1, unitPlacementHighlight.getPosition());
+		createUnitActive = false;
+	}
+
 	clickTimer--;
 	if (clickTimer < 0)
 	{
@@ -233,6 +309,7 @@ void GameManager::menuInteractions()
 	if (clickTimer == 10)
 	{
 		endTurnButton.setFillColor(sf::Color(100, 200, 100));
+		openUnitMenuButton.setFillColor(sf::Color(100, 100, 200));
 	}
 }
 
