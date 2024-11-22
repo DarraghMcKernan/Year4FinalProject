@@ -35,6 +35,8 @@ private:
 	sf::RectangleShape openUnitMenuButton;//button that brings up the menu to create units
 	sf::RectangleShape unitMenuBacking;//just a background ui for the buttons to create units
 	sf::RectangleShape createDefaultUnit;//placeholder button to create the default unit type
+	sf::RectangleShape menuBackground;
+	sf::RectangleShape menuStartButton;
 
 	sf::CircleShape unitPlacementHighlight;//a circular highlight to show where your placed unit will go
 
@@ -43,6 +45,7 @@ private:
 	sf::Text playerTurnDisplay;//text to shows whos turn it is
 	sf::Text endTurnText;//text to shows whos turn it is
 	sf::Text createUnitText;//text to shows whos turn it is
+	sf::Text menuStartButtonText;
 	sf::Text framerateText;
 
 	int whosTurn = 1;//used to keep track of which player currently gets to play
@@ -51,4 +54,5 @@ private:
 
 	bool openCreateUnitMenu = false;//toggles the create unit menu
 	bool createUnitActive = false;//allows a unit to be created after a type is selected
+	bool menuOpen = true;
 };

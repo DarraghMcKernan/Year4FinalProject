@@ -48,6 +48,20 @@ void GameManager::startGame()//setup variables needed before the game starts
 	createDefaultUnit.setOutlineColor(sf::Color::Black);
 	createDefaultUnit.setOutlineThickness(3);
 
+	menuBackground.setFillColor(sf::Color::Black);
+	menuBackground.setSize({ SCREEN_WIDTH-10,SCREEN_HEIGHT-10 });
+	menuBackground.setOrigin({ menuBackground.getSize().x / 2,menuBackground.getSize().y / 2 });
+	menuBackground.setPosition({ (menuBackground.getSize().x / 2) + 5,(menuBackground.getSize().y / 2) + 5});
+	menuBackground.setOutlineColor(sf::Color(200, 200, 100));
+	menuBackground.setOutlineThickness(10);
+
+	menuStartButton.setFillColor(sf::Color(200, 200, 200));
+	menuStartButton.setSize({ SCREEN_WIDTH / 4,SCREEN_HEIGHT / 10 });
+	menuStartButton.setOrigin({ menuStartButton.getSize().x / 2,menuStartButton.getSize().y / 2 });
+	menuStartButton.setPosition({ SCREEN_WIDTH / 2,SCREEN_HEIGHT / 2});
+	menuStartButton.setOutlineColor(sf::Color(100, 250, 200));
+	menuStartButton.setOutlineThickness(3);
+
 	unitPlacementHighlight.setRadius(20);
 	unitPlacementHighlight.setOutlineColor(sf::Color::Green);
 	unitPlacementHighlight.setOutlineThickness(2);
@@ -83,6 +97,14 @@ void GameManager::startGame()//setup variables needed before the game starts
 	createUnitText.setScale(0.75, 0.75);
 	createUnitText.setOrigin({ (endTurnText.getGlobalBounds().getSize().x / 2) +40,(endTurnText.getGlobalBounds().getSize().y / 2) + 15 });
 	createUnitText.setPosition(openUnitMenuButton.getPosition());
+
+	menuStartButtonText.setFont(font);
+	menuStartButtonText.setString("Start Game");
+	menuStartButtonText.setCharacterSize(70);//increase size and then downscale to prevent blurred text
+	menuStartButtonText.setFillColor(sf::Color::Black);
+	menuStartButtonText.setScale(0.75, 0.75);
+	menuStartButtonText.setOrigin({ (menuStartButtonText.getGlobalBounds().getSize().x / 2)+30,(menuStartButtonText.getGlobalBounds().getSize().y / 2)+22});
+	menuStartButtonText.setPosition(menuStartButton.getPosition());
 
 	framerateText.setFont(font);
 
@@ -121,11 +143,14 @@ void GameManager::updateLoop()
 
 		//worldTiles.update(deltaTime);
 
-		userControls(viewport,deltaTime);
+		if (menuOpen == false)
+		{
+			userControls(viewport, deltaTime);
 
-		updatePlayers(deltaTime);
+			updatePlayers(deltaTime);
 
-		worldTiles.update(deltaTime);
+			worldTiles.update(deltaTime);
+		}
 
 		display(window);
 		displayHUD(window, fixedWindow);
@@ -262,6 +287,17 @@ void GameManager::displayHUD(sf::RenderWindow& t_window,sf::View& t_fixedWindow)
 		t_window.draw(createDefaultUnit);
 	}
 
+	if (menuOpen == true)
+	{
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && menuStartButton.getGlobalBounds().contains({ mousePos.x*1.0f,mousePos.y*1.0f }))
+		{
+			menuOpen = false;
+		}
+		t_window.draw(menuBackground);
+		t_window.draw(menuStartButton);
+		t_window.draw(menuStartButtonText);
+	}
+	
 	t_window.display();
 }
 
