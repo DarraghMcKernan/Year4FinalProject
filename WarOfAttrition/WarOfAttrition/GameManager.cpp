@@ -30,9 +30,16 @@ void GameManager::startGame()//setup variables needed before the game starts
 	openUnitMenuButton.setSize({ hudBacking.getSize().x / 6, hudBacking.getSize().y / 3 });
 	openUnitMenuButton.setOrigin({ openUnitMenuButton.getSize().x / 2 ,openUnitMenuButton.getSize().y / 2 });
 	openUnitMenuButton.setPosition({ SCREEN_WIDTH - (SCREEN_WIDTH / 10),SCREEN_HEIGHT - (SCREEN_HEIGHT / 10) / 2 });
-	openUnitMenuButton.setFillColor(sf::Color(100, 100, 200));
+	openUnitMenuButton.setFillColor(sf::Color(100, 200, 150));
 	openUnitMenuButton.setOutlineColor(sf::Color::Black);
 	openUnitMenuButton.setOutlineThickness(3);
+
+	openTowerMenuButton.setSize({ hudBacking.getSize().x / 6, hudBacking.getSize().y / 3 });
+	openTowerMenuButton.setOrigin({ openTowerMenuButton.getSize().x / 2 ,openTowerMenuButton.getSize().y / 2 });
+	openTowerMenuButton.setPosition({ SCREEN_WIDTH - (SCREEN_WIDTH / 3.5),SCREEN_HEIGHT - (SCREEN_HEIGHT / 10) / 2 });
+	openTowerMenuButton.setFillColor(sf::Color(100, 150, 200));
+	openTowerMenuButton.setOutlineColor(sf::Color::Black);
+	openTowerMenuButton.setOutlineThickness(3);
 
 	unitMenuBacking.setSize({ SCREEN_WIDTH/ 4, SCREEN_HEIGHT / 2 });
 	unitMenuBacking.setOrigin({ unitMenuBacking.getSize().x / 2 ,unitMenuBacking.getSize().y / 2 });
@@ -47,6 +54,13 @@ void GameManager::startGame()//setup variables needed before the game starts
 	createDefaultUnit.setFillColor(sf::Color(200, 200, 100));
 	createDefaultUnit.setOutlineColor(sf::Color::Black);
 	createDefaultUnit.setOutlineThickness(3);
+
+	createUnitOne.setSize({ SCREEN_WIDTH / 15, SCREEN_HEIGHT / 12 });
+	createUnitOne.setOrigin({ createUnitOne.getSize().x / 2 ,createUnitOne.getSize().y / 2 });
+	createUnitOne.setPosition({ unitMenuBacking.getPosition().x + unitMenuBacking.getSize().x / 4,unitMenuBacking.getPosition().y - unitMenuBacking.getSize().y / 3 });
+	createUnitOne.setFillColor(sf::Color(100, 200, 200));
+	createUnitOne.setOutlineColor(sf::Color::Black);
+	createUnitOne.setOutlineThickness(3);
 
 	menuBackground.setFillColor(sf::Color::Black);
 	menuBackground.setSize({ SCREEN_WIDTH-10,SCREEN_HEIGHT-10 });
@@ -276,6 +290,7 @@ void GameManager::displayHUD(sf::RenderWindow& t_window,sf::View& t_fixedWindow)
 	t_window.draw(hudBacking);
 	t_window.draw(endTurnButton);
 	t_window.draw(openUnitMenuButton);
+	t_window.draw(openTowerMenuButton);
 	t_window.draw(playerTurnDisplay);
 	t_window.draw(endTurnText);
 	t_window.draw(createUnitText);
@@ -285,6 +300,11 @@ void GameManager::displayHUD(sf::RenderWindow& t_window,sf::View& t_fixedWindow)
 	{
 		t_window.draw(unitMenuBacking);
 		t_window.draw(createDefaultUnit);
+		t_window.draw(createUnitOne);
+	}
+	if (openCreateTowerMenu == true)
+	{
+		t_window.draw(unitMenuBacking);
 	}
 
 	if (menuOpen == true)
@@ -316,15 +336,29 @@ void GameManager::menuInteractions()
 	}
 	else if ((sf::Mouse::isButtonPressed(sf::Mouse::Left) && openUnitMenuButton.getGlobalBounds().contains({ static_cast<float>(mousePos.x),static_cast<float>(mousePos.y) })) && openCreateUnitMenu == false && clickTimer == 0)
 	{
-		openUnitMenuButton.setFillColor(sf::Color(100, 100, 150));
+		openUnitMenuButton.setFillColor(sf::Color(100, 150, 100));
 		clickTimer = 30;
 		openCreateUnitMenu = true;
+		openCreateTowerMenu = false;
 	}
 	else if ((sf::Mouse::isButtonPressed(sf::Mouse::Left) && openUnitMenuButton.getGlobalBounds().contains({ static_cast<float>(mousePos.x),static_cast<float>(mousePos.y) })) && openCreateUnitMenu == true &&clickTimer == 0)
 	{
-		openUnitMenuButton.setFillColor(sf::Color(100, 100, 150));
+		openUnitMenuButton.setFillColor(sf::Color(100, 150, 100));
 		clickTimer = 30;
 		openCreateUnitMenu = false;
+	}
+	else if ((sf::Mouse::isButtonPressed(sf::Mouse::Left) && openTowerMenuButton.getGlobalBounds().contains({ static_cast<float>(mousePos.x),static_cast<float>(mousePos.y) })) && openCreateTowerMenu == false && clickTimer == 0)
+	{
+		openTowerMenuButton.setFillColor(sf::Color(100, 100, 150));
+		clickTimer = 30;
+		openCreateTowerMenu = true;
+		openCreateUnitMenu = false;
+	}
+	else if ((sf::Mouse::isButtonPressed(sf::Mouse::Left) && openTowerMenuButton.getGlobalBounds().contains({ static_cast<float>(mousePos.x),static_cast<float>(mousePos.y) })) && openCreateTowerMenu == true && clickTimer == 0)
+	{
+		openTowerMenuButton.setFillColor(sf::Color(100, 100, 150));
+		clickTimer = 30;
+		openCreateTowerMenu = false;
 	}
 	else if ((sf::Mouse::isButtonPressed(sf::Mouse::Left) && createDefaultUnit.getGlobalBounds().contains({ static_cast<float>(mousePos.x),static_cast<float>(mousePos.y) })) && openCreateUnitMenu == true && clickTimer == 0)
 	{
@@ -344,7 +378,8 @@ void GameManager::menuInteractions()
 	if (clickTimer == 10)
 	{
 		endTurnButton.setFillColor(sf::Color(100, 200, 100));
-		openUnitMenuButton.setFillColor(sf::Color(100, 100, 200));
+		openUnitMenuButton.setFillColor(sf::Color(100, 200, 150));
+		openTowerMenuButton.setFillColor(sf::Color(100, 150, 200));
 	}
 }
 

@@ -177,7 +177,7 @@ bool Player::squadDistanceValid(sf::Vector2f t_hoveredTile)
 	distanceOK = false;
 	sf::Vector2f temp = t_hoveredTile - getSquadPosition();
 	float distance = sqrt((temp.x * temp.x) + (temp.y * temp.y));
-	if (distance < (playersSquads[squadBeingControlled].maxMoveDistance + 2) * TILE_SIZE)
+	if (distance < (playersSquads[squadBeingControlled].maxMoveDistance) * TILE_SIZE)
 	{
 		distanceOK = true;
 		return true;

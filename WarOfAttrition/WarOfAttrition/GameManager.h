@@ -33,8 +33,10 @@ private:
 	sf::RectangleShape hudBacking;//a temporary square to hold basic UI
 	sf::RectangleShape endTurnButton;//button to allow player to end their turn
 	sf::RectangleShape openUnitMenuButton;//button that brings up the menu to create units
+	sf::RectangleShape openTowerMenuButton;
 	sf::RectangleShape unitMenuBacking;//just a background ui for the buttons to create units
 	sf::RectangleShape createDefaultUnit;//placeholder button to create the default unit type
+	sf::RectangleShape createUnitOne;
 	sf::RectangleShape menuBackground;
 	sf::RectangleShape menuStartButton;
 
@@ -43,8 +45,9 @@ private:
 	sf::Vector2i mousePos;
 	sf::Font font;//default font
 	sf::Text playerTurnDisplay;//text to shows whos turn it is
-	sf::Text endTurnText;//text to shows whos turn it is
-	sf::Text createUnitText;//text to shows whos turn it is
+	sf::Text endTurnText;
+	sf::Text createUnitText;
+	sf::Text createTowerText;
 	sf::Text menuStartButtonText;
 	sf::Text framerateText;
 
@@ -53,6 +56,8 @@ private:
 	int clickTimer = 0;
 
 	bool openCreateUnitMenu = false;//toggles the create unit menu
+	bool openCreateTowerMenu = false;//toggles the create unit menu
 	bool createUnitActive = false;//allows a unit to be created after a type is selected
+	bool createTowerActive = false;//allows a unit to be created after a type is selected
 	bool menuOpen = true;
 };
