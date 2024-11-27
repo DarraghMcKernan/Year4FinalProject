@@ -15,6 +15,8 @@ public:
 	void attemptEndTurn();
 	bool squadDistanceValid(sf::Vector2f t_hoveredTile);
 	void generateNewUnit(int t_teamNum, int t_unitType, sf::Vector2f unitSpawnPos);
+	void eliminateUnit(int t_num);
+	void turnActive();
 
 	bool targetNeeded = false;//do we need a target for a squad
 	bool arrivedAtTarget = false;//has the squad reached its target
@@ -24,16 +26,19 @@ public:
 	int squadTargetSet[MAX_MOVES_PER_TURN];
 	int unitsMoved = 0;
 
+	bool playerEliminated = false;
+
 	sf::Vector2f getSquadPosition();
 private:
 	std::vector<Squad> playersSquads;//vector to hold the players squads
 	std::vector<sf::Text> playersSquadsStrenghts;//used for debugging to display strengths on squads
-	sf::CircleShape tempPlayer;//used to represent the squad visually
+	std::vector<int> squadsThatMoved;
 	sf::Vector2f mousePos;
 	sf::Vector2f targetPosition;//position that the squad is to move to
 	sf::RectangleShape tileForColliding;//used to check the cell a squad is on regardless of its shape as this will be 1 tile big
 	//sf::Text strengthValueText;
 	sf::Font font;
+
 
 	int squadBeingControlled = 1;//which squad is allowed to move
 	int playerSquadsCount = 4;//how many squads does player have

@@ -5,26 +5,19 @@ void Squad::init(int t_squadStrength, sf::Vector2f t_startingPos,int t_teamNum)
 	squadStrength = t_squadStrength;
 	teamNum = t_teamNum;
 
-	/*if (!font.loadFromFile("ASSETS/FONTS/BebasNeue.otf"))
-	{
-		std::cout << "Error loading BebasNeue.otf from file\n";
-	}*/
-
 	resetColour();
 
-	troopContainer.setRadius(20);
+	troopContainer.setSize(sf::Vector2f(TILE_SIZE -5, TILE_SIZE - 5));
+	//troopContainer.setRotation(45);//can be used to have collision checks in all 9 surrounding squares or the 4 immediate squares
+
+	//troopContainer.setSize(sf::Vector2f(TILE_SIZE + 15, TILE_SIZE + 15));// used to expand the squad to allow for collision checks of surrounding cells
+	//troopContainer.setRotation(45);//can be used to have collision checks in all 9 surrounding squares or the 4 immediate squares
+
 	troopContainer.setOutlineColor(sf::Color::Black);
 	troopContainer.setOutlineThickness(1.5);
-	troopContainer.setOrigin(troopContainer.getRadius(), troopContainer.getRadius());
+	troopContainer.setOrigin(troopContainer.getSize().x/2, troopContainer.getSize().y/2);
 	troopContainer.setPosition(t_startingPos.x - (TILE_SIZE / 2), t_startingPos.y - (TILE_SIZE / 2));//spawn player in the center of the map
 	targetPosition = troopContainer.getPosition();
-
-	//debugStrengthDisplay.setFont(font);
-	//debugStrengthDisplay.setString("test");
-	//debugStrengthDisplay.setCharacterSize(100);//increase size and then downscale to prevent blurred text
-	//debugStrengthDisplay.setFillColor(sf::Color::Black);
-	//debugStrengthDisplay.setScale(0.2, 0.2);
-	//debugStrengthDisplay.setPosition((troopContainer.getPosition().x - troopContainer.getRadius() / 1.625), (troopContainer.getPosition().y - troopContainer.getRadius() / 1.625));
 }
 
 void Squad::update(sf::Time t_deltaTime)
@@ -74,7 +67,7 @@ void Squad::unlockMovement(bool t_allowed)
 	troopContainer.setFillColor(sf::Color(0, 255, 0, 150));
 }
 
-sf::CircleShape Squad::getTroopContainter()
+sf::RectangleShape Squad::getTroopContainter()
 {
 	return troopContainer;
 }
@@ -94,19 +87,19 @@ void Squad::resetColour()
 {
 	if (teamNum == 0)
 	{
-		troopContainer.setFillColor(sf::Color(0, 0, 255, 150));
+		troopContainer.setFillColor(sf::Color(0, 0, 255, 100));
 	}
 	if (teamNum == 1)
 	{
-		troopContainer.setFillColor(sf::Color(255, 0, 0, 150));
+		troopContainer.setFillColor(sf::Color(255, 0, 0, 100));
 	}
 	if (teamNum == 2)
 	{
-		troopContainer.setFillColor(sf::Color(0, 255, 255, 150));
+		troopContainer.setFillColor(sf::Color(0, 255, 255, 100));
 	}
 	if (teamNum == 3)
 	{
-		troopContainer.setFillColor(sf::Color(255, 0, 255, 150));
+		troopContainer.setFillColor(sf::Color(255, 0, 255, 100));
 	}
 }
 

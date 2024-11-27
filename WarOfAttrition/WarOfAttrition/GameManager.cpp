@@ -224,6 +224,7 @@ void GameManager::updatePlayers(sf::Time& t_deltaTime)
 				}
 				setPlayerTurnColour();
 				playerTurnDisplay.setString("Player " + std::to_string(whosTurn) + "'s Turn");
+				player[whosTurn-1].turnActive();
 			}
 		}
 	}
@@ -262,6 +263,12 @@ void GameManager::userControls(sf::View& t_viewport,sf::Time& t_deltaTime)
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
 	{
 		t_viewport.zoom(1.001);
+	}
+
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::N) && clickTimer == 0)//debug
+	{
+		clickTimer = 30;
+		player[1].eliminateUnit(1);
 	}
 
 	if (createUnitActive == true)

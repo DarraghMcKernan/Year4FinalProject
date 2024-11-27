@@ -8,7 +8,7 @@ public:
 	void update(sf::Time t_deltaTime);
 	void render(sf::RenderWindow& t_window);
 	void unlockMovement(bool t_allowed);
-	sf::CircleShape getTroopContainter();
+	sf::RectangleShape getTroopContainter();
 	void setTargetPosition(sf::Vector2f t_targetPos);
 	bool movingAllowed();
 	bool targetReached = false;
@@ -19,7 +19,7 @@ public:
 	bool targetSet = false;
 	int maxMoveDistance = 5;
 private:
-	sf::CircleShape troopContainer;
+	sf::RectangleShape troopContainer;
 	sf::Vector2f targetPosition;
 
 	bool movementAllowed = false;
