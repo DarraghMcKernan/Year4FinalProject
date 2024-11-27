@@ -135,7 +135,7 @@ void Player::setTargetPosition(int t_cellNum)
 {
 	squadSet = false;
 	targetNeeded = false;
-	//unitsMoved++;
+	squadsThatMoved.push_back(squadBeingControlled);
 
 	targetPosition = { (t_cellNum % TILE_COLUMNS) * TILE_SIZE, (t_cellNum / TILE_COLUMNS) * TILE_SIZE };//the tile that the player wants to move to
 	targetPosition = { targetPosition.x + (TILE_SIZE / 2) , targetPosition.y + (TILE_SIZE / 2) };//center the target on a tile
@@ -146,37 +146,35 @@ void Player::setTargetPosition(int t_cellNum)
 	}
 }
 
-int Player::collisionCheckerDamage(sf::CircleShape targetToCheck,int t_strength)
+int Player::collisionCheckerDamage(std::vector<sf::RectangleShape> targetToCheck,int t_strength)
 {
-	for (int index = 0; index < playerSquadsCount; index++)
+	for (int enemySquadsIndex = 0; enemySquadsIndex < targetToCheck.size(); enemySquadsIndex++)
 	{
-		if (playersSquads[index].getTroopContainter().getGlobalBounds().intersects(targetToCheck.getGlobalBounds()))
+		for (int index = 0; index < playerSquadsCount; index++)
 		{
-			if (t_strength < playersSquads[index].getStrength())
+			if (playersSquads[index].getTroopContainter().getGlobalBounds().intersects(targetToCheck[enemySquadsIndex].getGlobalBounds()))
 			{
-				int outcome = playersSquads[index].getStrength() - t_strength;
-				playersSquads[index].setStrength(outcome);
-				return t_strength;//lost the fight so is now 0
+				if (t_strength < playersSquads[index].getStrength())
+				{
+					int outcome = playersSquads[index].getStrength() - t_strength;
+					playersSquads[index].setStrength(outcome);
+					playersSquadsStrenghts[index].setString(std::to_string(playersSquads[index].getStrength()));
+					return t_strength;//lost the fight so is now 0
+				}
+				else if (t_strength > playersSquads[index].getStrength())
+				{
+					int outcome = t_strength - playersSquads[index].getStrength();
+					eliminateUnit(index);
+					return outcome;//won the fight but took damage
+				}
+				else {
+					eliminateUnit(index);//both lose as equal health -- might change to defenders advantage
+					return t_strength;
+				}
 			}
-			else if(t_strength > playersSquads[index].getStrength())
-			{
-				int outcome = t_strength - playersSquads[index].getStrength();
-				eliminateUnit(index);
-				return outcome;//won the fight but took damage
-			}
-			else {
-				eliminateUnit(index);//both lose as equal health -- might change to defenders advantage
-				return t_strength;
-			}
-			/*playersSquads[index].setStrength(playersSquads[index].getStrength() - t_strength);
-			if (playersSquads[index].getStrength() <= 0)
-			{
-				eliminateUnit(index);
-			}*/
-
-			//return playersSquads[index].getStrength() - t_strength;
 		}
 	}
+	
 	return 0;//no targets found no damage done
 }
 
@@ -238,6 +236,18 @@ void Player::eliminateUnit(int t_num)
 void Player::turnActive()
 {
 	squadsThatMoved.clear();
+}
+
+std::vector<sf::RectangleShape> Player::returnMovedSquads()
+{
+	std::vector<sf::RectangleShape> allMovedSquads;
+
+	for(int index = 0;index < squadsThatMoved.size();index++)
+	{
+		allMovedSquads.push_back(playersSquads[squadsThatMoved[index]].getTroopContainter());
+	}
+
+	return allMovedSquads;
 }
 
 sf::Vector2f Player::getSquadPosition()

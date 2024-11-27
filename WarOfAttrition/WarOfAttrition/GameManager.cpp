@@ -213,8 +213,19 @@ void GameManager::updatePlayers(sf::Time& t_deltaTime)
 				}
 			}
 			player[index].update(t_deltaTime);
-			if (player[index].arrivedAtTarget == true)
+			if (player[index].arrivedAtTarget == true)//if the players turn is over as all units have moved
 			{
+				for (int playersIndex = 0; playersIndex < MAX_PLAYERS; playersIndex++)
+				{
+					if (playersIndex != whosTurn - 1)
+					{
+						player[playersIndex].collisionCheckerDamage(player[whosTurn-1].returnMovedSquads(),90);//only hurts defending squad currently
+						//should be significantly more efficient to store all moved squads here then get all squads from enemies and compare them here before doing damage to each other
+						//trying to keep it self contained might have made this the most inefficient part of the game though it does only run between turns where performance drops would be negligable
+					}
+				}
+
+
 				worldTiles.resetTiles();
 				player[index].arrivedAtTarget = false;
 				whosTurn++;
