@@ -146,8 +146,10 @@ void Player::setTargetPosition(int t_cellNum)
 	}
 }
 
-int Player::collisionCheckerDamage(std::vector<sf::RectangleShape> targetToCheck,int t_strength)
+std::vector<int> Player::collisionCheckerDamage(std::vector<sf::RectangleShape> targetToCheck,int t_strength)
 {
+	std::vector<int> damageTaken;
+
 	for (int enemySquadsIndex = 0; enemySquadsIndex < targetToCheck.size(); enemySquadsIndex++)
 	{
 		for (int index = 0; index < playerSquadsCount; index++)
@@ -159,23 +161,26 @@ int Player::collisionCheckerDamage(std::vector<sf::RectangleShape> targetToCheck
 					int outcome = playersSquads[index].getStrength() - t_strength;
 					playersSquads[index].setStrength(outcome);
 					playersSquadsStrenghts[index].setString(std::to_string(playersSquads[index].getStrength()));
-					return t_strength;//lost the fight so is now 0
+					//return t_strength;//lost the fight so is now 0
+					damageTaken.push_back(t_strength);
 				}
 				else if (t_strength > playersSquads[index].getStrength())
 				{
 					int outcome = t_strength - playersSquads[index].getStrength();
 					eliminateUnit(index);
-					return outcome;//won the fight but took damage
+					//return outcome;//won the fight but took damage
+					damageTaken.push_back(outcome);
 				}
 				else {
 					eliminateUnit(index);//both lose as equal health -- might change to defenders advantage
-					return t_strength;
+					damageTaken.push_back(t_strength);
+					//return t_strength;
 				}
 			}
 		}
 	}
 	
-	return 0;//no targets found no damage done
+	return damageTaken;//no targets found no damage done
 }
 
 bool Player::checkIfContained(sf::Vector2f t_pointToCheck)
@@ -236,6 +241,20 @@ void Player::eliminateUnit(int t_num)
 void Player::turnActive()
 {
 	squadsThatMoved.clear();
+}
+
+void Player::dealDamage(std::vector<int> t_damage)
+{
+	for (int index = 0; index < t_damage.size(); index++)
+	{
+		int outcome = playersSquads[squadsThatMoved[index]].getStrength() - t_damage[index];
+		playersSquads[squadsThatMoved[index]].setStrength(outcome);
+		playersSquadsStrenghts[index].setString(std::to_string(playersSquads[index].getStrength()));
+		if (playersSquads[squadsThatMoved[index]].getStrength() <= 0)
+		{
+			eliminateUnit(squadsThatMoved[index]);
+		}
+	}
 }
 
 std::vector<sf::RectangleShape> Player::returnMovedSquads()

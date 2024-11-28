@@ -219,7 +219,10 @@ void GameManager::updatePlayers(sf::Time& t_deltaTime)
 				{
 					if (playersIndex != whosTurn - 1)
 					{
-						player[playersIndex].collisionCheckerDamage(player[whosTurn-1].returnMovedSquads(),90);//only hurts defending squad currently
+						std::vector<int> damageTaken = player[playersIndex].collisionCheckerDamage(player[whosTurn - 1].returnMovedSquads(), 90);//only hurts defending squad currently
+						
+						player[whosTurn-1].dealDamage(damageTaken);//this player needs to also take damage
+						//player[playersIndex]//go through each player and assign damage;
 						//should be significantly more efficient to store all moved squads here then get all squads from enemies and compare them here before doing damage to each other
 						//trying to keep it self contained might have made this the most inefficient part of the game though it does only run between turns where performance drops would be negligable
 					}

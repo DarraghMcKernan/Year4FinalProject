@@ -10,13 +10,14 @@ public:
 	void fixedUpdate();
 	void render(sf::RenderWindow& t_window);
 	void setTargetPosition(int t_cellNum);//assign the cell set in worldTile to the squad currently being assigned
-	int collisionCheckerDamage(std::vector<sf::RectangleShape> targetToCheck,int t_strength);//return damage dealt if any
+	std::vector<int> collisionCheckerDamage(std::vector<sf::RectangleShape> targetToCheck, int t_strength);//return damage dealt if any
 	bool checkIfContained(sf::Vector2f t_pointToCheck);//check if given coordinates is on a tile shared by one of the squads
 	void attemptEndTurn();
 	bool squadDistanceValid(sf::Vector2f t_hoveredTile);
 	void generateNewUnit(int t_teamNum, int t_unitType, sf::Vector2f unitSpawnPos);
 	void eliminateUnit(int t_num);
 	void turnActive();
+	void dealDamage(std::vector<int> t_damage);
 	std::vector<sf::RectangleShape> returnMovedSquads();
 
 	bool targetNeeded = false;//do we need a target for a squad
