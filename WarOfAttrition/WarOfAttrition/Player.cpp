@@ -16,15 +16,15 @@ void Player::init(int t_teamNum, int t_unitType)
 		startPos.y += t_teamNum * (TILE_SIZE * 3);
 		playersSquads[index].init(100 + (25*index), startPos, t_teamNum);
 
-		playersSquadsStrenghts.push_back(newText);
-		playersSquadsStrenghts[index].setFont(font);
-		playersSquadsStrenghts[index].setString(std::to_string(playersSquads[index].getStrength()));
-		playersSquadsStrenghts[index].setCharacterSize(100);//increase size and then downscale to prevent blurred text
-		playersSquadsStrenghts[index].setFillColor(sf::Color::White);
-		playersSquadsStrenghts[index].setOutlineThickness(5 );
-		playersSquadsStrenghts[index].setScale(0.2, 0.2);
-		playersSquadsStrenghts[index].setOrigin(sf::Vector2f(TILE_SIZE + playersSquadsStrenghts[index].getGlobalBounds().width/2, TILE_SIZE + playersSquadsStrenghts[index].getGlobalBounds().height / 2));
-		playersSquadsStrenghts[index].setPosition((playersSquads[index].getTroopContainter().getPosition()));
+		//playersSquadsStrenghts.push_back(newText);
+		//playersSquadsStrenghts[index].setFont(font);
+		//playersSquadsStrenghts[index].setString(std::to_string(playersSquads[index].getStrength()));
+		//playersSquadsStrenghts[index].setCharacterSize(100);//increase size and then downscale to prevent blurred text
+		//playersSquadsStrenghts[index].setFillColor(sf::Color::White);
+		//playersSquadsStrenghts[index].setOutlineThickness(5 );
+		//playersSquadsStrenghts[index].setScale(0.2, 0.2);
+		//playersSquadsStrenghts[index].setOrigin(sf::Vector2f(TILE_SIZE + playersSquadsStrenghts[index].getGlobalBounds().width/2, TILE_SIZE + playersSquadsStrenghts[index].getGlobalBounds().height / 2));
+		//playersSquadsStrenghts[index].setPosition((playersSquads[index].getTroopContainter().getPosition()));
 	}
 
 	tileForColliding.setSize(sf::Vector2f(TILE_SIZE +3, TILE_SIZE+3));//used for making sure player cant select a tile that its own squads are on
@@ -116,7 +116,7 @@ void Player::fixedUpdate()
 	}
 	for (int index = 0; index < playerSquadsCount; index++)
 	{
-		playersSquadsStrenghts[index].setPosition((playersSquads[index].getTroopContainter().getPosition()));
+		//playersSquadsStrenghts[index].setPosition((playersSquads[index].getTroopContainter().getPosition()));
 	}
 }
 
@@ -127,7 +127,7 @@ void Player::render(sf::RenderWindow& t_window)
 	for (int index = 0; index < playerSquadsCount; index++)
 	{
 		playersSquads[index].render(t_window);
-		t_window.draw(playersSquadsStrenghts[index]);
+		//t_window.draw(playersSquadsStrenghts[index]);
 	}
 }
 
@@ -160,7 +160,7 @@ std::vector<int> Player::collisionCheckerDamage(std::vector<sf::RectangleShape> 
 				{
 					int outcome = playersSquads[index].getStrength() - t_strength;
 					playersSquads[index].setStrength(outcome);
-					playersSquadsStrenghts[index].setString(std::to_string(playersSquads[index].getStrength()));
+					//playersSquadsStrenghts[index].setString(std::to_string(playersSquads[index].getStrength()));
 					//return t_strength;//lost the fight so is now 0
 					damageTaken.push_back(t_strength);
 				}
@@ -232,9 +232,13 @@ void Player::eliminateUnit(int t_num)
 {
 	if (t_num < playerSquadsCount)
 	{
-		playersSquadsStrenghts.erase(playersSquadsStrenghts.begin() + t_num);
+		//playersSquadsStrenghts.erase(playersSquadsStrenghts.begin() + t_num);
 		playersSquads.erase(playersSquads.begin() + t_num);
 		playerSquadsCount--;
+	}
+	if (playerSquadsCount <= 0)
+	{
+		playerEliminated = true;
 	}
 }
 
@@ -249,7 +253,7 @@ void Player::dealDamage(std::vector<int> t_damage)
 	{
 		int outcome = playersSquads[squadsThatMoved[index]].getStrength() - t_damage[index];
 		playersSquads[squadsThatMoved[index]].setStrength(outcome);
-		playersSquadsStrenghts[index].setString(std::to_string(playersSquads[index].getStrength()));
+		//playersSquadsStrenghts[index].setString(std::to_string(playersSquads[index].getStrength()));
 		if (playersSquads[squadsThatMoved[index]].getStrength() <= 0)
 		{
 			eliminateUnit(squadsThatMoved[index]);

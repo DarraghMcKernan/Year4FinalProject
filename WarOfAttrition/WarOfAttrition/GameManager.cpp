@@ -95,6 +95,15 @@ void GameManager::startGame()//setup variables needed before the game starts
 	playerTurnDisplay.setScale(0.75, 0.75);
 	playerTurnDisplay.setOrigin(0, 10);
 	playerTurnDisplay.setPosition(SCREEN_WIDTH/50, SCREEN_HEIGHT - (SCREEN_HEIGHT / 6.5) / 2);
+	
+	winScreenMessage.setFont(font);
+	winScreenMessage.setString("Player " + std::to_string(whosTurn) + "'s Wins!");
+	winScreenMessage.setCharacterSize(60);//increase size and then downscale to prevent blurred text
+	winScreenMessage.setFillColor(sf::Color(0, 0, 255));
+	winScreenMessage.setOutlineThickness(2);
+	winScreenMessage.setScale(0.75, 0.75);
+	winScreenMessage.setOrigin(winScreenMessage.getGlobalBounds().width/2, winScreenMessage.getGlobalBounds().height / 2);
+	winScreenMessage.setPosition(SCREEN_WIDTH/2, SCREEN_HEIGHT /2);
 
 	endTurnText.setFont(font);
 	endTurnText.setString("End Turn");
@@ -181,7 +190,10 @@ void GameManager::updateLoop()
 		{
 			for (int index = 0; index < MAX_PLAYERS; index++)
 			{
-				player[index].fixedUpdate();
+				if (player[whosTurn - 1].playerEliminated == false)
+				{
+					player[index].fixedUpdate();
+				}				
 			}
 			handleCollisions();
 			menuInteractions();
@@ -196,6 +208,14 @@ void GameManager::updatePlayers(sf::Time& t_deltaTime)
 	{
 		if ((whosTurn - 1) == index && openCreateUnitMenu == false)
 		{
+			if (player[whosTurn - 1].playerEliminated == true)
+			{
+				whosTurn++;
+				setPlayerTurnColour();
+				playerTurnDisplay.setString("Player " + std::to_string(whosTurn) + "'s Turn");
+				player[whosTurn - 1].turnActive();
+				break;
+			}
 			worldTiles.hightlightTiles(player[index].squadDistanceValid(worldTiles.tileHoveredOver()));
 			if (player[index].targetNeeded == true)
 			{
@@ -217,9 +237,9 @@ void GameManager::updatePlayers(sf::Time& t_deltaTime)
 			{
 				for (int playersIndex = 0; playersIndex < MAX_PLAYERS; playersIndex++)
 				{
-					if (playersIndex != whosTurn - 1)
+					if (playersIndex != whosTurn - 1 && player[playersIndex].playerEliminated == false)
 					{
-						std::vector<int> damageTaken = player[playersIndex].collisionCheckerDamage(player[whosTurn - 1].returnMovedSquads(), 90);//only hurts defending squad currently
+						std::vector<int> damageTaken = player[playersIndex].collisionCheckerDamage(player[whosTurn - 1].returnMovedSquads(), 400);//only hurts defending squad currently
 						
 						player[whosTurn-1].dealDamage(damageTaken);//this player needs to also take damage
 						//player[playersIndex]//go through each player and assign damage;
@@ -278,11 +298,25 @@ void GameManager::userControls(sf::View& t_viewport,sf::Time& t_deltaTime)
 	{
 		t_viewport.zoom(1.001);
 	}
-
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::N) && clickTimer == 0)//debug
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1) && clickTimer == 0)//debug
 	{
 		clickTimer = 30;
-		player[1].eliminateUnit(1);
+		player[0].eliminateUnit(0);
+	}
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2) && clickTimer == 0)//debug
+	{
+		clickTimer = 30;
+		player[1].eliminateUnit(0);
+	}
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3) && clickTimer == 0)//debug
+	{
+		clickTimer = 30;
+		player[2].eliminateUnit(0);
+	}
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num4) && clickTimer == 0)//debug
+	{
+		clickTimer = 30;
+		player[3].eliminateUnit(0);
 	}
 
 	if (createUnitActive == true)
@@ -303,7 +337,10 @@ void GameManager::display(sf::RenderWindow& t_window)
 	worldTiles.render(t_window);
 	for (int index = 0; index < MAX_PLAYERS; index++)
 	{
-		player[index].render(t_window);
+		if (player[whosTurn - 1].playerEliminated == false)
+		{
+			player[index].render(t_window);
+		}
 	}
 
 	if (createUnitActive == true)
@@ -346,6 +383,12 @@ void GameManager::displayHUD(sf::RenderWindow& t_window,sf::View& t_fixedWindow)
 		t_window.draw(menuBackground);
 		t_window.draw(menuStartButton);
 		t_window.draw(menuStartButtonText);
+	}
+
+	if (gameOver == true)
+	{
+		t_window.draw(menuBackground);
+		t_window.draw(winScreenMessage);
 	}
 	
 	t_window.display();
@@ -397,9 +440,9 @@ void GameManager::menuInteractions()
 		createDefaultUnit.setFillColor(sf::Color(150, 150, 100));
 		createUnitActive = true;
 	}
-	else if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && createUnitActive == true && clickTimer == 0)
+	else if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && createUnitActive == true && clickTimer == 0 && player[whosTurn-1].playerEliminated == false)
 	{
-		player[whosTurn - 1].generateNewUnit(whosTurn - 1, 1, unitPlacementHighlight.getPosition());
+		player[whosTurn - 1].generateNewUnit(whosTurn - 1, 0, unitPlacementHighlight.getPosition());
 		createUnitActive = false;
 	}
 
@@ -434,5 +477,23 @@ void GameManager::setPlayerTurnColour()
 	else if (whosTurn == 4)
 	{
 		playerTurnDisplay.setFillColor(sf::Color(255, 0, 255));
+	}
+}
+
+void GameManager::checkGameOver()
+{
+	int eliminatedPlayers = 0;
+	for (int index = 0; index < MAX_PLAYERS; index++)
+	{
+		if (player[index].playerEliminated == true)
+		{
+			eliminatedPlayers++;
+		}
+		else winner = index;
+	}
+	if (eliminatedPlayers == MAX_PLAYERS - 1)
+	{
+		gameOver = true;
+		winScreenMessage.setString("Player " + std::to_string(winner) + " Wins!");
 	}
 }

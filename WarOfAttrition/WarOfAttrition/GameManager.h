@@ -19,6 +19,7 @@ private:
 	void handleCollisions();//work out all collisions between any hitboxes
 	void menuInteractions();//handle all menu interactions
 	void setPlayerTurnColour();//set the text to the correct colour
+	void checkGameOver();
 
 	static const int MAX_PLAYERS = 4;//maximum players in a game
 
@@ -50,14 +51,17 @@ private:
 	sf::Text createTowerText;
 	sf::Text menuStartButtonText;
 	sf::Text framerateText;
+	sf::Text winScreenMessage;
 
 	int whosTurn = 1;//used to keep track of which player currently gets to play
 	int currentTileSelected = 0;
 	int clickTimer = 0;
+	int winner = 0;
 
 	bool openCreateUnitMenu = false;//toggles the create unit menu
 	bool openCreateTowerMenu = false;//toggles the create unit menu
 	bool createUnitActive = false;//allows a unit to be created after a type is selected
 	bool createTowerActive = false;//allows a unit to be created after a type is selected
 	bool menuOpen = true;
+	bool gameOver = false;
 };
