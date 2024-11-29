@@ -251,11 +251,22 @@ void GameManager::updatePlayers(sf::Time& t_deltaTime)
 
 				worldTiles.resetTiles();
 				player[index].arrivedAtTarget = false;
-				whosTurn++;
-				if (whosTurn > MAX_PLAYERS)
+				bool playerValid = false;
+				while (playerValid == false)
 				{
-					whosTurn = 1;
+					whosTurn++;
+					if (whosTurn > MAX_PLAYERS)
+					{
+						whosTurn = 1;
+					}
+					if (player[whosTurn - 1].playerEliminated == false)
+					{
+						playerValid = true;
+					}
 				}
+				
+				checkGameOver();
+
 				setPlayerTurnColour();
 				playerTurnDisplay.setString("Player " + std::to_string(whosTurn) + "'s Turn");
 				player[whosTurn-1].turnActive();
@@ -494,6 +505,6 @@ void GameManager::checkGameOver()
 	if (eliminatedPlayers == MAX_PLAYERS - 1)
 	{
 		gameOver = true;
-		winScreenMessage.setString("Player " + std::to_string(winner) + " Wins!");
+		winScreenMessage.setString("Player " + std::to_string(winner+1) + " Wins!");
 	}
 }
