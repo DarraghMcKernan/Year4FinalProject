@@ -476,18 +476,22 @@ void GameManager::setPlayerTurnColour()
 	if (whosTurn == 1)
 	{
 		playerTurnDisplay.setFillColor(sf::Color(0, 0, 255));
+		winScreenMessage.setFillColor(sf::Color(0, 0, 255));
 	}
 	else if (whosTurn == 2)
 	{
 		playerTurnDisplay.setFillColor(sf::Color(255, 0, 0));
+		winScreenMessage.setFillColor(sf::Color(255, 0, 0));
 	}
 	else if (whosTurn == 3)
 	{
 		playerTurnDisplay.setFillColor(sf::Color(0, 255, 255));
+		winScreenMessage.setFillColor(sf::Color(0, 255, 255));
 	}
 	else if (whosTurn == 4)
 	{
 		playerTurnDisplay.setFillColor(sf::Color(255, 0, 255));
+		winScreenMessage.setFillColor(sf::Color(255, 0, 255));
 	}
 }
 
