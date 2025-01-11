@@ -148,6 +148,7 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="Squad.h" />
     <ClInclude Include="TileGrid.h" />
+    <ClInclude Include="WorldEditor.h" />
     <ClInclude Include="WorldTile.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

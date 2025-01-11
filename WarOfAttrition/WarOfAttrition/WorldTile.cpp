@@ -38,7 +38,18 @@ void Tile::setTarget(bool t_active)
 void Tile::setType(int t_type)
 {
 	tileType = t_type;
-	tileShape.setFillColor(sf::Color(0, 0, 0));
+	if (t_type == 0)//default ground
+	{
+		tileShape.setFillColor(sf::Color(255, 255, 255, 150));
+	}
+	else if (t_type == 1)//wall
+	{
+		tileShape.setFillColor(sf::Color(0, 0, 0));
+	}
+	else if (t_type == 2)//water
+	{
+		tileShape.setFillColor(sf::Color(0, 0, 255, 255));
+	}
 }
 
 int Tile::getType()

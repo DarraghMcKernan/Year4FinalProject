@@ -14,3 +14,8 @@ const int TILE_ROWS = SCREEN_HEIGHT / TILE_SIZE;
 const int TILE_COLUMNS = SCREEN_WIDTH / TILE_SIZE;
 
 const int MAX_MOVES_PER_TURN = 3;
+
+static int playerOneUnits = 4;
+static int playerTwoUnits = 4;
+static int playerThreeUnits = 4;
+static int playerFourUnits = 4;

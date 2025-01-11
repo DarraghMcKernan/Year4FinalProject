@@ -174,7 +174,7 @@ void GameManager::updateLoop()
 
 		//worldTiles.update(deltaTime);
 
-		if (menuOpen == false)
+		if (menuOpen == false && worldEditingEnabled == false)
 		{
 			userControls(viewport, deltaTime);
 
@@ -216,7 +216,7 @@ void GameManager::updatePlayers(sf::Time& t_deltaTime)
 				player[whosTurn - 1].turnActive();
 				break;
 			}
-			worldTiles.hightlightTiles(player[index].squadDistanceValid(worldTiles.tileHoveredOver()));
+			worldTiles.hightlightTiles(player[index].squadDistanceValid(worldTiles.tileHoveredOverPos()));
 			if (player[index].targetNeeded == true)
 			{
 				worldTiles.findTargetedTile();
@@ -321,7 +321,7 @@ void GameManager::userControls(sf::View& t_viewport,sf::Time& t_deltaTime)
 
 	if (createUnitActive == true)
 	{
-		unitPlacementHighlight.setPosition(worldTiles.tileHoveredOver());
+		unitPlacementHighlight.setPosition(worldTiles.tileHoveredOverPos());
 	}
 }
 
@@ -337,7 +337,7 @@ void GameManager::display(sf::RenderWindow& t_window)
 	worldTiles.render(t_window);
 	for (int index = 0; index < MAX_PLAYERS; index++)
 	{
-		if (player[whosTurn - 1].playerEliminated == false)
+		if (player[whosTurn - 1].playerEliminated == false && worldEditingEnabled == false)
 		{
 			player[index].render(t_window);
 		}
@@ -443,7 +443,34 @@ void GameManager::menuInteractions()
 	else if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && createUnitActive == true && clickTimer == 0 && player[whosTurn-1].playerEliminated == false)
 	{
 		player[whosTurn - 1].generateNewUnit(whosTurn - 1, 0, unitPlacementHighlight.getPosition());
+		addUnit(whosTurn - 1);//add the new unit to the counter in globals
 		createUnitActive = false;
+	}
+
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter) && clickTimer == 0)
+	{
+		clickTimer = 30;
+		worldEditingEnabled = !worldEditingEnabled;
+		std::cout << worldEditingEnabled;
+	}
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1) && clickTimer == 0 && worldEditingEnabled == true)
+	{
+		editingTerrainType = 0;
+		std::cout << "Ground tile selected\n";
+	}
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2) && clickTimer == 0 && worldEditingEnabled == true)
+	{
+		editingTerrainType = 1;
+		std::cout << "Wall tile selected\n";
+	}
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3) && clickTimer == 0 && worldEditingEnabled == true)
+	{
+		editingTerrainType = 2;
+		std::cout << "Water tile selected\n";
+	}
+	else if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && clickTimer == 0 && worldEditingEnabled == true)
+	{
+		worldTiles.updateTileType(editingTerrainType);
 	}
 
 	clickTimer--;
@@ -495,5 +522,45 @@ void GameManager::checkGameOver()
 	{
 		gameOver = true;
 		winScreenMessage.setString("Player " + std::to_string(winner) + " Wins!");
+	}
+}
+
+void GameManager::addUnit(int t_playerNum)
+{
+	if (t_playerNum == 0)
+	{
+		playerOneUnits++;
+	}
+	if (t_playerNum == 1)
+	{
+		playerTwoUnits++;
+	}
+	if (t_playerNum == 2)
+	{
+		playerThreeUnits++;
+	}
+	if (t_playerNum == 3)
+	{
+		playerFourUnits++;
+	}
+}
+
+void GameManager::removeUnit(int t_playerNum)
+{
+	if (t_playerNum == 0)
+	{
+		playerOneUnits--;
+	}
+	if (t_playerNum == 1)
+	{
+		playerTwoUnits--;
+	}
+	if (t_playerNum == 2)
+	{
+		playerThreeUnits--;
+	}
+	if (t_playerNum == 3)
+	{
+		playerFourUnits--;
 	}
 }

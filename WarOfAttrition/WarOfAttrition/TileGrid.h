@@ -12,9 +12,11 @@ public:
 	void deactiveateTile();
 	int currentPlayerTarget(int t_turnNum);
 	sf::Vector2f mousePosViewport();
-	sf::Vector2f tileHoveredOver();
+	sf::Vector2f tileHoveredOverPos();
+	int tileHoveredOverNum();
 	void resetTiles();
 	bool checkIfWall(int t_tileNum);
+	void updateTileType(int t_type);
 
 	bool positionUpdated = false;
 	bool targetMoving = false;

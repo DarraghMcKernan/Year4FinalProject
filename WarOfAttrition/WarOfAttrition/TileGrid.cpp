@@ -108,7 +108,7 @@ sf::Vector2f TileGrid::mousePosViewport()
 	return mousePosViewPort;
 }
 
-sf::Vector2f TileGrid::tileHoveredOver()
+sf::Vector2f TileGrid::tileHoveredOverPos()
 {
 	sf::Vector2f temp = mousePosViewport();
 	for (int index = 0; index < (TILE_ROWS * TILE_COLUMNS); index++)
@@ -119,6 +119,19 @@ sf::Vector2f TileGrid::tileHoveredOver()
 		}
 	}
 	return sf::Vector2f(0,0);
+}
+
+int TileGrid::tileHoveredOverNum()
+{
+	sf::Vector2f temp = mousePosViewport();
+	for (int index = 0; index < (TILE_ROWS * TILE_COLUMNS); index++)
+	{
+		if (tiles[index].getTileShape().getGlobalBounds().contains(temp))
+		{
+			return index;
+		}
+	}
+	return 0;
 }
 
 void TileGrid::resetTiles()
@@ -145,4 +158,9 @@ bool TileGrid::checkIfWall(int t_tileNum)
 		}
 	}
 	return false;
+}
+
+void TileGrid::updateTileType(int t_type)
+{
+	tiles[tileHoveredOverNum()].setType(t_type);
 }

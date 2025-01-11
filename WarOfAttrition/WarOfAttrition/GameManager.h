@@ -20,6 +20,8 @@ private:
 	void menuInteractions();//handle all menu interactions
 	void setPlayerTurnColour();//set the text to the correct colour
 	void checkGameOver();
+	void addUnit(int t_playerNum);
+	void removeUnit(int t_playerNum);
 
 	static const int MAX_PLAYERS = 4;//maximum players in a game
 
@@ -57,6 +59,7 @@ private:
 	int currentTileSelected = 0;
 	int clickTimer = 0;
 	int winner = 0;
+	int editingTerrainType = 0;//0 = normal ground, 1 = wall, 2 = water
 
 	bool openCreateUnitMenu = false;//toggles the create unit menu
 	bool openCreateTowerMenu = false;//toggles the create unit menu
@@ -64,4 +67,5 @@ private:
 	bool createTowerActive = false;//allows a unit to be created after a type is selected
 	bool menuOpen = true;
 	bool gameOver = false;
+	bool worldEditingEnabled = false;
 };
