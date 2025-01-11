@@ -251,11 +251,22 @@ void GameManager::updatePlayers(sf::Time& t_deltaTime)
 
 				worldTiles.resetTiles();
 				player[index].arrivedAtTarget = false;
-				whosTurn++;
-				if (whosTurn > MAX_PLAYERS)
+				bool playerValid = false;
+				while (playerValid == false)
 				{
-					whosTurn = 1;
+					whosTurn++;
+					if (whosTurn > MAX_PLAYERS)
+					{
+						whosTurn = 1;
+					}
+					if (player[whosTurn - 1].playerEliminated == false)
+					{
+						playerValid = true;
+					}
 				}
+				
+				checkGameOver();
+
 				setPlayerTurnColour();
 				playerTurnDisplay.setString("Player " + std::to_string(whosTurn) + "'s Turn");
 				player[whosTurn-1].turnActive();
@@ -492,18 +503,22 @@ void GameManager::setPlayerTurnColour()
 	if (whosTurn == 1)
 	{
 		playerTurnDisplay.setFillColor(sf::Color(0, 0, 255));
+		winScreenMessage.setFillColor(sf::Color(0, 0, 255));
 	}
 	else if (whosTurn == 2)
 	{
 		playerTurnDisplay.setFillColor(sf::Color(255, 0, 0));
+		winScreenMessage.setFillColor(sf::Color(255, 0, 0));
 	}
 	else if (whosTurn == 3)
 	{
 		playerTurnDisplay.setFillColor(sf::Color(0, 255, 255));
+		winScreenMessage.setFillColor(sf::Color(0, 255, 255));
 	}
 	else if (whosTurn == 4)
 	{
 		playerTurnDisplay.setFillColor(sf::Color(255, 0, 255));
+		winScreenMessage.setFillColor(sf::Color(255, 0, 255));
 	}
 }
 
@@ -521,7 +536,7 @@ void GameManager::checkGameOver()
 	if (eliminatedPlayers == MAX_PLAYERS - 1)
 	{
 		gameOver = true;
-		winScreenMessage.setString("Player " + std::to_string(winner) + " Wins!");
+		winScreenMessage.setString("Player " + std::to_string(winner+1) + " Wins!");
 	}
 }
 
