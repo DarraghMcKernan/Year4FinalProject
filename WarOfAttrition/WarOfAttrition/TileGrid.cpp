@@ -325,22 +325,22 @@ int TileGrid::checkSurroundingTiles(int t_tileNum)
 
 	//flat on 1 side
 	else if (N != 2 && W == 2 && E == 2 && S == 2 &&
-		NW != 2 && NE != 2 && SW == 2 && SE == 2)
+		SW == 2 && SE == 2)
 	{
 		return 7;
 	}
 	else if (N == 2 && W != 2 && E == 2 && S == 2 &&
-		NW != 2 && NE == 2 && SW != 2 && SE == 2)
+		NE == 2 && SE == 2)
 	{
 		return 8;
 	}
 	else if (N == 2 && W == 2 && E != 2 && S == 2 &&
-		NW == 2 && NE != 2 && SW == 2 && SE != 2)
+		NW == 2  && SW == 2 )
 	{
 		return 9;
 	}
 	else if (N == 2 && W == 2 && E == 2 && S != 2 &&
-		NW == 2 && NE == 2 && SW != 2 && SE != 2)
+		NW == 2 && NE == 2 )
 	{
 		return 10;
 	}
@@ -366,10 +366,12 @@ int TileGrid::checkSurroundingTiles(int t_tileNum)
 		return 14;//nothing down and right
 	}
 
-	else if (N == 2 && W == 2 && E == 2 && S == 2)
+	else if (N == 2 && W == 2 && E == 2 && S == 2&&
+		NW != 2 && NE != 2 && SW != 2 && SE != 2)
 	{
-		return 6;
+		return 6;//center no corners
 	}
+
 	else if (N == 2)
 	{
 		return 2;
