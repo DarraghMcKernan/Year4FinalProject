@@ -21,6 +21,8 @@ public:
 	void setupTextures();
 	void updateTileTexture(int t_tileNum);
 
+	int checkSurroundingTiles(int t_tileNum);
+
 	bool positionUpdated = false;
 	bool targetMoving = false;
 	int tilesSelected[MAX_MOVES_PER_TURN];
@@ -28,6 +30,8 @@ private:
 	std::vector<Tile> tiles;
 	std::vector<sf::Sprite> worldTileTemp;
 	std::vector<int> tileSetAsWalls;
+	std::vector<int> tilesToBeChecked;
+
 	sf::Vector2i mousePos;
 	sf::Vector2f mousePosViewPort;
 
@@ -46,5 +50,12 @@ private:
 	sf::Texture waterE;
 	sf::Texture waterNE;
 
-	sf::Texture waterC;
+	sf::Texture waterNA;//north nothing on sides
+	sf::Texture waterWA;
+	sf::Texture waterSA;
+	sf::Texture waterEA;
+
+	sf::Texture waterC;//surrounded by water 9 tiles
+	sf::Texture waterA;//by itself
+	sf::Texture waterCI;//Surrounded N E S W only
 };

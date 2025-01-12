@@ -183,7 +183,12 @@ void TileGrid::setupTextures()
 		std::cout << "ERROR loading DEFAULT tile\n";
 
 	if (!waterC.loadFromFile("ASSETS/Tiles/Water/tile_0077_water4.png"))
-		std::cout << "ERROR loading NORTH WATER tile\n";
+		std::cout << "ERROR loading CENTRAL WATER tile\n";
+
+	if (!waterA.loadFromFile("ASSETS/Tiles/Water/Custom/WaterCenter.png"))
+		std::cout << "ERROR loading ALONE WATER tile\n";
+	if (!waterCI.loadFromFile("ASSETS/Tiles/Water/Custom/WaterCenterRoundedInterior.png"))
+		std::cout << "ERROR loading SURROUNDED INVERTED WATER tile\n";
 
 	if (!waterN.loadFromFile("ASSETS/Tiles/Water/tile_0079_water6.png"))
 		std::cout << "ERROR loading NORTH WATER tile\n";
@@ -202,12 +207,115 @@ void TileGrid::setupTextures()
 		std::cout << "ERROR loading EAST WATER tile\n";
 	if (!waterNE.loadFromFile("ASSETS/Tiles/Water/tile_0080_water7.png"))
 		std::cout << "ERROR loading NORTH EAST WATER tile\n";
+	
+	//straight upwards, nothing on sides
+	if (!waterNA.loadFromFile("ASSETS/Tiles/Water/Custom/WaterNCenter.png"))
+		std::cout << "ERROR loading NORTH ALONE WATER tile\n";
+	if (!waterWA.loadFromFile("ASSETS/Tiles/Water/Custom/WaterWCenter.png"))
+		std::cout << "ERROR loading WEST ALONE WATER tile\n";
+	if (!waterSA.loadFromFile("ASSETS/Tiles/Water/Custom/WaterSCenter.png"))
+		std::cout << "ERROR loading SOUTH ALONE WATER tile\n";
+	if (!waterEA.loadFromFile("ASSETS/Tiles/Water/Custom/WaterECenter.png"))
+		std::cout << "ERROR loading EAST ALONE WATER tile\n";
 }
 
 void TileGrid::updateTileTexture(int t_tileNum)
 {
+	tilesToBeChecked.push_back(t_tileNum);
 	if (tiles[t_tileNum].getType() == 2)//water tile
 	{
-		worldTileTemp[t_tileNum].setTexture(waterC);
+		if (checkSurroundingTiles(t_tileNum) == 0)//single tile
+		{
+			worldTileTemp[t_tileNum].setTexture(waterA);
+		}
+		else if (checkSurroundingTiles(t_tileNum) == 1)//surrounded by water
+		{
+			worldTileTemp[t_tileNum].setTexture(waterC);
+		}
+
+		else if (checkSurroundingTiles(t_tileNum) == 2)
+		{
+			worldTileTemp[t_tileNum].setTexture(waterSA);
+		}
+		else if (checkSurroundingTiles(t_tileNum) == 3)
+		{
+			worldTileTemp[t_tileNum].setTexture(waterEA);
+		}
+		else if (checkSurroundingTiles(t_tileNum) == 4)
+		{
+			worldTileTemp[t_tileNum].setTexture(waterWA);
+		}
+		else if (checkSurroundingTiles(t_tileNum) == 5)
+		{
+			worldTileTemp[t_tileNum].setTexture(waterNA);
+		}
+		else if (checkSurroundingTiles(t_tileNum) == 6)
+		{
+			worldTileTemp[t_tileNum].setTexture(waterCI);
+		}
 	}
+}
+
+int TileGrid::checkSurroundingTiles(int t_tileNum)
+{
+	int NW = tiles[t_tileNum - TILE_COLUMNS -1].getType();
+	int N = tiles[t_tileNum - TILE_COLUMNS].getType();
+	int NE = tiles[t_tileNum - TILE_COLUMNS +1].getType();
+
+	int W = tiles[t_tileNum - 1].getType();
+
+	int E = tiles[t_tileNum + 1].getType();
+
+	int SW = tiles[t_tileNum + TILE_COLUMNS - 1].getType();
+	int S = tiles[t_tileNum + TILE_COLUMNS].getType();
+	int SE = tiles[t_tileNum + TILE_COLUMNS + 1].getType();
+
+	if (N == 2 && W == 2 && E == 2 && S == 2 &&
+		NW == 2 && NE == 2 && SW == 2 && SE == 2)
+	{
+		return 1;//surrounded by water on all sides
+	}
+	else if (N == 2 && W == 2 && E == 2 && S == 2)
+	{
+		return 6;
+	}
+	else if (N == 2)
+	{
+		return 2;
+	}
+	else if (W == 2)
+	{
+		return 3;
+	}
+	else if (E == 2)
+	{
+		return 4;
+	}
+	else if (S == 2)
+	{
+		return 5;
+	}
+	//else if (N == 2 && W != 2 && E != 2 && S != 2 &&
+	//	NW != 2 && NE != 2 && SW != 2 && SE != 2)
+	//{
+	//	return 2;
+	//}
+	//else if (N != 2 && W == 2 && E != 2 && S != 2 &&
+	//	NW != 2 && NE != 2 && SW != 2 && SE != 2)
+	//{
+	//	return 3;
+	//}
+	//else if (N != 2 && W != 2 && E == 2 && S != 2 &&
+	//	NW != 2 && NE != 2 && SW != 2 && SE != 2)
+	//{
+	//	return 4;
+	//}
+	//else if (N != 2 && W != 2 && E != 2 && S == 2 &&
+	//	NW != 2 && NE != 2 && SW != 2 && SE != 2)
+	//{
+	//	return 5;
+	//}
+
+
+	return 0;
 }
