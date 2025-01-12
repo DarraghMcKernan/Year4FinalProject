@@ -58,4 +58,9 @@ private:
 	sf::Texture waterC;//surrounded by water 9 tiles
 	sf::Texture waterA;//by itself
 	sf::Texture waterCI;//Surrounded N E S W only
+
+	sf::Texture waterNWI;//northwest interior
+	sf::Texture waterNEI;
+	sf::Texture waterSWI;
+	sf::Texture waterSEI;
 };

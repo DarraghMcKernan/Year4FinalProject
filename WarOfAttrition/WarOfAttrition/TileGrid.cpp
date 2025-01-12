@@ -217,6 +217,16 @@ void TileGrid::setupTextures()
 		std::cout << "ERROR loading SOUTH ALONE WATER tile\n";
 	if (!waterEA.loadFromFile("ASSETS/Tiles/Water/Custom/WaterECenter.png"))
 		std::cout << "ERROR loading EAST ALONE WATER tile\n";
+
+	//interior corners
+	if (!waterNWI.loadFromFile("ASSETS/Tiles/Water/Custom/WaterNCenter.png"))
+		std::cout << "ERROR loading NORTH WEST INTERIOR WATER tile\n";
+	if (!waterNEI.loadFromFile("ASSETS/Tiles/Water/Custom/WaterWCenter.png"))
+		std::cout << "ERROR loading NORTH EAST INTERIOR WATER tile\n";
+	if (!waterSWI.loadFromFile("ASSETS/Tiles/Water/Custom/WaterSCenter.png"))
+		std::cout << "ERROR loading SOUTH WEST INTERIOR WATER tile\n";
+	if (!waterSEI.loadFromFile("ASSETS/Tiles/Water/Custom/WaterECenter.png"))
+		std::cout << "ERROR loading SOUTH EAST INTERIOR WATER tile\n";
 }
 
 void TileGrid::updateTileTexture(int t_tileNum, int t_depth)
