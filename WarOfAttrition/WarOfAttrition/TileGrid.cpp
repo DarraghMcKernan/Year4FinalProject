@@ -3,10 +3,20 @@
 void TileGrid::init()
 {
 	Tile newTile;
+
+	setupTextures();
+
+	sf::Sprite tempSprite;
+	tempSprite.setTexture(defaultTileTexture);
+	tempSprite.setOrigin(tempSprite.getGlobalBounds().getSize().x / 2, tempSprite.getGlobalBounds().getSize().y / 2);
+	tempSprite.setScale((tempSprite.getScale().x / 64) * 50, (tempSprite.getScale().y / 64) * 50);
+
 	for (int index = 0; index < (TILE_ROWS * TILE_COLUMNS); index++)
 	{
 		tiles.push_back(newTile);//add new tile to list
 		tiles[index].init({ (index % TILE_COLUMNS) * TILE_SIZE,(index / TILE_COLUMNS) * TILE_SIZE } , index);//place new tile in position relative to its number
+		tempSprite.setPosition(tiles[index].getTileShape().getPosition());
+		worldTileTemp.push_back(tempSprite);
 	}
 	for (int index = 0; index < 5; index++)//would eventually be read from a file
 	{
@@ -92,6 +102,7 @@ void TileGrid::render(sf::RenderWindow& t_window)
 	for (int index = 0; index < TILE_ROWS * TILE_COLUMNS; index++)
 	{
 		tiles[index].render(t_window);
+		t_window.draw(worldTileTemp[index]);
 	}
 }
 
@@ -163,4 +174,40 @@ bool TileGrid::checkIfWall(int t_tileNum)
 void TileGrid::updateTileType(int t_type)
 {
 	tiles[tileHoveredOverNum()].setType(t_type);
+	updateTileTexture(tileHoveredOverNum());
+}
+
+void TileGrid::setupTextures()
+{
+	if (!defaultTileTexture.loadFromFile("ASSETS/Tiles/Grass/tile_0029_grass6.png"))
+		std::cout << "ERROR loading DEFAULT tile\n";
+
+	if (!waterC.loadFromFile("ASSETS/Tiles/Water/tile_0077_water4.png"))
+		std::cout << "ERROR loading NORTH WATER tile\n";
+
+	if (!waterN.loadFromFile("ASSETS/Tiles/Water/tile_0079_water6.png"))
+		std::cout << "ERROR loading NORTH WATER tile\n";
+	if (!waterNW.loadFromFile("ASSETS/Tiles/Water/tile_0076_water3.png"))
+		std::cout << "ERROR loading NORTH WEST WATER tile\n";
+	if (!waterW.loadFromFile("ASSETS/Tiles/Water/tile_0078_water5.png"))
+		std::cout << "ERROR loading WEST WATER tile\n";
+	if (!waterSW.loadFromFile("ASSETS/Tiles/Water/tile_0087_water14.png"))
+		std::cout << "ERROR loading SOUTH WEST WATER tile\n";
+
+	if (!waterS.loadFromFile("ASSETS/Tiles/Water/tile_0088_water15.png"))
+		std::cout << "ERROR loading SOUTH WATER tile\n";
+	if (!waterSE.loadFromFile("ASSETS/Tiles/Water/tile_0089_water16.png"))
+		std::cout << "ERROR loading SOUTH EAST WATER tile\n";
+	if (!waterE.loadFromFile("ASSETS/Tiles/Water/tile_0075_water2.png"))
+		std::cout << "ERROR loading EAST WATER tile\n";
+	if (!waterNE.loadFromFile("ASSETS/Tiles/Water/tile_0080_water7.png"))
+		std::cout << "ERROR loading NORTH EAST WATER tile\n";
+}
+
+void TileGrid::updateTileTexture(int t_tileNum)
+{
+	if (tiles[t_tileNum].getType() == 2)//water tile
+	{
+		worldTileTemp[t_tileNum].setTexture(waterC);
+	}
 }
