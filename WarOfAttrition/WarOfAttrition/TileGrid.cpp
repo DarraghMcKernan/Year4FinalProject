@@ -174,7 +174,7 @@ bool TileGrid::checkIfWall(int t_tileNum)
 void TileGrid::updateTileType(int t_type)
 {
 	tiles[tileHoveredOverNum()].setType(t_type);
-	updateTileTexture(tileHoveredOverNum());
+	updateTileTexture(tileHoveredOverNum(),0);
 }
 
 void TileGrid::setupTextures()
@@ -219,9 +219,8 @@ void TileGrid::setupTextures()
 		std::cout << "ERROR loading EAST ALONE WATER tile\n";
 }
 
-void TileGrid::updateTileTexture(int t_tileNum)
+void TileGrid::updateTileTexture(int t_tileNum, int t_depth)
 {
-	tilesToBeChecked.push_back(t_tileNum);
 	if (tiles[t_tileNum].getType() == 2)//water tile
 	{
 		if (checkSurroundingTiles(t_tileNum) == 0)//single tile
@@ -231,6 +230,10 @@ void TileGrid::updateTileTexture(int t_tileNum)
 		else if (checkSurroundingTiles(t_tileNum) == 1)//surrounded by water
 		{
 			worldTileTemp[t_tileNum].setTexture(waterC);
+		}
+		else if (checkSurroundingTiles(t_tileNum) == 6)
+		{
+			worldTileTemp[t_tileNum].setTexture(waterCI);
 		}
 
 		else if (checkSurroundingTiles(t_tileNum) == 2)
@@ -249,9 +252,53 @@ void TileGrid::updateTileTexture(int t_tileNum)
 		{
 			worldTileTemp[t_tileNum].setTexture(waterNA);
 		}
-		else if (checkSurroundingTiles(t_tileNum) == 6)
+		
+		else if (checkSurroundingTiles(t_tileNum) == 7)
 		{
-			worldTileTemp[t_tileNum].setTexture(waterCI);
+			worldTileTemp[t_tileNum].setTexture(waterN);
+		}
+		else if (checkSurroundingTiles(t_tileNum) == 8)
+		{
+			worldTileTemp[t_tileNum].setTexture(waterW);
+		}
+		else if (checkSurroundingTiles(t_tileNum) == 9)
+		{
+			worldTileTemp[t_tileNum].setTexture(waterE);
+		}
+		else if (checkSurroundingTiles(t_tileNum) == 10)
+		{
+			worldTileTemp[t_tileNum].setTexture(waterS);
+		}
+
+		else if (checkSurroundingTiles(t_tileNum) == 11)
+		{
+			worldTileTemp[t_tileNum].setTexture(waterNW);
+		}
+		else if (checkSurroundingTiles(t_tileNum) == 12)
+		{
+			worldTileTemp[t_tileNum].setTexture(waterNE);
+		}
+		else if (checkSurroundingTiles(t_tileNum) == 13)
+		{
+			worldTileTemp[t_tileNum].setTexture(waterSW);
+		}
+		else if (checkSurroundingTiles(t_tileNum) == 14)
+		{
+			worldTileTemp[t_tileNum].setTexture(waterSE);
+		}
+
+		if (t_depth == 0)//if this is the orignal tile recall this function on the surronding tiles so they can update themselves too
+		{
+			updateTileTexture(t_tileNum - TILE_COLUMNS-1, 1);
+			updateTileTexture(t_tileNum - TILE_COLUMNS, 1);
+			updateTileTexture(t_tileNum - TILE_COLUMNS+1, 1);
+
+			updateTileTexture(t_tileNum - 1, 1);
+			updateTileTexture(t_tileNum + 1, 1);
+
+			updateTileTexture(t_tileNum + TILE_COLUMNS-1, 1);
+			updateTileTexture(t_tileNum + TILE_COLUMNS, 1);
+			updateTileTexture(t_tileNum + TILE_COLUMNS+1, 1);
 		}
 	}
 }
@@ -275,6 +322,50 @@ int TileGrid::checkSurroundingTiles(int t_tileNum)
 	{
 		return 1;//surrounded by water on all sides
 	}
+
+	//flat on 1 side
+	else if (N != 2 && W == 2 && E == 2 && S == 2 &&
+		NW != 2 && NE != 2 && SW == 2 && SE == 2)
+	{
+		return 7;
+	}
+	else if (N == 2 && W != 2 && E == 2 && S == 2 &&
+		NW != 2 && NE == 2 && SW != 2 && SE == 2)
+	{
+		return 8;
+	}
+	else if (N == 2 && W == 2 && E != 2 && S == 2 &&
+		NW == 2 && NE != 2 && SW == 2 && SE != 2)
+	{
+		return 9;
+	}
+	else if (N == 2 && W == 2 && E == 2 && S != 2 &&
+		NW == 2 && NE == 2 && SW != 2 && SE != 2)
+	{
+		return 10;
+	}
+
+	else if (N != 2 && W != 2 && E == 2 && S == 2 &&
+		NW != 2 && SE == 2)
+	{
+		return 11;//nothing up and left
+	}
+	else if (N != 2 && W == 2 && E != 2 && S == 2 &&
+		NE != 2 && SW == 2)
+	{
+		return 12;//nothing up and right
+	}
+	else if (N == 2 && W != 2 && E == 2 && S != 2 &&
+		SW != 2 && NE == 2)
+	{
+		return 13;//nothing down and left
+	}
+	else if (N == 2 && W == 2 && E != 2 && S != 2 &&
+		SE != 2 && NW == 2)
+	{
+		return 14;//nothing down and right
+	}
+
 	else if (N == 2 && W == 2 && E == 2 && S == 2)
 	{
 		return 6;
@@ -295,6 +386,7 @@ int TileGrid::checkSurroundingTiles(int t_tileNum)
 	{
 		return 5;
 	}
+	
 	//else if (N == 2 && W != 2 && E != 2 && S != 2 &&
 	//	NW != 2 && NE != 2 && SW != 2 && SE != 2)
 	//{

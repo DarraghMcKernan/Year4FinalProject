@@ -48,7 +48,7 @@ void Tile::setType(int t_type)
 	}
 	else if (t_type == 2)//water
 	{
-		tileShape.setFillColor(sf::Color(0, 0, 255, 255));
+		tileShape.setFillColor(sf::Color(0, 0, 0, 255));
 	}
 }
 

@@ -19,7 +19,7 @@ public:
 	void updateTileType(int t_type);
 
 	void setupTextures();
-	void updateTileTexture(int t_tileNum);
+	void updateTileTexture(int t_tileNum,int t_depth);
 
 	int checkSurroundingTiles(int t_tileNum);
 
