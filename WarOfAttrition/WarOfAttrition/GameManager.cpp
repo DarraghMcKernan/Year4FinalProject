@@ -412,77 +412,86 @@ void GameManager::handleCollisions()
 
 void GameManager::menuInteractions()
 {
-	if ((sf::Mouse::isButtonPressed(sf::Mouse::Left) && endTurnButton.getGlobalBounds().contains({ static_cast<float>(mousePos.x),static_cast<float>(mousePos.y) })) || sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && clickTimer == 0)
+	if (worldEditingEnabled == true)
 	{
-		endTurnButton.setFillColor(sf::Color(100, 150, 100));
-		clickTimer = 30;
-		player[whosTurn-1].attemptEndTurn();
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1) && clickTimer == 0)
+		{
+			editingTerrainType = 0;
+			std::cout << "Ground tile selected\n";
+		}
+		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2) && clickTimer == 0)
+		{
+			editingTerrainType = 1;
+			std::cout << "Wall tile selected\n";
+		}
+		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3) && clickTimer == 0)
+		{
+			editingTerrainType = 2;
+			std::cout << "Water tile selected\n";
+		}
+		else if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+		{
+			worldTiles.updateTileType(editingTerrainType);
+		}
+		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+		{
+			worldTiles.updateTileType(editingTerrainType);
+		}
 	}
-	else if ((sf::Mouse::isButtonPressed(sf::Mouse::Left) && openUnitMenuButton.getGlobalBounds().contains({ static_cast<float>(mousePos.x),static_cast<float>(mousePos.y) })) && openCreateUnitMenu == false && clickTimer == 0)
-	{
-		openUnitMenuButton.setFillColor(sf::Color(100, 150, 100));
-		clickTimer = 30;
-		openCreateUnitMenu = true;
-		openCreateTowerMenu = false;
-	}
-	else if ((sf::Mouse::isButtonPressed(sf::Mouse::Left) && openUnitMenuButton.getGlobalBounds().contains({ static_cast<float>(mousePos.x),static_cast<float>(mousePos.y) })) && openCreateUnitMenu == true &&clickTimer == 0)
-	{
-		openUnitMenuButton.setFillColor(sf::Color(100, 150, 100));
-		clickTimer = 30;
-		openCreateUnitMenu = false;
-		createUnitActive = false;
-	}
-	else if ((sf::Mouse::isButtonPressed(sf::Mouse::Left) && openTowerMenuButton.getGlobalBounds().contains({ static_cast<float>(mousePos.x),static_cast<float>(mousePos.y) })) && openCreateTowerMenu == false && clickTimer == 0)
-	{
-		openTowerMenuButton.setFillColor(sf::Color(100, 100, 150));
-		clickTimer = 30;
-		openCreateTowerMenu = true;
-		openCreateUnitMenu = false;
-	}
-	else if ((sf::Mouse::isButtonPressed(sf::Mouse::Left) && openTowerMenuButton.getGlobalBounds().contains({ static_cast<float>(mousePos.x),static_cast<float>(mousePos.y) })) && openCreateTowerMenu == true && clickTimer == 0)
-	{
-		openTowerMenuButton.setFillColor(sf::Color(100, 100, 150));
-		clickTimer = 30;
-		openCreateTowerMenu = false;
-	}
-	else if ((sf::Mouse::isButtonPressed(sf::Mouse::Left) && createDefaultUnit.getGlobalBounds().contains({ static_cast<float>(mousePos.x),static_cast<float>(mousePos.y) })) && openCreateUnitMenu == true && clickTimer == 0)
-	{
-		clickTimer = 30;
-		createDefaultUnit.setFillColor(sf::Color(150, 150, 100));
-		createUnitActive = true;
-	}
-	else if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && createUnitActive == true && clickTimer == 0 && player[whosTurn-1].playerEliminated == false)
-	{
-		player[whosTurn - 1].generateNewUnit(whosTurn - 1, 0, unitPlacementHighlight.getPosition());
-		addUnit(whosTurn - 1);//add the new unit to the counter in globals
-		createUnitActive = false;
+	else {
+		if ((sf::Mouse::isButtonPressed(sf::Mouse::Left) && endTurnButton.getGlobalBounds().contains({ static_cast<float>(mousePos.x),static_cast<float>(mousePos.y) })) || sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && clickTimer == 0)
+		{
+			endTurnButton.setFillColor(sf::Color(100, 150, 100));
+			clickTimer = 30;
+			player[whosTurn - 1].attemptEndTurn();
+		}
+		else if ((sf::Mouse::isButtonPressed(sf::Mouse::Left) && openUnitMenuButton.getGlobalBounds().contains({ static_cast<float>(mousePos.x),static_cast<float>(mousePos.y) })) && openCreateUnitMenu == false && clickTimer == 0)
+		{
+			openUnitMenuButton.setFillColor(sf::Color(100, 150, 100));
+			clickTimer = 30;
+			openCreateUnitMenu = true;
+			openCreateTowerMenu = false;
+		}
+		else if ((sf::Mouse::isButtonPressed(sf::Mouse::Left) && openUnitMenuButton.getGlobalBounds().contains({ static_cast<float>(mousePos.x),static_cast<float>(mousePos.y) })) && openCreateUnitMenu == true && clickTimer == 0)
+		{
+			openUnitMenuButton.setFillColor(sf::Color(100, 150, 100));
+			clickTimer = 30;
+			openCreateUnitMenu = false;
+			createUnitActive = false;
+		}
+		else if ((sf::Mouse::isButtonPressed(sf::Mouse::Left) && openTowerMenuButton.getGlobalBounds().contains({ static_cast<float>(mousePos.x),static_cast<float>(mousePos.y) })) && openCreateTowerMenu == false && clickTimer == 0)
+		{
+			openTowerMenuButton.setFillColor(sf::Color(100, 100, 150));
+			clickTimer = 30;
+			openCreateTowerMenu = true;
+			openCreateUnitMenu = false;
+		}
+		else if ((sf::Mouse::isButtonPressed(sf::Mouse::Left) && openTowerMenuButton.getGlobalBounds().contains({ static_cast<float>(mousePos.x),static_cast<float>(mousePos.y) })) && openCreateTowerMenu == true && clickTimer == 0)
+		{
+			openTowerMenuButton.setFillColor(sf::Color(100, 100, 150));
+			clickTimer = 30;
+			openCreateTowerMenu = false;
+		}
+		else if ((sf::Mouse::isButtonPressed(sf::Mouse::Left) && createDefaultUnit.getGlobalBounds().contains({ static_cast<float>(mousePos.x),static_cast<float>(mousePos.y) })) && openCreateUnitMenu == true && clickTimer == 0)
+		{
+			clickTimer = 30;
+			createDefaultUnit.setFillColor(sf::Color(150, 150, 100));
+			createUnitActive = true;
+		}
+		else if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && createUnitActive == true && clickTimer == 0 && player[whosTurn - 1].playerEliminated == false)
+		{
+			player[whosTurn - 1].generateNewUnit(whosTurn - 1, 0, unitPlacementHighlight.getPosition());
+			addUnit(whosTurn - 1);//add the new unit to the counter in globals
+			createUnitActive = false;
+		}
+		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter) && clickTimer == 0)
+		{
+			clickTimer = 30;
+			worldEditingEnabled = !worldEditingEnabled;
+			std::cout << worldEditingEnabled;
+		}
 	}
 
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter) && clickTimer == 0)
-	{
-		clickTimer = 30;
-		worldEditingEnabled = !worldEditingEnabled;
-		std::cout << worldEditingEnabled;
-	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1) && clickTimer == 0 && worldEditingEnabled == true)
-	{
-		editingTerrainType = 0;
-		std::cout << "Ground tile selected\n";
-	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2) && clickTimer == 0 && worldEditingEnabled == true)
-	{
-		editingTerrainType = 1;
-		std::cout << "Wall tile selected\n";
-	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3) && clickTimer == 0 && worldEditingEnabled == true)
-	{
-		editingTerrainType = 2;
-		std::cout << "Water tile selected\n";
-	}
-	else if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && clickTimer == 0 && worldEditingEnabled == true)
-	{
-		worldTiles.updateTileType(editingTerrainType);
-	}
 
 	clickTimer--;
 	if (clickTimer < 0)
