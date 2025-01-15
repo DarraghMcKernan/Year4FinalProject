@@ -228,6 +228,21 @@ void TileGrid::setupTextures()
 		std::cout << "ERROR loading SOUTH WEST INTERIOR WATER tile\n";
 	if (!waterSEI.loadFromFile("ASSETS/Tiles/Water/Custom/WaterSEInteriorCorner.png"))
 		std::cout << "ERROR loading SOUTH EAST INTERIOR WATER tile\n";
+	//diagonal
+	if (!waterSEINW.loadFromFile("ASSETS/Tiles/Water/Custom/WaterNW&SECornerFilled.png"))
+		std::cout << "ERROR loading SOUTH EAST INTERIOR WITH NORTH WEST WATER tile\n";
+	if (!waterSWINE.loadFromFile("ASSETS/Tiles/Water/Custom/WaterNE&SWCornerFilled.png"))
+		std::cout << "ERROR loading SOUTH WEST INTERIOR WITH NORTH EAST WATER tile\n";
+
+	//1 corner filled
+	if (!waterSEF.loadFromFile("ASSETS/Tiles/Water/Custom/WaterSECornerFilled.png"))
+		std::cout << "ERROR loading SOUTH EAST FILLED tile\n";
+	if (!waterSWF.loadFromFile("ASSETS/Tiles/Water/Custom/WaterSWCornerFilled.png"))
+		std::cout << "ERROR loading SOUTH WEST FILLED tile\n";
+	if (!waterNEF.loadFromFile("ASSETS/Tiles/Water/Custom/WaterNECornerFilled.png"))
+		std::cout << "ERROR loading NORTH EAST FILLED tile\n";
+	if (!waterNWF.loadFromFile("ASSETS/Tiles/Water/Custom/WaterNWCornerFilled.png"))
+		std::cout << "ERROR loading NORTH WEST FILLED tile\n";
 }
 
 void TileGrid::updateTileTexture(int t_tileNum, int t_depth)
@@ -268,7 +283,7 @@ void TileGrid::updateTileTexture(int t_tileNum, int t_depth)
 		{
 			worldTileTemp[t_tileNum].setTexture(waterNA);
 		}
-		
+
 		else if (checkSurroundingTiles(t_tileNum) == 7)
 		{
 			worldTileTemp[t_tileNum].setTexture(waterN);
@@ -320,6 +335,34 @@ void TileGrid::updateTileTexture(int t_tileNum, int t_depth)
 		{
 			worldTileTemp[t_tileNum].setTexture(waterSEI);
 		}
+
+		//diagonal interior
+		else if (checkSurroundingTiles(t_tileNum) == 20)
+		{
+			worldTileTemp[t_tileNum].setTexture(waterSEINW);
+		}
+		else if (checkSurroundingTiles(t_tileNum) == 19)
+		{
+			worldTileTemp[t_tileNum].setTexture(waterSWINE);
+		}
+
+		//1 corner filled
+		else if (checkSurroundingTiles(t_tileNum) == 23)
+		{
+			worldTileTemp[t_tileNum].setTexture(waterNEF);
+		}
+		else if (checkSurroundingTiles(t_tileNum) == 24)
+		{
+			worldTileTemp[t_tileNum].setTexture(waterNWF);
+		}
+		else if (checkSurroundingTiles(t_tileNum) == 22)
+		{
+			worldTileTemp[t_tileNum].setTexture(waterSWF);
+		}
+		else if (checkSurroundingTiles(t_tileNum) == 21)
+		{
+			worldTileTemp[t_tileNum].setTexture(waterSEF);
+		}
 	}
 	if (t_depth == 0)//if this is the orignal tile recall this function on the surronding tiles so they can update themselves too
 	{
@@ -355,6 +398,7 @@ int TileGrid::checkSurroundingTiles(int t_tileNum)
 	{
 		return 1;//surrounded by water on all sides
 	}
+
 	//interior corners
 	else if (N == thisType && W == thisType && E == thisType && S == thisType &&
 		NW != thisType && NE == thisType && SW == thisType && SE == thisType)
@@ -375,6 +419,38 @@ int TileGrid::checkSurroundingTiles(int t_tileNum)
 		NW == thisType && NE == thisType && SW == thisType && SE != thisType)
 	{
 		return 18;
+	}
+	//diagonal interior corners
+	else if (N == thisType && W == thisType && E == thisType && S == thisType &&
+		NW != thisType && NE == thisType && SW == thisType && SE != thisType)
+	{
+		return 19;
+	}
+	else if (N == thisType && W == thisType && E == thisType && S == thisType &&
+		NW == thisType && NE != thisType && SW != thisType && SE == thisType)
+	{
+		return 20;
+	}
+
+	else if (N == thisType && W == thisType && E == thisType && S == thisType &&
+		NW != thisType && NE != thisType && SW != thisType && SE == thisType)
+	{
+		return 21;//SE filled
+	}
+	else if (N == thisType && W == thisType && E == thisType && S == thisType &&
+		NW != thisType && NE != thisType && SW == thisType && SE != thisType)
+	{
+		return 22;//SW filled
+	}
+	else if (N == thisType && W == thisType && E == thisType && S == thisType &&
+		NW != thisType && NE == thisType && SW != thisType && SE != thisType)
+	{
+		return 23;//NE filled
+	}
+	else if (N == thisType && W == thisType && E == thisType && S == thisType &&
+		NW == thisType && NE != thisType && SW != thisType && SE != thisType)
+	{
+		return 24;//NW filled
 	}
 
 	//flat on 1 side

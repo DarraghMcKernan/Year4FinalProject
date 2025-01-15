@@ -63,4 +63,12 @@ private:
 	sf::Texture waterNEI;
 	sf::Texture waterSWI;
 	sf::Texture waterSEI;
+
+	sf::Texture waterSEINW;//diagonal corners
+	sf::Texture waterSWINE;
+
+	sf::Texture waterSEF;//1 corner filled
+	sf::Texture waterSWF;
+	sf::Texture waterNEF;
+	sf::Texture waterNWF;
 };
