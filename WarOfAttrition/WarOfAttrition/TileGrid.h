@@ -71,4 +71,9 @@ private:
 	sf::Texture waterSWF;
 	sf::Texture waterNEF;
 	sf::Texture waterNWF;
+
+	sf::Texture waterNEC;//NE turn corner cutout 
+	sf::Texture waterNWC;
+	sf::Texture waterSWC;
+	sf::Texture waterSEC;
 };

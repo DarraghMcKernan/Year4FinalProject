@@ -243,6 +243,15 @@ void TileGrid::setupTextures()
 		std::cout << "ERROR loading NORTH EAST FILLED tile\n";
 	if (!waterNWF.loadFromFile("ASSETS/Tiles/Water/Custom/WaterNWCornerFilled.png"))
 		std::cout << "ERROR loading NORTH WEST FILLED tile\n";
+
+	if (!waterNEC.loadFromFile("ASSETS/Tiles/Water/Custom/WaterICornerNE.png"))
+		std::cout << "ERROR loading NORTH EAST TURN INTERIOR CORNER CUT OUT tile\n";
+	if (!waterNWC.loadFromFile("ASSETS/Tiles/Water/Custom/WaterCornerNW.png"))
+		std::cout << "ERROR loading NORTH WEST TURN INTERIOR CORNER CUT OUT tile\n";
+	if (!waterSEC.loadFromFile("ASSETS/Tiles/Water/Custom/WaterCornerSE.png"))
+		std::cout << "ERROR loading SOUTH EAST TURN INTERIOR CORNER CUT OUT tile\n";
+	if (!waterSWC.loadFromFile("ASSETS/Tiles/Water/Custom/WaterCornerSW.png"))
+		std::cout << "ERROR loading SOUTH WEST TURN INTERIOR CORNER CUT OUT tile\n";
 }
 
 void TileGrid::updateTileTexture(int t_tileNum, int t_depth)
@@ -301,7 +310,7 @@ void TileGrid::updateTileTexture(int t_tileNum, int t_depth)
 			worldTileTemp[t_tileNum].setTexture(waterS);
 		}
 
-		else if (checkSurroundingTiles(t_tileNum) == 11)
+		else if (checkSurroundingTiles(t_tileNum) == 11)//turn
 		{
 			worldTileTemp[t_tileNum].setTexture(waterNW);
 		}
@@ -363,6 +372,24 @@ void TileGrid::updateTileTexture(int t_tileNum, int t_depth)
 		{
 			worldTileTemp[t_tileNum].setTexture(waterSEF);
 		}
+
+		else if (checkSurroundingTiles(t_tileNum) == 25)
+		{
+			worldTileTemp[t_tileNum].setTexture(waterNEC);
+		}
+		else if (checkSurroundingTiles(t_tileNum) == 26)
+		{
+			worldTileTemp[t_tileNum].setTexture(waterNWC);
+		}
+		else if (checkSurroundingTiles(t_tileNum) == 27)
+		{
+			worldTileTemp[t_tileNum].setTexture(waterSEC);
+		}
+		else if (checkSurroundingTiles(t_tileNum) == 28)
+		{
+			worldTileTemp[t_tileNum].setTexture(waterSWC);
+		}
+
 	}
 	if (t_depth == 0)//if this is the orignal tile recall this function on the surronding tiles so they can update themselves too
 	{
@@ -453,6 +480,27 @@ int TileGrid::checkSurroundingTiles(int t_tileNum)
 		return 24;//NW filled
 	}
 
+	else if (N != thisType && W == thisType && E != thisType && S == thisType &&
+		NE != thisType && SW != thisType)
+	{
+		return 25;//Turn with interior corner missing
+	}
+	else if (N != thisType && W != thisType && E == thisType && S == thisType &&
+		SE != thisType && NW != thisType)
+	{
+		return 26;
+	}
+	else if (N == thisType && W == thisType && E != thisType && S != thisType &&
+		NW != thisType && SE != thisType)
+	{
+		return 27;
+	}
+	else if (N == thisType && W != thisType && E == thisType && S != thisType &&
+		NE != thisType && SW != thisType)
+	{
+		return 28;
+	}
+
 	//flat on 1 side
 	else if (N != thisType && W == thisType && E == thisType && S == thisType &&
 		SW == thisType && SE == thisType)
@@ -476,22 +524,22 @@ int TileGrid::checkSurroundingTiles(int t_tileNum)
 	}
 
 	else if (N != thisType && W != thisType && E == thisType && S == thisType &&
-		NW != thisType && SE == thisType)
+		 SE == thisType)
 	{
 		return 11;//nothing up and left
 	}
 	else if (N != thisType && W == thisType && E != thisType && S == thisType &&
-		NE != thisType && SW == thisType)
+		 SW == thisType)
 	{
 		return 12;//nothing up and right
 	}
 	else if (N == thisType && W != thisType && E == thisType && S != thisType &&
-		SW != thisType && NE == thisType)
+		 NE == thisType)
 	{
 		return 13;//nothing down and left
 	}
 	else if (N == thisType && W == thisType && E != thisType && S != thisType &&
-		SE != thisType && NW == thisType)
+		NW == thisType)
 	{
 		return 14;//nothing down and right
 	}
