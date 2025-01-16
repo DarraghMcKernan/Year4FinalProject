@@ -19,3 +19,6 @@ static int playerOneUnits = 4;
 static int playerTwoUnits = 4;
 static int playerThreeUnits = 4;
 static int playerFourUnits = 4;
+
+static sf::Texture UnitTexture;
+static sf::Texture TeamOutlineTexture;

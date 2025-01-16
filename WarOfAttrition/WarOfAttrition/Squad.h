@@ -22,6 +22,11 @@ private:
 	sf::RectangleShape troopContainer;
 	sf::Vector2f targetPosition;
 
+	sf::Sprite UnitSprite;
+	sf::Sprite teamOutlineSprite;
+
+	sf::Vector2f worldTileOffset = sf::Vector2f(23, 23);
+
 	bool movementAllowed = false;
 	
 	int moveSpeed = 100;

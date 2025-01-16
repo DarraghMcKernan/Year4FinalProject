@@ -13,11 +13,29 @@ void Squad::init(int t_squadStrength, sf::Vector2f t_startingPos,int t_teamNum)
 	//troopContainer.setSize(sf::Vector2f(TILE_SIZE + 15, TILE_SIZE + 15));// used to expand the squad to allow for collision checks of surrounding cells
 	//troopContainer.setRotation(45);//can be used to have collision checks in all 9 surrounding squares or the 4 immediate squares
 
-	troopContainer.setOutlineColor(sf::Color::Black);
-	troopContainer.setOutlineThickness(1.5);
+	//troopContainer.setOutlineColor(sf::Color::Black);
+	//troopContainer.setOutlineThickness(1.5);
 	troopContainer.setOrigin(troopContainer.getSize().x/2, troopContainer.getSize().y/2);
 	troopContainer.setPosition(t_startingPos.x - (TILE_SIZE / 2), t_startingPos.y - (TILE_SIZE / 2));//spawn player in the center of the map
 	targetPosition = troopContainer.getPosition();
+
+	if(!UnitTexture.loadFromFile("ASSETS/ACS_Preview.png"))
+	{
+		std::cout << "error loading squad texture";
+	}
+	if(!TeamOutlineTexture.loadFromFile("ASSETS/TankTeamOutline.png"))
+	{
+		std::cout << "error loading squad outline texture";
+	}
+	UnitSprite.setTexture(UnitTexture);
+	UnitSprite.setScale((UnitSprite.getScale().x / 128) * (TILE_SIZE), (UnitSprite.getScale().y / 128) * (TILE_SIZE));
+	UnitSprite.setOrigin(UnitSprite.getGlobalBounds().getSize().x/2, UnitSprite.getGlobalBounds().getSize().y / 2);
+	UnitSprite.setPosition(troopContainer.getPosition() - worldTileOffset);
+
+	teamOutlineSprite.setTexture(TeamOutlineTexture);
+	teamOutlineSprite.setScale((teamOutlineSprite.getScale().x / 128) * (TILE_SIZE) +0.03, (teamOutlineSprite.getScale().y / 128) * (TILE_SIZE) + 0.03);
+	teamOutlineSprite.setOrigin((teamOutlineSprite.getGlobalBounds().getSize().x / 2) + 1.25, (teamOutlineSprite.getGlobalBounds().getSize().y / 2) + 1.5);
+	teamOutlineSprite.setPosition(troopContainer.getPosition() - worldTileOffset);
 }
 
 void Squad::update(sf::Time t_deltaTime)
@@ -32,6 +50,8 @@ void Squad::update(sf::Time t_deltaTime)
 			if (distance <= 2.1)//lock player to target once close enough
 			{
 				troopContainer.setPosition(targetPosition);
+				UnitSprite.setPosition(troopContainer.getPosition() - worldTileOffset);
+				teamOutlineSprite.setPosition(troopContainer.getPosition() - worldTileOffset);
 				movementAllowed = false;
 				targetReached = true;
 				resetColour();
@@ -51,6 +71,8 @@ void Squad::update(sf::Time t_deltaTime)
 				vectorToTarget = vectorToTarget * (distance / moveSpeed);//slow down as we get closer to the target
 
 				troopContainer.move((vectorToTarget.x * t_deltaTime.asSeconds()) * moveSpeed, (vectorToTarget.y * t_deltaTime.asSeconds())* moveSpeed);
+				UnitSprite.setPosition(troopContainer.getPosition() - worldTileOffset);
+				teamOutlineSprite.setPosition(troopContainer.getPosition() - worldTileOffset);
 			}
 		}
 	}
@@ -59,6 +81,8 @@ void Squad::update(sf::Time t_deltaTime)
 void Squad::render(sf::RenderWindow& t_window)
 {
 	t_window.draw(troopContainer);
+	t_window.draw(teamOutlineSprite);
+	t_window.draw(UnitSprite);
 }
 
 void Squad::unlockMovement(bool t_allowed)
@@ -87,19 +111,23 @@ void Squad::resetColour()
 {
 	if (teamNum == 0)
 	{
-		troopContainer.setFillColor(sf::Color(0, 0, 255, 100));
+		troopContainer.setFillColor(sf::Color(0, 0, 255, 00));
+		teamOutlineSprite.setColor(sf::Color(0, 0, 255, 200));
 	}
 	if (teamNum == 1)
 	{
-		troopContainer.setFillColor(sf::Color(255, 0, 0, 100));
+		troopContainer.setFillColor(sf::Color(255, 0, 0, 00));
+		teamOutlineSprite.setColor(sf::Color(255, 0, 0, 200));
 	}
 	if (teamNum == 2)
 	{
-		troopContainer.setFillColor(sf::Color(0, 255, 255, 100));
+		troopContainer.setFillColor(sf::Color(0, 255, 255, 00));
+		teamOutlineSprite.setColor(sf::Color(0, 255, 255, 200));
 	}
 	if (teamNum == 3)
 	{
-		troopContainer.setFillColor(sf::Color(255, 0, 255, 100));
+		troopContainer.setFillColor(sf::Color(255, 0, 255, 00));
+		teamOutlineSprite.setColor(sf::Color(255, 0, 255, 200));
 	}
 }
 
