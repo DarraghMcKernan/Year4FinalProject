@@ -1,9 +1,10 @@
 #include "Squad.h"
 
-void Squad::init(int t_squadStrength, sf::Vector2f t_startingPos,int t_teamNum)
+void Squad::init(int t_squadStrength, sf::Vector2f t_startingPos,int t_teamNum, int t_unitType)
 {
 	squadStrength = t_squadStrength;
 	teamNum = t_teamNum;
+	unitType = t_unitType;
 
 	resetColour();
 
@@ -19,23 +20,7 @@ void Squad::init(int t_squadStrength, sf::Vector2f t_startingPos,int t_teamNum)
 	troopContainer.setPosition(t_startingPos.x - (TILE_SIZE / 2), t_startingPos.y - (TILE_SIZE / 2));//spawn player in the center of the map
 	targetPosition = troopContainer.getPosition();
 
-	if(!UnitTexture.loadFromFile("ASSETS/ACS_Preview.png"))
-	{
-		std::cout << "error loading squad texture";
-	}
-	if(!TeamOutlineTexture.loadFromFile("ASSETS/TankTeamOutline.png"))
-	{
-		std::cout << "error loading squad outline texture";
-	}
-	UnitSprite.setTexture(UnitTexture);
-	UnitSprite.setScale((UnitSprite.getScale().x / 128) * (TILE_SIZE), (UnitSprite.getScale().y / 128) * (TILE_SIZE));
-	UnitSprite.setOrigin(UnitSprite.getGlobalBounds().getSize().x/2, UnitSprite.getGlobalBounds().getSize().y / 2);
-	UnitSprite.setPosition(troopContainer.getPosition() - worldTileOffset);
-
-	teamOutlineSprite.setTexture(TeamOutlineTexture);
-	teamOutlineSprite.setScale((teamOutlineSprite.getScale().x / 128) * (TILE_SIZE) +0.03, (teamOutlineSprite.getScale().y / 128) * (TILE_SIZE) + 0.03);
-	teamOutlineSprite.setOrigin((teamOutlineSprite.getGlobalBounds().getSize().x / 2) + 1.25, (teamOutlineSprite.getGlobalBounds().getSize().y / 2) + 1.5);
-	teamOutlineSprite.setPosition(troopContainer.getPosition() - worldTileOffset);
+	setunitType();
 }
 
 void Squad::update(sf::Time t_deltaTime)
@@ -139,4 +124,48 @@ int Squad::getStrength()
 void Squad::setStrength(int t_strength)
 {
 	squadStrength = t_strength;
+}
+
+void Squad::setunitType()
+{
+	if (unitType == 0)
+	{
+		if (!tankTexture.loadFromFile("ASSETS/ACS_Preview.png"))
+		{
+			std::cout << "error loading squad texture";
+		}
+		if (!tankOutlineTexture.loadFromFile("ASSETS/TankTeamOutline.png"))
+		{
+			std::cout << "error loading squad outline texture";
+		}
+		UnitSprite.setTexture(tankTexture);
+		UnitSprite.setScale((UnitSprite.getScale().x / 128) * (TILE_SIZE), (UnitSprite.getScale().y / 128) * (TILE_SIZE));
+		UnitSprite.setOrigin(UnitSprite.getGlobalBounds().getSize().x / 2, UnitSprite.getGlobalBounds().getSize().y / 2);
+		UnitSprite.setPosition(troopContainer.getPosition() - worldTileOffset);
+
+		teamOutlineSprite.setTexture(tankOutlineTexture);
+		teamOutlineSprite.setScale((teamOutlineSprite.getScale().x / 128) * (TILE_SIZE)+0.03, (teamOutlineSprite.getScale().y / 128) * (TILE_SIZE)+0.03);
+		teamOutlineSprite.setOrigin((teamOutlineSprite.getGlobalBounds().getSize().x / 2) + 1.25, (teamOutlineSprite.getGlobalBounds().getSize().y / 2) + 1.5);
+		teamOutlineSprite.setPosition(troopContainer.getPosition() - worldTileOffset);
+	}
+	if (unitType == 1)
+	{
+		if (!infantryTexture.loadFromFile("ASSETS/Hero_Pistol.png"))
+		{
+			std::cout << "error loading squad texture";
+		}
+		if (!infantryOutlineTexture.loadFromFile("ASSETS/HeroPistolOutline.png"))
+		{
+			std::cout << "error loading squad outline texture";
+		}
+		UnitSprite.setTexture(infantryTexture);
+		UnitSprite.setScale((UnitSprite.getScale().x / 128) * (TILE_SIZE), (UnitSprite.getScale().y / 128) * (TILE_SIZE));
+		UnitSprite.setOrigin(UnitSprite.getGlobalBounds().getSize().x / 2, UnitSprite.getGlobalBounds().getSize().y / 2);
+		UnitSprite.setPosition(troopContainer.getPosition());
+
+		teamOutlineSprite.setTexture(infantryOutlineTexture);
+		teamOutlineSprite.setScale((teamOutlineSprite.getScale().x / 128) * (TILE_SIZE)+0.04, (teamOutlineSprite.getScale().y / 128) * (TILE_SIZE)+0.04);
+		teamOutlineSprite.setOrigin((teamOutlineSprite.getGlobalBounds().getSize().x / 2) + 0.5, (teamOutlineSprite.getGlobalBounds().getSize().y / 2) + 0.5);
+		teamOutlineSprite.setPosition(troopContainer.getPosition());
+	}
 }

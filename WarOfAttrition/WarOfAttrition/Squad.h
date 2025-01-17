@@ -4,7 +4,7 @@
 class Squad 
 {
 public:
-	void init(int t_squadStrength,sf::Vector2f t_startingPos,int t_teamNum);
+	void init(int t_squadStrength,sf::Vector2f t_startingPos,int t_teamNum,int t_unitType);
 	void update(sf::Time t_deltaTime);
 	void render(sf::RenderWindow& t_window);
 	void unlockMovement(bool t_allowed);
@@ -19,6 +19,7 @@ public:
 	bool targetSet = false;
 	int maxMoveDistance = 5;
 private:
+	void setunitType();
 	sf::RectangleShape troopContainer;
 	sf::Vector2f targetPosition;
 
@@ -32,4 +33,5 @@ private:
 	int moveSpeed = 100;
 	int teamNum=0;
 	int squadStrength = 100;
+	int unitType = 0;
 };

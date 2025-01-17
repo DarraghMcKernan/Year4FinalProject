@@ -38,8 +38,8 @@ private:
 	sf::RectangleShape openUnitMenuButton;//button that brings up the menu to create units
 	sf::RectangleShape openTowerMenuButton;
 	sf::RectangleShape unitMenuBacking;//just a background ui for the buttons to create units
-	sf::RectangleShape createDefaultUnit;//placeholder button to create the default unit type
-	sf::RectangleShape createUnitOne;
+	sf::RectangleShape createTankUnit;//button to create a tank unit
+	sf::RectangleShape createPistolUnit;//button to create a pistol unit
 	sf::RectangleShape menuBackground;
 	sf::RectangleShape menuStartButton;
 
@@ -60,6 +60,7 @@ private:
 	int clickTimer = 0;
 	int winner = 0;
 	int editingTerrainType = 0;//0 = normal ground, 1 = wall, 2 = water
+	int unitTypeToCreate = 0;
 
 	bool openCreateUnitMenu = false;//toggles the create unit menu
 	bool openCreateTowerMenu = false;//toggles the create unit menu

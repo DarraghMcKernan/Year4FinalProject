@@ -14,7 +14,7 @@ void Player::init(int t_teamNum, int t_unitType)
 		playersSquads.push_back(newSquad);
 		sf::Vector2f startPos = { ((150 + index) % TILE_COLUMNS) * TILE_SIZE, ((150 + index + t_teamNum) / TILE_COLUMNS) * TILE_SIZE };
 		startPos.y += t_teamNum * (TILE_SIZE * 3);
-		playersSquads[index].init(100 + (25*index), startPos, t_teamNum);
+		playersSquads[index].init(100 + (25*index), startPos, t_teamNum,0);
 
 		//playersSquadsStrenghts.push_back(newText);
 		//playersSquadsStrenghts[index].setFont(font);
@@ -221,7 +221,7 @@ void Player::generateNewUnit(int t_teamNum, int t_unitType, sf::Vector2f t_unitS
 
 	int strength = 100;//will be determined based on type
 	sf::Vector2f positionWithOffset = {t_unitSpawnPos.x + TILE_SIZE/2,t_unitSpawnPos.y + TILE_SIZE/2};
-	newSquad.init(strength, positionWithOffset, t_teamNum);
+	newSquad.init(strength, positionWithOffset, t_teamNum,t_unitType);
 
 	playersSquads.push_back(newSquad);
 
