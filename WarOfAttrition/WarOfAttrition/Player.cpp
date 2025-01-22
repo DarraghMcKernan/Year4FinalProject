@@ -277,3 +277,25 @@ sf::Vector2f Player::getSquadPosition()
 {
 	return playersSquads.at(squadBeingControlled).getTroopContainter().getPosition();
 }
+
+SquadData Player::getSquadData(int t_squadNum)
+{
+	if (t_squadNum > 0)
+	{
+		return playersSquads.at(t_squadNum).getSquadData();
+	}
+	return playersSquads.at(0).getSquadData();
+}
+
+int Player::getSquadNumHovered(sf::Vector2f t_pointToCheck)
+{
+	for (int index = 0; index < playerSquadsCount; index++)
+	{
+		tileForColliding.setPosition(playersSquads[index].getTroopContainter().getPosition());
+		if (tileForColliding.getGlobalBounds().contains(t_pointToCheck))
+		{
+			return index;
+		}
+	}
+	return -1;
+}

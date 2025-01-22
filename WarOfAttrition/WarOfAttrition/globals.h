@@ -25,3 +25,11 @@ static sf::Texture tankOutlineTexture;
 
 static sf::Texture infantryTexture;
 static sf::Texture infantryOutlineTexture;
+
+struct SquadData
+{
+	int teamNum = 0;
+	int moveSpeed = 100;
+	int squadStrength = 100;
+	int unitType = 0;
+};

@@ -2,9 +2,10 @@
 
 void Squad::init(int t_squadStrength, sf::Vector2f t_startingPos,int t_teamNum, int t_unitType)
 {
-	squadStrength = t_squadStrength;
-	teamNum = t_teamNum;
-	unitType = t_unitType;
+	squadData.moveSpeed = 100;
+	squadData.squadStrength = t_squadStrength;
+	squadData.teamNum = t_teamNum;
+	squadData.unitType = t_unitType;
 
 	resetColour();
 
@@ -27,7 +28,7 @@ void Squad::update(sf::Time t_deltaTime)
 {
 	if (movementAllowed == true)
 	{
-		if (troopContainer.getPosition() != targetPosition && squadStrength > 0 && turnEnded == true)
+		if (troopContainer.getPosition() != targetPosition && squadData.squadStrength > 0 && turnEnded == true)
 		{
 			sf::Vector2f vectorToTarget = targetPosition - troopContainer.getPosition();
 			float distance = sqrt((vectorToTarget.x * vectorToTarget.x) + (vectorToTarget.y * vectorToTarget.y));
@@ -53,9 +54,9 @@ void Squad::update(sf::Time t_deltaTime)
 				{
 					distance = 200;
 				}
-				vectorToTarget = vectorToTarget * (distance / moveSpeed);//slow down as we get closer to the target
+				vectorToTarget = vectorToTarget * (distance / squadData.moveSpeed);//slow down as we get closer to the target
 
-				troopContainer.move((vectorToTarget.x * t_deltaTime.asSeconds()) * moveSpeed, (vectorToTarget.y * t_deltaTime.asSeconds())* moveSpeed);
+				troopContainer.move((vectorToTarget.x * t_deltaTime.asSeconds()) * squadData.moveSpeed, (vectorToTarget.y * t_deltaTime.asSeconds())* squadData.moveSpeed);
 				UnitSprite.setPosition(troopContainer.getPosition() - worldTileOffset);
 				teamOutlineSprite.setPosition(troopContainer.getPosition() - worldTileOffset);
 			}
@@ -94,22 +95,22 @@ bool Squad::movingAllowed()
 
 void Squad::resetColour()
 {
-	if (teamNum == 0)
+	if (squadData.teamNum == 0)
 	{
 		troopContainer.setFillColor(sf::Color(0, 0, 255, 00));
 		teamOutlineSprite.setColor(sf::Color(0, 0, 255, 200));
 	}
-	if (teamNum == 1)
+	if (squadData.teamNum == 1)
 	{
 		troopContainer.setFillColor(sf::Color(255, 0, 0, 00));
 		teamOutlineSprite.setColor(sf::Color(255, 0, 0, 200));
 	}
-	if (teamNum == 2)
+	if (squadData.teamNum == 2)
 	{
 		troopContainer.setFillColor(sf::Color(0, 255, 255, 00));
 		teamOutlineSprite.setColor(sf::Color(0, 255, 255, 200));
 	}
-	if (teamNum == 3)
+	if (squadData.teamNum == 3)
 	{
 		troopContainer.setFillColor(sf::Color(255, 0, 255, 00));
 		teamOutlineSprite.setColor(sf::Color(255, 0, 255, 200));
@@ -118,17 +119,22 @@ void Squad::resetColour()
 
 int Squad::getStrength()
 {
-	return squadStrength;
+	return squadData.squadStrength;
 }
 
 void Squad::setStrength(int t_strength)
 {
-	squadStrength = t_strength;
+	squadData.squadStrength = t_strength;
+}
+
+SquadData Squad::getSquadData()
+{
+	return squadData;
 }
 
 void Squad::setunitType()
 {
-	if (unitType == 0)
+	if (squadData.unitType == 0)
 	{
 		if (!tankTexture.loadFromFile("ASSETS/ACS_Preview.png"))
 		{
@@ -148,7 +154,7 @@ void Squad::setunitType()
 		teamOutlineSprite.setOrigin((teamOutlineSprite.getGlobalBounds().getSize().x / 2) + 1.25, (teamOutlineSprite.getGlobalBounds().getSize().y / 2) + 1.5);
 		teamOutlineSprite.setPosition(troopContainer.getPosition() - worldTileOffset);
 	}
-	if (unitType == 1)
+	if (squadData.unitType == 1)
 	{
 		if (!infantryTexture.loadFromFile("ASSETS/Hero_Pistol.png"))
 		{

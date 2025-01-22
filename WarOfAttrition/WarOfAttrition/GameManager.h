@@ -4,6 +4,8 @@
 #include "TileGrid.h"
 #include "Enemy.h"
 
+
+
 class GameManager
 {
 public:
@@ -27,6 +29,7 @@ private:
 
 	Player player[MAX_PLAYERS];//create as many instances of player as is needed
 	TileGrid worldTiles;//create an instance of the world tiles
+	SquadData squadData;//stores the data of the most recent squad that was hovered over
 
 	sf::Time timePerFrame;
 	sf::Time timeSinceLastUpdate;
@@ -46,6 +49,7 @@ private:
 	sf::CircleShape unitPlacementHighlight;//a circular highlight to show where your placed unit will go
 
 	sf::Vector2i mousePos;
+	sf::Vector2f mousePosFloat;
 	sf::Font font;//default font
 	sf::Text playerTurnDisplay;//text to shows whos turn it is
 	sf::Text endTurnText;
@@ -54,6 +58,11 @@ private:
 	sf::Text menuStartButtonText;
 	sf::Text framerateText;
 	sf::Text winScreenMessage;
+	//squad data display
+	sf::Text squadStrengthDisplay;
+	sf::Text squadTypeDisplay;
+	sf::Text squadSpeedDisplay;
+	sf::Text squadTeamDisplay;
 
 	int whosTurn = 1;//used to keep track of which player currently gets to play
 	int currentTileSelected = 0;
@@ -69,4 +78,5 @@ private:
 	bool menuOpen = true;
 	bool gameOver = false;
 	bool worldEditingEnabled = false;
+	bool allowSquadDataDisplay = false;
 };

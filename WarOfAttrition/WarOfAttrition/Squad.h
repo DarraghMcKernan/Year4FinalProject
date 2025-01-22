@@ -1,6 +1,8 @@
 #pragma once
 #include "globals.h"
 
+
+
 class Squad 
 {
 public:
@@ -18,7 +20,11 @@ public:
 	bool turnEnded = false;
 	bool targetSet = false;
 	int maxMoveDistance = 5;
+
+	SquadData getSquadData();
 private:
+	SquadData squadData;
+
 	void setunitType();
 	sf::RectangleShape troopContainer;
 	sf::Vector2f targetPosition;
@@ -30,8 +36,8 @@ private:
 
 	bool movementAllowed = false;
 	
-	int moveSpeed = 100;
+	/*int moveSpeed = 100;
 	int teamNum=0;
 	int squadStrength = 100;
-	int unitType = 0;
+	int unitType = 0;*/
 };

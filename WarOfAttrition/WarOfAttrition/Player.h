@@ -2,6 +2,8 @@
 #include "globals.h"
 #include "Squad.h"
 
+
+
 class Player
 {
 public:
@@ -31,6 +33,9 @@ public:
 	bool playerEliminated = false;
 
 	sf::Vector2f getSquadPosition();
+
+	SquadData getSquadData(int t_squadNum);
+	int getSquadNumHovered(sf::Vector2f t_pointToCheck);
 private:
 	std::vector<Squad> playersSquads;//vector to hold the players squads
 	std::vector<sf::Text> playersSquadsStrenghts;//used for debugging to display strengths on squads
