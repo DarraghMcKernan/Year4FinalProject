@@ -248,12 +248,17 @@ void GameManager::updatePlayers(sf::Time& t_deltaTime)
 		if (player[index].getSquadNumHovered(mousePosFloat) != -1)//doestn work when viewport moves
 		{
 			squadData = player[index].getSquadData(player[index].getSquadNumHovered(worldTiles.tileHoveredOverPos()));
+			unitDataDisplayBacking.setPosition({mousePos.x - (SCREEN_WIDTH / 5), mousePos.y - (SCREEN_HEIGHT / 7)});
+			squadTeamDisplay.setPosition(mousePos.x - 350,mousePos.y - 180);
+			squadTypeDisplay.setPosition(mousePos.x - 350,mousePos.y - 160);
+			squadStrengthDisplay.setPosition(mousePos.x - 350,mousePos.y - 140);
+			squadSpeedDisplay.setPosition(mousePos.x - 350,mousePos.y - 120);
 			allowSquadDataDisplay = true;
 
 			squadSpeedDisplay.setString("Speed: " + std::to_string(squadData.moveSpeed));
 			squadStrengthDisplay.setString("Strength: " + std::to_string(squadData.squadStrength));
 			squadTypeDisplay.setString("Type: " + std::to_string(squadData.unitType));
-			squadTeamDisplay.setString("Team: " + std::to_string(squadData.teamNum));
+			squadTeamDisplay.setString("Team: " + std::to_string(squadData.teamNum + 1));
 		}
 
 		if ((whosTurn - 1) == index && openCreateUnitMenu == false)
