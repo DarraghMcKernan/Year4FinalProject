@@ -142,28 +142,35 @@ void GameManager::startGame()//setup variables needed before the game starts
 	squadSpeedDisplay.setFillColor(sf::Color::Black);
 	squadSpeedDisplay.setScale(0.75, 0.75);
 	squadSpeedDisplay.setOrigin({ (squadSpeedDisplay.getGlobalBounds().getSize().x / 2),(squadSpeedDisplay.getGlobalBounds().getSize().y / 2) });
-	squadSpeedDisplay.setPosition(20,20);
+	squadSpeedDisplay.setPosition(50,90);
 
 	squadStrengthDisplay.setFont(font);
 	squadStrengthDisplay.setCharacterSize(30);//increase size and then downscale to prevent blurred text
 	squadStrengthDisplay.setFillColor(sf::Color::Black);
 	squadStrengthDisplay.setScale(0.75, 0.75);
 	squadStrengthDisplay.setOrigin({ (squadSpeedDisplay.getGlobalBounds().getSize().x / 2),(squadSpeedDisplay.getGlobalBounds().getSize().y / 2) });
-	squadStrengthDisplay.setPosition(20, 40);
+	squadStrengthDisplay.setPosition(50, 110);
 
 	squadTeamDisplay.setFont(font);
 	squadTeamDisplay.setCharacterSize(30);//increase size and then downscale to prevent blurred text
 	squadTeamDisplay.setFillColor(sf::Color::Black);
 	squadTeamDisplay.setScale(0.75, 0.75);
 	squadTeamDisplay.setOrigin({ (squadSpeedDisplay.getGlobalBounds().getSize().x / 2),(squadSpeedDisplay.getGlobalBounds().getSize().y / 2) });
-	squadTeamDisplay.setPosition(20, 60);
+	squadTeamDisplay.setPosition(50, 130);
 
 	squadTypeDisplay.setFont(font);
 	squadTypeDisplay.setCharacterSize(30);//increase size and then downscale to prevent blurred text
 	squadTypeDisplay.setFillColor(sf::Color::Black);
 	squadTypeDisplay.setScale(0.75, 0.75);
 	squadTypeDisplay.setOrigin({ (squadSpeedDisplay.getGlobalBounds().getSize().x / 2),(squadSpeedDisplay.getGlobalBounds().getSize().y / 2) });
-	squadTypeDisplay.setPosition(20, 80);
+	squadTypeDisplay.setPosition(50, 150);
+
+	unitDataDisplayBacking.setSize({ SCREEN_WIDTH / 3,SCREEN_HEIGHT / 5 });
+	unitDataDisplayBacking.setOrigin({ unitDataDisplayBacking.getSize().x / 2 ,unitDataDisplayBacking.getSize().y / 2 });
+	unitDataDisplayBacking.setPosition({SCREEN_WIDTH / 5,SCREEN_HEIGHT / 5 });
+	unitDataDisplayBacking.setFillColor(sf::Color(200, 200, 200));
+	unitDataDisplayBacking.setOutlineThickness(3);
+	unitDataDisplayBacking.setOutlineColor(sf::Color::Black);
 
 	framerateText.setFont(font);
 
@@ -240,7 +247,7 @@ void GameManager::updatePlayers(sf::Time& t_deltaTime)
 	{
 		if (player[index].getSquadNumHovered(mousePosFloat) != -1)//doestn work when viewport moves
 		{
-			squadData = player[index].getSquadData(player[index].getSquadNumHovered(mousePosFloat));
+			squadData = player[index].getSquadData(player[index].getSquadNumHovered(worldTiles.tileHoveredOverPos()));
 			allowSquadDataDisplay = true;
 
 			squadSpeedDisplay.setString("Speed: " + std::to_string(squadData.moveSpeed));
@@ -388,7 +395,8 @@ void GameManager::displayClean(sf::RenderWindow& t_window, sf::View& t_viewport)
 void GameManager::display(sf::RenderWindow& t_window)
 {
 	mousePos = sf::Mouse::getPosition(t_window);
-	mousePosFloat = sf::Vector2f(mousePos.x * 1.0f, mousePos.y * 1.0f);
+	mousePosFloat = t_window.mapPixelToCoords(mousePos);
+
 	worldTiles.render(t_window);
 	for (int index = 0; index < MAX_PLAYERS; index++)
 	{
@@ -420,6 +428,7 @@ void GameManager::displayHUD(sf::RenderWindow& t_window,sf::View& t_fixedWindow)
 
 	if (allowSquadDataDisplay == true)
 	{
+		t_window.draw(unitDataDisplayBacking);
 		t_window.draw(squadSpeedDisplay);
 		t_window.draw(squadStrengthDisplay);
 		t_window.draw(squadTypeDisplay);

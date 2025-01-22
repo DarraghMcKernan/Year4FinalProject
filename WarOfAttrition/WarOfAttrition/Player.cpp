@@ -291,8 +291,8 @@ int Player::getSquadNumHovered(sf::Vector2f t_pointToCheck)
 {
 	for (int index = 0; index < playerSquadsCount; index++)
 	{
-		tileForColliding.setPosition(playersSquads[index].getTroopContainter().getPosition());
-		if (tileForColliding.getGlobalBounds().contains(t_pointToCheck))
+		tileForColliding.setPosition(t_pointToCheck);
+		if (playersSquads[index].getTroopContainter().getGlobalBounds().contains(t_pointToCheck))
 		{
 			return index;
 		}

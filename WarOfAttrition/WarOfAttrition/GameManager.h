@@ -45,6 +45,7 @@ private:
 	sf::RectangleShape createPistolUnit;//button to create a pistol unit
 	sf::RectangleShape menuBackground;
 	sf::RectangleShape menuStartButton;
+	sf::RectangleShape unitDataDisplayBacking;
 
 	sf::CircleShape unitPlacementHighlight;//a circular highlight to show where your placed unit will go
 
