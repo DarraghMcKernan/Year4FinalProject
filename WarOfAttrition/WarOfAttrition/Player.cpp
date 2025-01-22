@@ -299,3 +299,13 @@ int Player::getSquadNumHovered(sf::Vector2f t_pointToCheck)
 	}
 	return -1;
 }
+
+int Player::getMoney()
+{
+	return money;
+}
+
+void Player::spendMoney(int t_money)
+{
+	money -= t_money;
+}

@@ -59,11 +59,15 @@ private:
 	sf::Text menuStartButtonText;
 	sf::Text framerateText;
 	sf::Text winScreenMessage;
+	sf::Text moneyDisplay;
 	//squad data display
 	sf::Text squadStrengthDisplay;
 	sf::Text squadTypeDisplay;
 	sf::Text squadSpeedDisplay;
 	sf::Text squadTeamDisplay;
+
+	sf::Sprite moneyIcon;
+	sf::Texture moneyIconTexture;
 
 	int whosTurn = 1;//used to keep track of which player currently gets to play
 	int currentTileSelected = 0;

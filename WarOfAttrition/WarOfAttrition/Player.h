@@ -36,6 +36,9 @@ public:
 
 	SquadData getSquadData(int t_squadNum);
 	int getSquadNumHovered(sf::Vector2f t_pointToCheck);
+
+	int getMoney();
+	void spendMoney(int t_money);
 private:
 	std::vector<Squad> playersSquads;//vector to hold the players squads
 	std::vector<sf::Text> playersSquadsStrenghts;//used for debugging to display strengths on squads
@@ -52,6 +55,7 @@ private:
 	int strength = 100;//how strong is this unit
 	int activeTargetTimer = 0;//a cooldown to prevent the player from trying to select the tile its on
 	int timerForEnd = 0;
+	int money = 1000;
 
 	bool endTurnActive = false;
 	bool squadSet = false;

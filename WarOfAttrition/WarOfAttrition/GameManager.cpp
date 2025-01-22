@@ -172,6 +172,23 @@ void GameManager::startGame()//setup variables needed before the game starts
 	unitDataDisplayBacking.setOutlineThickness(3);
 	unitDataDisplayBacking.setOutlineColor(sf::Color::Black);
 
+	moneyDisplay.setFont(font);
+	moneyDisplay.setCharacterSize(50);//increase size and then downscale to prevent blurred text
+	moneyDisplay.setFillColor(sf::Color::Black);
+	moneyDisplay.setScale(0.75, 0.75);
+	moneyDisplay.setOrigin({ (moneyDisplay.getGlobalBounds().getSize().x / 2),(moneyDisplay.getGlobalBounds().getSize().y / 2) });
+	moneyDisplay.setPosition((SCREEN_WIDTH / 2) - SCREEN_WIDTH/5, SCREEN_HEIGHT - (SCREEN_HEIGHT / 12.5));
+	moneyDisplay.setString(std::to_string(1000));
+
+	if (!moneyIconTexture.loadFromFile("ASSETS/MoneyIcon.png"))
+	{
+		std::cout << "Error loading moneyIcon from file\n";
+	}
+	moneyIcon.setTexture(moneyIconTexture);
+	moneyIcon.setOrigin(moneyIcon.getGlobalBounds().width / 2, moneyIcon.getGlobalBounds().height / 2);
+	moneyIcon.setPosition((SCREEN_WIDTH / 2) - SCREEN_WIDTH / 4.5, SCREEN_HEIGHT - (SCREEN_HEIGHT / 20));
+	moneyIcon.setScale(3, 3);
+
 	framerateText.setFont(font);
 
 	updateLoop();
@@ -263,6 +280,7 @@ void GameManager::updatePlayers(sf::Time& t_deltaTime)
 
 		if ((whosTurn - 1) == index && openCreateUnitMenu == false)
 		{
+			moneyDisplay.setString(std::to_string(player[index].getMoney()));
 			if (player[whosTurn - 1].playerEliminated == true)
 			{
 				whosTurn++;
@@ -429,6 +447,8 @@ void GameManager::displayHUD(sf::RenderWindow& t_window,sf::View& t_fixedWindow)
 	t_window.draw(endTurnText);
 	t_window.draw(createUnitText);
 	t_window.draw(createTowerText);
+	t_window.draw(moneyDisplay);
+	t_window.draw(moneyIcon);
 	t_window.draw(framerateText);
 
 	if (allowSquadDataDisplay == true)
@@ -554,9 +574,14 @@ void GameManager::menuInteractions()
 		}
 		else if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && createUnitActive == true && clickTimer == 0 && player[whosTurn - 1].playerEliminated == false)
 		{
-			player[whosTurn - 1].generateNewUnit(whosTurn - 1, unitTypeToCreate, unitPlacementHighlight.getPosition());
-			addUnit(whosTurn - 1);//add the new unit to the counter in globals
-			createUnitActive = false;
+			if (player[whosTurn - 1].getMoney() > 100)
+			{
+				player[whosTurn - 1].spendMoney(100);
+				moneyDisplay.setString(std::to_string(player[whosTurn - 1].getMoney()));
+				player[whosTurn - 1].generateNewUnit(whosTurn - 1, unitTypeToCreate, unitPlacementHighlight.getPosition());
+				addUnit(whosTurn - 1);//add the new unit to the counter in globals
+				createUnitActive = false;
+			}
 		}
 		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter) && clickTimer == 0)
 		{
