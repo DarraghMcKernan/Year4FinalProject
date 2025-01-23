@@ -1,9 +1,16 @@
 #include "Squad.h"
 
-void Squad::init(int t_squadStrength, sf::Vector2f t_startingPos,int t_teamNum, int t_unitType)
+void Squad::init(sf::Vector2f t_startingPos,int t_teamNum, int t_unitType)
 {
 	squadData.moveSpeed = 100;
-	squadData.squadStrength = t_squadStrength;
+	if(t_unitType == 0)
+	{
+		squadData.squadStrength = 200;
+	}
+	if(t_unitType == 1)
+	{
+		squadData.squadStrength = 50;
+	}
 	squadData.teamNum = t_teamNum;
 	squadData.unitType = t_unitType;
 

@@ -6,7 +6,7 @@
 class Squad 
 {
 public:
-	void init(int t_squadStrength,sf::Vector2f t_startingPos,int t_teamNum,int t_unitType);
+	void init(sf::Vector2f t_startingPos,int t_teamNum,int t_unitType);
 	void update(sf::Time t_deltaTime);
 	void render(sf::RenderWindow& t_window);
 	void unlockMovement(bool t_allowed);

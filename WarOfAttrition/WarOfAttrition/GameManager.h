@@ -24,6 +24,7 @@ private:
 	void checkGameOver();
 	void addUnit(int t_playerNum);
 	void removeUnit(int t_playerNum);
+	void updateUnitDataDisplay();
 
 	static const int MAX_PLAYERS = 4;//maximum players in a game
 
