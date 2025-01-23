@@ -169,7 +169,7 @@ void GameManager::startGame()//setup variables needed before the game starts
 	unitDataDisplayBacking.setOrigin({ unitDataDisplayBacking.getSize().x / 2 ,unitDataDisplayBacking.getSize().y / 2 });
 	unitDataDisplayBacking.setPosition({SCREEN_WIDTH / 5,SCREEN_HEIGHT / 5 });
 	unitDataDisplayBacking.setFillColor(sf::Color(200, 200, 200));
-	unitDataDisplayBacking.setOutlineThickness(3);
+	unitDataDisplayBacking.setOutlineThickness(6);
 	unitDataDisplayBacking.setOutlineColor(sf::Color::Black);
 
 	moneyDisplay.setFont(font);
