@@ -169,7 +169,7 @@ void GameManager::startGame()//setup variables needed before the game starts
 	unitDataDisplayBacking.setOrigin({ unitDataDisplayBacking.getSize().x / 2 ,unitDataDisplayBacking.getSize().y / 2 });
 	unitDataDisplayBacking.setPosition({SCREEN_WIDTH / 5,SCREEN_HEIGHT / 5 });
 	unitDataDisplayBacking.setFillColor(sf::Color(200, 200, 200));
-	unitDataDisplayBacking.setOutlineThickness(3);
+	unitDataDisplayBacking.setOutlineThickness(6);
 	unitDataDisplayBacking.setOutlineColor(sf::Color::Black);
 
 	moneyDisplay.setFont(font);
@@ -276,6 +276,8 @@ void GameManager::updatePlayers(sf::Time& t_deltaTime)
 			squadStrengthDisplay.setString("Strength: " + std::to_string(squadData.squadStrength));
 			squadTypeDisplay.setString("Type: " + std::to_string(squadData.unitType));
 			squadTeamDisplay.setString("Team: " + std::to_string(squadData.teamNum + 1));
+
+			updateUnitDataDisplay();
 
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Delete))
 			{
@@ -693,4 +695,38 @@ void GameManager::removeUnit(int t_playerNum)
 	{
 		playerFourUnits--;
 	}
+}
+
+void GameManager::updateUnitDataDisplay()
+{
+	unitDataDisplayBacking.setPosition({ mousePos.x - (SCREEN_WIDTH / 5), mousePos.y - (SCREEN_HEIGHT / 7) });
+
+	if(unitDataDisplayBacking.getPosition().x < unitDataDisplayBacking.getGlobalBounds().getSize().x/2)
+	{
+		unitDataDisplayBacking.setPosition(unitDataDisplayBacking.getGlobalBounds().getSize().x / 2, unitDataDisplayBacking.getPosition().y);
+	}
+	if (unitDataDisplayBacking.getPosition().y < unitDataDisplayBacking.getGlobalBounds().getSize().y / 2)
+	{
+		unitDataDisplayBacking.setPosition(unitDataDisplayBacking.getPosition().x, unitDataDisplayBacking.getGlobalBounds().getSize().y / 2);
+	}
+
+	float xSize = unitDataDisplayBacking.getGlobalBounds().getSize().x;
+	float ySize = unitDataDisplayBacking.getGlobalBounds().getSize().y;
+
+	squadTeamDisplay.setPosition(unitDataDisplayBacking.getPosition().x - (xSize / 2.25), unitDataDisplayBacking.getPosition().y - (ySize / 2.25));
+	squadTypeDisplay.setPosition(unitDataDisplayBacking.getPosition().x - (xSize / 2.25), unitDataDisplayBacking.getPosition().y - (ySize / 2.25) + ySize/8);
+	squadStrengthDisplay.setPosition(unitDataDisplayBacking.getPosition().x - (xSize / 2.25), unitDataDisplayBacking.getPosition().y - (ySize / 2.25)+ ySize / 8*2);
+	squadSpeedDisplay.setPosition(unitDataDisplayBacking.getPosition().x - (xSize / 2.25), unitDataDisplayBacking.getPosition().y - (ySize / 2.25)+ ySize / 8*3);
+
+	//squadTeamDisplay.setPosition(mousePos.x - 350, mousePos.y - 180);
+	//squadTypeDisplay.setPosition(mousePos.x - 350, mousePos.y - 160);
+	//squadStrengthDisplay.setPosition(mousePos.x - 350, mousePos.y - 140);
+	//squadSpeedDisplay.setPosition(mousePos.x - 350, mousePos.y - 120);
+
+	allowSquadDataDisplay = true;
+
+	squadSpeedDisplay.setString("Speed: " + std::to_string(squadData.moveSpeed));
+	squadStrengthDisplay.setString("Strength: " + std::to_string(squadData.squadStrength));
+	squadTypeDisplay.setString("Type: " + std::to_string(squadData.unitType));
+	squadTeamDisplay.setString("Team: " + std::to_string(squadData.teamNum + 1));
 }
