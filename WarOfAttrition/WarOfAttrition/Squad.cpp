@@ -132,6 +132,11 @@ SquadData Squad::getSquadData()
 	return squadData;
 }
 
+int Squad::getUnitType()
+{
+	return squadData.unitType;
+}
+
 void Squad::setunitType()
 {
 	if (squadData.unitType == 0)

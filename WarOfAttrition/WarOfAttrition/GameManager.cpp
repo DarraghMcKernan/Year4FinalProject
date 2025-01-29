@@ -262,7 +262,7 @@ void GameManager::updatePlayers(sf::Time& t_deltaTime)
 	}
 	for (int index = 0; index < MAX_PLAYERS; index++)
 	{
-		if (player[index].getSquadNumHovered(mousePosFloat) != -1)//doestn work when viewport moves
+		if (player[index].getSquadNumHovered(mousePosFloat) != -1)
 		{
 			squadData = player[index].getSquadData(player[index].getSquadNumHovered(worldTiles.tileHoveredOverPos()));
 			unitDataDisplayBacking.setPosition({mousePos.x - (SCREEN_WIDTH / 5), mousePos.y - (SCREEN_HEIGHT / 7)});
@@ -276,6 +276,13 @@ void GameManager::updatePlayers(sf::Time& t_deltaTime)
 			squadStrengthDisplay.setString("Strength: " + std::to_string(squadData.squadStrength));
 			squadTypeDisplay.setString("Type: " + std::to_string(squadData.unitType));
 			squadTeamDisplay.setString("Team: " + std::to_string(squadData.teamNum + 1));
+
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Delete))
+			{
+				std::cout << "eliminate unit " << std::to_string(player[index].getSquadNumHovered(worldTiles.tileHoveredOverPos()));
+				player[index].eliminateUnit(player[index].getSquadNumHovered(worldTiles.tileHoveredOverPos()));
+				continue;
+			}
 		}
 
 		if ((whosTurn - 1) == index && openCreateUnitMenu == false)

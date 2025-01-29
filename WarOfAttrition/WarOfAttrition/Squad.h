@@ -22,6 +22,7 @@ public:
 	int maxMoveDistance = 5;
 
 	SquadData getSquadData();
+	int getUnitType();
 private:
 	SquadData squadData;
 

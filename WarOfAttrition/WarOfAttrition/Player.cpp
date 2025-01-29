@@ -232,6 +232,14 @@ void Player::eliminateUnit(int t_num)
 {
 	if (t_num < playerSquadsCount)
 	{
+		if (playersSquads[t_num].getUnitType() == 1)
+		{
+			money += 75;
+		}
+		else if (playersSquads[t_num].getUnitType() == 0)
+		{
+			money += 50;
+		}
 		//playersSquadsStrenghts.erase(playersSquadsStrenghts.begin() + t_num);
 		playersSquads.erase(playersSquads.begin() + t_num);
 		playerSquadsCount--;
