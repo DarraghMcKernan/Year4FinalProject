@@ -34,6 +34,10 @@ private:
 	sf::Sprite teamOutlineSprite;
 	sf::Sprite unitSpriteExtras;
 
+	sf::Sprite goldmineSprite;
+	int goldmineCost = 750;
+	int goldmineIncome = 100;
+
 	sf::Vector2f worldTileOffset = sf::Vector2f(23, 23);
 
 	bool movementAllowed = false;

@@ -1,7 +1,7 @@
 #pragma once
 #include "globals.h"
 #include "Squad.h"
-
+#include "Tower.h"
 
 
 class Player
@@ -17,6 +17,7 @@ public:
 	void attemptEndTurn();
 	bool squadDistanceValid(sf::Vector2f t_hoveredTile);
 	void generateNewUnit(int t_teamNum, int t_unitType, sf::Vector2f unitSpawnPos);
+	void generateNewTower(int t_type, int t_teamNum, sf::Vector2f t_position);
 	void eliminateUnit(int t_num);
 	void turnActive();
 	void dealDamage(std::vector<int> t_damage);
@@ -41,6 +42,7 @@ public:
 	void spendMoney(int t_money);
 private:
 	std::vector<Squad> playersSquads;//vector to hold the players squads
+	std::vector<Tower> playersTowers;
 	std::vector<sf::Text> playersSquadsStrenghts;//used for debugging to display strengths on squads
 	std::vector<int> squadsThatMoved;
 	sf::Vector2f mousePos;

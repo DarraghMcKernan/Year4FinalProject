@@ -114,10 +114,10 @@ void Player::fixedUpdate()
 		}
 		activeTargetTimer--;
 	}
-	for (int index = 0; index < playerSquadsCount; index++)
-	{
-		//playersSquadsStrenghts[index].setPosition((playersSquads[index].getTroopContainter().getPosition()));
-	}
+	//for (int index = 0; index < playerSquadsCount; index++)
+	//{
+	//	//playersSquadsStrenghts[index].setPosition((playersSquads[index].getTroopContainter().getPosition()));
+	//}
 }
 
 void Player::render(sf::RenderWindow& t_window)
@@ -128,6 +128,13 @@ void Player::render(sf::RenderWindow& t_window)
 	{
 		playersSquads[index].render(t_window);
 		//t_window.draw(playersSquadsStrenghts[index]);
+	}
+	if(playersTowers.size() > 0)
+	{
+		for (int index = 0; index < playersTowers.size(); index++)
+		{
+			playersTowers[index].render(t_window);
+		}
 	}
 }
 
@@ -225,6 +232,12 @@ void Player::generateNewUnit(int t_teamNum, int t_unitType, sf::Vector2f t_unitS
 	playersSquads.push_back(newSquad);
 
 	playerSquadsCount++;
+}
+
+void Player::generateNewTower(int t_type, int t_teamNum, sf::Vector2f t_position)
+{
+	Tower newTower(t_type, t_teamNum, t_position);
+	playersTowers.push_back(newTower);
 }
 
 void Player::eliminateUnit(int t_num)

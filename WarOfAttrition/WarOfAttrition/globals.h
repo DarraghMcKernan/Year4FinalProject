@@ -30,6 +30,8 @@ static sf::Texture BTRTexture;
 static sf::Texture BTROutlineTexture;
 static sf::Texture unitSpriteExtrasTexture;
 
+static sf::Texture goldmineTexture;
+
 struct SquadData
 {
 	int teamNum = 0;

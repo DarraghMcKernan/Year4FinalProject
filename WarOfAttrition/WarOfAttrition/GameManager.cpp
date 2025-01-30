@@ -69,6 +69,13 @@ void GameManager::startGame()//setup variables needed before the game starts
 	createHeavyTankUnit.setOutlineColor(sf::Color::Black);
 	createHeavyTankUnit.setOutlineThickness(3);
 
+	createGoldMineTower.setSize({ SCREEN_WIDTH / 15, SCREEN_HEIGHT / 12 });
+	createGoldMineTower.setOrigin({ createGoldMineTower.getSize().x / 2 ,createGoldMineTower.getSize().y / 2 });
+	createGoldMineTower.setPosition({ unitMenuBacking.getPosition().x + unitMenuBacking.getSize().x / 4,unitMenuBacking.getPosition().y - unitMenuBacking.getSize().y / 3 });
+	createGoldMineTower.setFillColor(sf::Color(200, 200, 100));
+	createGoldMineTower.setOutlineColor(sf::Color::Black);
+	createGoldMineTower.setOutlineThickness(3);
+
 	menuBackground.setFillColor(sf::Color::Black);
 	menuBackground.setSize({ SCREEN_WIDTH-10,SCREEN_HEIGHT-10 });
 	menuBackground.setOrigin({ menuBackground.getSize().x / 2,menuBackground.getSize().y / 2 });
@@ -486,6 +493,7 @@ void GameManager::displayHUD(sf::RenderWindow& t_window,sf::View& t_fixedWindow)
 	if (openCreateTowerMenu == true)
 	{
 		t_window.draw(unitMenuBacking);
+		t_window.draw(createGoldMineTower);
 	}
 
 	if (menuOpen == true)
@@ -596,6 +604,12 @@ void GameManager::menuInteractions()
 			createUnitActive = true;
 			unitTypeToCreate = 2;
 		}
+		else if ((sf::Mouse::isButtonPressed(sf::Mouse::Left) && createGoldMineTower.getGlobalBounds().contains({ static_cast<float>(mousePos.x),static_cast<float>(mousePos.y) })) && openCreateTowerMenu == true && clickTimer == 0)
+		{
+			clickTimer = 30;
+			createGoldMineTower.setFillColor(sf::Color(150, 150, 100));
+			player[whosTurn - 1].generateNewTower(0, whosTurn - 1, sf::Vector2f(200, 200));
+		}
 		else if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && createUnitActive == true && clickTimer == 0 && player[whosTurn - 1].playerEliminated == false)
 		{
 			if (player[whosTurn - 1].getMoney() > 100)
@@ -628,6 +642,7 @@ void GameManager::menuInteractions()
 		openTowerMenuButton.setFillColor(sf::Color(100, 150, 200));
 		createTankUnit.setFillColor(sf::Color(200, 200, 100));
 		createHeavyTankUnit.setFillColor(sf::Color(200, 100, 200));
+		createGoldMineTower.setFillColor(sf::Color(200, 200, 100));
 	}
 }
 
