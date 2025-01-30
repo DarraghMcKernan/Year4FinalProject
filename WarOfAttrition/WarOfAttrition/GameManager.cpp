@@ -62,6 +62,13 @@ void GameManager::startGame()//setup variables needed before the game starts
 	createPistolUnit.setOutlineColor(sf::Color::Black);
 	createPistolUnit.setOutlineThickness(3);
 
+	createHeavyTankUnit.setSize({ SCREEN_WIDTH / 15, SCREEN_HEIGHT / 12 });
+	createHeavyTankUnit.setOrigin({ createHeavyTankUnit.getSize().x / 2 ,createHeavyTankUnit.getSize().y / 2 });
+	createHeavyTankUnit.setPosition({ unitMenuBacking.getPosition().x - unitMenuBacking.getSize().x / 4,unitMenuBacking.getPosition().y});
+	createHeavyTankUnit.setFillColor(sf::Color(200, 100, 200));
+	createHeavyTankUnit.setOutlineColor(sf::Color::Black);
+	createHeavyTankUnit.setOutlineThickness(3);
+
 	menuBackground.setFillColor(sf::Color::Black);
 	menuBackground.setSize({ SCREEN_WIDTH-10,SCREEN_HEIGHT-10 });
 	menuBackground.setOrigin({ menuBackground.getSize().x / 2,menuBackground.getSize().y / 2 });
@@ -474,6 +481,7 @@ void GameManager::displayHUD(sf::RenderWindow& t_window,sf::View& t_fixedWindow)
 		t_window.draw(unitMenuBacking);
 		t_window.draw(createTankUnit);
 		t_window.draw(createPistolUnit);
+		t_window.draw(createHeavyTankUnit);
 	}
 	if (openCreateTowerMenu == true)
 	{
@@ -577,9 +585,16 @@ void GameManager::menuInteractions()
 		else if ((sf::Mouse::isButtonPressed(sf::Mouse::Left) && createPistolUnit.getGlobalBounds().contains({ static_cast<float>(mousePos.x),static_cast<float>(mousePos.y) })) && openCreateUnitMenu == true && clickTimer == 0)
 		{
 			clickTimer = 30;
-			createTankUnit.setFillColor(sf::Color(150, 150, 100));
+			createPistolUnit.setFillColor(sf::Color(150, 150, 100));
 			createUnitActive = true;
 			unitTypeToCreate = 1;
+		}
+		else if ((sf::Mouse::isButtonPressed(sf::Mouse::Left) && createHeavyTankUnit.getGlobalBounds().contains({ static_cast<float>(mousePos.x),static_cast<float>(mousePos.y) })) && openCreateUnitMenu == true && clickTimer == 0)
+		{
+			clickTimer = 30;
+			createHeavyTankUnit.setFillColor(sf::Color(150, 150, 100));
+			createUnitActive = true;
+			unitTypeToCreate = 2;
 		}
 		else if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && createUnitActive == true && clickTimer == 0 && player[whosTurn - 1].playerEliminated == false)
 		{
@@ -612,6 +627,7 @@ void GameManager::menuInteractions()
 		openUnitMenuButton.setFillColor(sf::Color(100, 200, 150));
 		openTowerMenuButton.setFillColor(sf::Color(100, 150, 200));
 		createTankUnit.setFillColor(sf::Color(200, 200, 100));
+		createHeavyTankUnit.setFillColor(sf::Color(200, 100, 200));
 	}
 }
 

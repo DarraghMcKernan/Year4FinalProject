@@ -44,6 +44,7 @@ private:
 	sf::RectangleShape unitMenuBacking;//just a background ui for the buttons to create units
 	sf::RectangleShape createTankUnit;//button to create a tank unit
 	sf::RectangleShape createPistolUnit;//button to create a pistol unit
+	sf::RectangleShape createHeavyTankUnit;//button to create a pistol unit
 	sf::RectangleShape menuBackground;
 	sf::RectangleShape menuStartButton;
 	sf::RectangleShape unitDataDisplayBacking;

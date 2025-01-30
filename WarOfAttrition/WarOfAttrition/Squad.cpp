@@ -11,6 +11,10 @@ void Squad::init(sf::Vector2f t_startingPos,int t_teamNum, int t_unitType)
 	{
 		squadData.squadStrength = 50;
 	}
+	if (t_unitType == 2)
+	{
+		squadData.squadStrength = 300;
+	}
 	squadData.teamNum = t_teamNum;
 	squadData.unitType = t_unitType;
 
@@ -44,6 +48,10 @@ void Squad::update(sf::Time t_deltaTime)
 			{
 				troopContainer.setPosition(targetPosition);
 				UnitSprite.setPosition(troopContainer.getPosition() - worldTileOffset);
+				if (extraSpriteNeeded == true)
+				{
+					unitSpriteExtras.setPosition(UnitSprite.getPosition());
+				}
 				teamOutlineSprite.setPosition(troopContainer.getPosition() - worldTileOffset);
 				movementAllowed = false;
 				targetReached = true;
@@ -65,6 +73,10 @@ void Squad::update(sf::Time t_deltaTime)
 
 				troopContainer.move((vectorToTarget.x * t_deltaTime.asSeconds()) * squadData.moveSpeed, (vectorToTarget.y * t_deltaTime.asSeconds())* squadData.moveSpeed);
 				UnitSprite.setPosition(troopContainer.getPosition() - worldTileOffset);
+				if (extraSpriteNeeded == true)
+				{
+					unitSpriteExtras.setPosition(UnitSprite.getPosition());
+				}
 				teamOutlineSprite.setPosition(troopContainer.getPosition() - worldTileOffset);
 			}
 		}
@@ -76,6 +88,10 @@ void Squad::render(sf::RenderWindow& t_window)
 	t_window.draw(troopContainer);
 	t_window.draw(teamOutlineSprite);
 	t_window.draw(UnitSprite);
+	if(extraSpriteNeeded == true)
+	{
+		t_window.draw(unitSpriteExtras);
+	}
 }
 
 void Squad::unlockMovement(bool t_allowed)
@@ -185,5 +201,36 @@ void Squad::setunitType()
 		teamOutlineSprite.setScale((teamOutlineSprite.getScale().x / 128) * (TILE_SIZE)+0.04, (teamOutlineSprite.getScale().y / 128) * (TILE_SIZE)+0.04);
 		teamOutlineSprite.setOrigin((teamOutlineSprite.getGlobalBounds().getSize().x / 2) + 0.5, (teamOutlineSprite.getGlobalBounds().getSize().y / 2) + 0.5);
 		teamOutlineSprite.setPosition(troopContainer.getPosition());
+	}
+	if (squadData.unitType == 2)
+	{
+		if (!BTRTexture.loadFromFile("ASSETS/BTR_Base.png"))
+		{
+			std::cout << "error loading squad texture";
+		}
+		if (!BTROutlineTexture.loadFromFile("ASSETS/BTRTeamOutline.png"))
+		{
+			std::cout << "error loading squad outline texture";
+		}
+		if(!unitSpriteExtrasTexture.loadFromFile("ASSETS/BTR_Tower.png"))
+		{
+			std::cout << "error loading squad extra texture";
+		}
+		extraSpriteNeeded = true;
+
+		UnitSprite.setTexture(BTRTexture);
+		UnitSprite.setScale((UnitSprite.getScale().x / 128) * (TILE_SIZE), (UnitSprite.getScale().y / 128) * (TILE_SIZE));
+		UnitSprite.setOrigin((UnitSprite.getGlobalBounds().getSize().x / 2) - (worldTileOffset.x), (UnitSprite.getGlobalBounds().getSize().y / 2) - (worldTileOffset.y));
+		UnitSprite.setPosition(troopContainer.getPosition() - worldTileOffset);
+
+		teamOutlineSprite.setTexture(BTROutlineTexture);
+		teamOutlineSprite.setScale((teamOutlineSprite.getScale().x / 128) * (TILE_SIZE)+0.04, (teamOutlineSprite.getScale().y / 128) * (TILE_SIZE)+0.04);
+		teamOutlineSprite.setOrigin(((teamOutlineSprite.getGlobalBounds().getSize().x / 2) + 3) - (worldTileOffset.x), ((teamOutlineSprite.getGlobalBounds().getSize().y / 2) + 3) - (worldTileOffset.y));
+		teamOutlineSprite.setPosition(troopContainer.getPosition() - worldTileOffset);
+
+		unitSpriteExtras.setTexture(unitSpriteExtrasTexture);
+		unitSpriteExtras.setScale((unitSpriteExtras.getScale().x / 128) * (TILE_SIZE), (unitSpriteExtras.getScale().y / 128) * (TILE_SIZE));
+		unitSpriteExtras.setOrigin((unitSpriteExtras.getGlobalBounds().getSize().x / 2) - (worldTileOffset.x), (unitSpriteExtras.getGlobalBounds().getSize().y / 2) - (worldTileOffset.y));
+		unitSpriteExtras.setPosition(troopContainer.getPosition() - worldTileOffset);
 	}
 }

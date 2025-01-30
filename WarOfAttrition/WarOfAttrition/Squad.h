@@ -32,10 +32,12 @@ private:
 
 	sf::Sprite UnitSprite;
 	sf::Sprite teamOutlineSprite;
+	sf::Sprite unitSpriteExtras;
 
 	sf::Vector2f worldTileOffset = sf::Vector2f(23, 23);
 
 	bool movementAllowed = false;
+	bool extraSpriteNeeded = false;
 	
 	/*int moveSpeed = 100;
 	int teamNum=0;

@@ -26,6 +26,10 @@ static sf::Texture tankOutlineTexture;
 static sf::Texture infantryTexture;
 static sf::Texture infantryOutlineTexture;
 
+static sf::Texture BTRTexture;
+static sf::Texture BTROutlineTexture;
+static sf::Texture unitSpriteExtrasTexture;
+
 struct SquadData
 {
 	int teamNum = 0;
