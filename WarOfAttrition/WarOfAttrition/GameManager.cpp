@@ -303,7 +303,7 @@ void GameManager::updatePlayers(sf::Time& t_deltaTime)
 
 		if ((whosTurn - 1) == index && openCreateUnitMenu == false)
 		{
-			moneyDisplay.setString(std::to_string(player[index].getMoney()));
+			moneyDisplay.setString(std::to_string(player[index].getMoney()));			
 			if (player[whosTurn - 1].playerEliminated == true)
 			{
 				whosTurn++;
@@ -350,6 +350,7 @@ void GameManager::updatePlayers(sf::Time& t_deltaTime)
 				bool playerValid = false;
 				while (playerValid == false)
 				{
+					player[index].addIncomeFromTurn();
 					whosTurn++;
 					if (whosTurn > MAX_PLAYERS)
 					{
@@ -415,16 +416,16 @@ void GameManager::userControls(sf::View& t_viewport,sf::Time& t_deltaTime)
 		clickTimer = 30;
 		player[1].eliminateUnit(0);
 	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3) && clickTimer == 0)//debug
-	{
-		clickTimer = 30;
-		player[2].eliminateUnit(0);
-	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num4) && clickTimer == 0)//debug
-	{
-		clickTimer = 30;
-		player[3].eliminateUnit(0);
-	}
+	//else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3) && clickTimer == 0)//debug
+	//{
+	//	clickTimer = 30;
+	//	player[2].eliminateUnit(0);
+	//}
+	//else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num4) && clickTimer == 0)//debug
+	//{
+	//	clickTimer = 30;
+	//	player[3].eliminateUnit(0);
+	//}
 
 	if (createUnitActive == true)
 	{
@@ -606,6 +607,8 @@ void GameManager::menuInteractions()
 		}
 		else if ((sf::Mouse::isButtonPressed(sf::Mouse::Left) && createGoldMineTower.getGlobalBounds().contains({ static_cast<float>(mousePos.x),static_cast<float>(mousePos.y) })) && openCreateTowerMenu == true && clickTimer == 0)
 		{
+			player[whosTurn - 1].spendMoney(750);
+			moneyDisplay.setString(std::to_string(player[whosTurn - 1].getMoney()));
 			clickTimer = 30;
 			createGoldMineTower.setFillColor(sf::Color(150, 150, 100));
 			player[whosTurn - 1].generateNewTower(0, whosTurn - 1, sf::Vector2f(200, 200));

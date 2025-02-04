@@ -40,6 +40,8 @@ public:
 
 	int getMoney();
 	void spendMoney(int t_money);
+
+	void addIncomeFromTurn();
 private:
 	std::vector<Squad> playersSquads;//vector to hold the players squads
 	std::vector<Tower> playersTowers;

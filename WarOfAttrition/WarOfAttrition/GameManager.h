@@ -26,7 +26,7 @@ private:
 	void removeUnit(int t_playerNum);
 	void updateUnitDataDisplay();
 
-	static const int MAX_PLAYERS = 4;//maximum players in a game
+	static const int MAX_PLAYERS = 2;//maximum players in a game
 
 	Player player[MAX_PLAYERS];//create as many instances of player as is needed
 	TileGrid worldTiles;//create an instance of the world tiles

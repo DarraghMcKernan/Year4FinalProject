@@ -329,3 +329,15 @@ void Player::spendMoney(int t_money)
 {
 	money -= t_money;
 }
+
+void Player::addIncomeFromTurn()
+{
+	money += globalMoneyPerTurn;
+	if (playersTowers.size() > 0)
+	{
+		for (int index = 0; index < playersTowers.size(); index++)
+		{
+			money += playersTowers[index].getIncome();
+		}
+	}
+}
