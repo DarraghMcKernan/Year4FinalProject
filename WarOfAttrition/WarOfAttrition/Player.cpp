@@ -271,13 +271,25 @@ void Player::dealDamage(std::vector<int> t_damage)
 {
 	for (int index = 0; index < t_damage.size(); index++)
 	{
+		int randomChance = rand() % 100;
+		if (randomChance < 30)
+		{
+			t_damage[index] = t_damage[index] * 0.9f;
+			std::cout << "Damage reduced\n";
+		}
+		else if (randomChance > 70)
+		{
+			t_damage[index] = t_damage[index] * 1.1f;
+			std::cout << "Damage increased\n";
+		}
+
 		int outcome = playersSquads[squadsThatMoved[index]].getStrength() - t_damage[index];
 		playersSquads[squadsThatMoved[index]].setStrength(outcome);
 		//playersSquadsStrenghts[index].setString(std::to_string(playersSquads[index].getStrength()));
-		if (playersSquads[squadsThatMoved[index]].getStrength() <= 0)
+	/*	if (playersSquads[squadsThatMoved[index]].getStrength() <= 0)
 		{
 			eliminateUnit(squadsThatMoved[index]);
-		}
+		}*/
 	}
 }
 
@@ -340,4 +352,21 @@ void Player::addIncomeFromTurn()
 			money += playersTowers[index].getIncome();
 		}
 	}
+}
+
+void Player::checkForDeadSquads()
+{
+	squadBeingControlled = 0;
+	std::vector<int> deadSquads;
+	for (int index = 0; index < playerSquadsCount; index++)
+	{
+		if (playersSquads[index].getStrength() <= 0)
+		{
+			deadSquads.push_back(index);//get units that are dead in order
+		}
+	}
+    for (int index = deadSquads.size() - 1; index >= 0; index--)//go in reverse order and remove units
+    {
+		eliminateUnit(deadSquads[index]);
+    }
 }

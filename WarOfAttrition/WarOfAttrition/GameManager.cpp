@@ -1,5 +1,4 @@
 #include "GameManager.h"
-
 void GameManager::startGame()//setup variables needed before the game starts
 {
 	timePerFrame = sf::seconds(1.0f / 60.0f);
@@ -219,6 +218,8 @@ void GameManager::updateLoop()
 	int frameCount = 0;
 	float elapsedTime = 0.0f;
 
+	srand(time(0));
+
 	while (window.isOpen())
 	{
 		sf::Time deltaTime = clock.restart();
@@ -338,10 +339,12 @@ void GameManager::updatePlayers(sf::Time& t_deltaTime)
 						std::vector<int> damageTaken = player[playersIndex].collisionCheckerDamage(player[whosTurn - 1].returnMovedSquads(), 400);//only hurts defending squad currently
 						
 						player[whosTurn-1].dealDamage(damageTaken);//this player needs to also take damage
-						//player[playersIndex]//go through each player and assign damage;
-						//should be significantly more efficient to store all moved squads here then get all squads from enemies and compare them here before doing damage to each other
-						//trying to keep it self contained might have made this the most inefficient part of the game though it does only run between turns where performance drops would be negligable
 					}
+				}
+
+				for (int playersIndex = 0; playersIndex < MAX_PLAYERS; playersIndex++)
+				{
+					player[playersIndex].checkForDeadSquads();
 				}
 
 

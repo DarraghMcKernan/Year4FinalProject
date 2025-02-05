@@ -42,6 +42,8 @@ public:
 	void spendMoney(int t_money);
 
 	void addIncomeFromTurn();
+
+	void checkForDeadSquads();
 private:
 	std::vector<Squad> playersSquads;//vector to hold the players squads
 	std::vector<Tower> playersTowers;
