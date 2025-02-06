@@ -178,6 +178,13 @@ void GameManager::startGame()//setup variables needed before the game starts
 	squadTypeDisplay.setOrigin({ (squadSpeedDisplay.getGlobalBounds().getSize().x / 2),(squadSpeedDisplay.getGlobalBounds().getSize().y / 2) });
 	squadTypeDisplay.setPosition(50, 150);
 
+	squadHealthDisplay.setFont(font);
+	squadHealthDisplay.setCharacterSize(30);//increase size and then downscale to prevent blurred text
+	squadHealthDisplay.setFillColor(sf::Color::Black);
+	squadHealthDisplay.setScale(0.75, 0.75);
+	squadHealthDisplay.setOrigin({ (squadSpeedDisplay.getGlobalBounds().getSize().x / 2),(squadSpeedDisplay.getGlobalBounds().getSize().y / 2) });
+	squadHealthDisplay.setPosition(50, 170);
+
 	unitDataDisplayBacking.setSize({ SCREEN_WIDTH / 3,SCREEN_HEIGHT / 5 });
 	unitDataDisplayBacking.setOrigin({ unitDataDisplayBacking.getSize().x / 2 ,unitDataDisplayBacking.getSize().y / 2 });
 	unitDataDisplayBacking.setPosition({SCREEN_WIDTH / 5,SCREEN_HEIGHT / 5 });
@@ -280,17 +287,7 @@ void GameManager::updatePlayers(sf::Time& t_deltaTime)
 		if (player[index].getSquadNumHovered(mousePosFloat) != -1)
 		{
 			squadData = player[index].getSquadData(player[index].getSquadNumHovered(worldTiles.tileHoveredOverPos()));
-			unitDataDisplayBacking.setPosition({mousePos.x - (SCREEN_WIDTH / 5), mousePos.y - (SCREEN_HEIGHT / 7)});
-			squadTeamDisplay.setPosition(mousePos.x - 350,mousePos.y - 180);
-			squadTypeDisplay.setPosition(mousePos.x - 350,mousePos.y - 160);
-			squadStrengthDisplay.setPosition(mousePos.x - 350,mousePos.y - 140);
-			squadSpeedDisplay.setPosition(mousePos.x - 350,mousePos.y - 120);
 			allowSquadDataDisplay = true;
-
-			squadSpeedDisplay.setString("Speed: " + std::to_string(squadData.moveSpeed));
-			squadStrengthDisplay.setString("Strength: " + std::to_string(squadData.squadStrength));
-			squadTypeDisplay.setString("Type: " + std::to_string(squadData.unitType));
-			squadTeamDisplay.setString("Team: " + std::to_string(squadData.teamNum + 1));
 
 			updateUnitDataDisplay();
 
@@ -484,6 +481,7 @@ void GameManager::displayHUD(sf::RenderWindow& t_window,sf::View& t_fixedWindow)
 		t_window.draw(squadSpeedDisplay);
 		t_window.draw(squadStrengthDisplay);
 		t_window.draw(squadTypeDisplay);
+		t_window.draw(squadHealthDisplay);
 		t_window.draw(squadTeamDisplay);
 	}
 
@@ -753,17 +751,14 @@ void GameManager::updateUnitDataDisplay()
 	squadTeamDisplay.setPosition(unitDataDisplayBacking.getPosition().x - (xSize / 2.25), unitDataDisplayBacking.getPosition().y - (ySize / 2.25));
 	squadTypeDisplay.setPosition(unitDataDisplayBacking.getPosition().x - (xSize / 2.25), unitDataDisplayBacking.getPosition().y - (ySize / 2.25) + ySize/8);
 	squadStrengthDisplay.setPosition(unitDataDisplayBacking.getPosition().x - (xSize / 2.25), unitDataDisplayBacking.getPosition().y - (ySize / 2.25)+ ySize / 8*2);
-	squadSpeedDisplay.setPosition(unitDataDisplayBacking.getPosition().x - (xSize / 2.25), unitDataDisplayBacking.getPosition().y - (ySize / 2.25)+ ySize / 8*3);
-
-	//squadTeamDisplay.setPosition(mousePos.x - 350, mousePos.y - 180);
-	//squadTypeDisplay.setPosition(mousePos.x - 350, mousePos.y - 160);
-	//squadStrengthDisplay.setPosition(mousePos.x - 350, mousePos.y - 140);
-	//squadSpeedDisplay.setPosition(mousePos.x - 350, mousePos.y - 120);
+	squadHealthDisplay.setPosition(unitDataDisplayBacking.getPosition().x - (xSize / 2.25), unitDataDisplayBacking.getPosition().y - (ySize / 2.25)+ ySize / 8*3);
+	squadSpeedDisplay.setPosition(unitDataDisplayBacking.getPosition().x - (xSize / 2.25), unitDataDisplayBacking.getPosition().y - (ySize / 2.25)+ ySize / 8*4);
 
 	allowSquadDataDisplay = true;
 
 	squadSpeedDisplay.setString("Speed: " + std::to_string(squadData.moveSpeed));
 	squadStrengthDisplay.setString("Strength: " + std::to_string(squadData.squadStrength));
 	squadTypeDisplay.setString("Type: " + std::to_string(squadData.unitType));
+	squadHealthDisplay.setString("Health: " + std::to_string(squadData.health));
 	squadTeamDisplay.setString("Team: " + std::to_string(squadData.teamNum + 1));
 }

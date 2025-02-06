@@ -68,6 +68,7 @@ private:
 	sf::Text squadTypeDisplay;
 	sf::Text squadSpeedDisplay;
 	sf::Text squadTeamDisplay;
+	sf::Text squadHealthDisplay;
 
 	sf::Sprite moneyIcon;
 	sf::Texture moneyIconTexture;

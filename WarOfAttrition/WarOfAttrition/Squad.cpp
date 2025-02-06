@@ -2,21 +2,25 @@
 
 void Squad::init(sf::Vector2f t_startingPos,int t_teamNum, int t_unitType)
 {
-	squadData.moveSpeed = 100;
 	if(t_unitType == 0)
 	{
 		squadData.squadStrength = 200;
+		moveSpeed = 80;
 	}
 	if(t_unitType == 1)
 	{
 		squadData.squadStrength = 50;
+		moveSpeed = 100;
 	}
 	if (t_unitType == 2)
 	{
 		squadData.squadStrength = 300;
+		moveSpeed = 65;
 	}
+	squadData.moveSpeed = moveSpeed;
 	squadData.teamNum = t_teamNum;
 	squadData.unitType = t_unitType;
+	squadData.health = 100;
 
 	resetColour();
 
@@ -69,9 +73,9 @@ void Squad::update(sf::Time t_deltaTime)
 				{
 					distance = 200;
 				}
-				vectorToTarget = vectorToTarget * (distance / squadData.moveSpeed);//slow down as we get closer to the target
+				//vectorToTarget = vectorToTarget * (distance);//slow down as we get closer to the target
 
-				troopContainer.move((vectorToTarget.x * t_deltaTime.asSeconds()) * squadData.moveSpeed, (vectorToTarget.y * t_deltaTime.asSeconds())* squadData.moveSpeed);
+				troopContainer.move((vectorToTarget.x * t_deltaTime.asSeconds()) * (moveSpeed * SPEED_MULTIPLIER), (vectorToTarget.y * t_deltaTime.asSeconds()) * (moveSpeed * SPEED_MULTIPLIER));
 				UnitSprite.setPosition(troopContainer.getPosition() - worldTileOffset);
 				if (extraSpriteNeeded == true)
 				{
@@ -148,6 +152,11 @@ int Squad::getStrength()
 void Squad::setStrength(int t_strength)
 {
 	squadData.squadStrength = t_strength;
+}
+
+void Squad::setHealth(int t_health)
+{
+	squadData.health = t_health;
 }
 
 SquadData Squad::getSquadData()

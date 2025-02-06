@@ -59,6 +59,7 @@ private:
 	int squadBeingControlled = 1;//which squad is allowed to move
 	int playerSquadsCount = 4;//how many squads does player have
 	int strength = 100;//how strong is this unit
+	int health = 100;
 	int activeTargetTimer = 0;//a cooldown to prevent the player from trying to select the tile its on
 	int timerForEnd = 0;
 	int money = 1000;

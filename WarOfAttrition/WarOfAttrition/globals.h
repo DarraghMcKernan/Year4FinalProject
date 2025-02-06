@@ -9,6 +9,7 @@ const float VIEWPORT_WIDTH = 600.0f;//can be any size
 const float VIEWPORT_HEIGHT = 500.0f;
 
 const float TILE_SIZE = 50.0f;//define the size of the square tiles that make up the world
+const static float SPEED_MULTIPLIER = 1.2f;//allows the entire games units to be sped up or slowed down
 
 const int TILE_ROWS = SCREEN_HEIGHT / TILE_SIZE;
 const int TILE_COLUMNS = SCREEN_WIDTH / TILE_SIZE;
@@ -40,4 +41,5 @@ struct SquadData
 	int moveSpeed = 100;
 	int squadStrength = 100;
 	int unitType = 0;
+	int health = 100;
 };

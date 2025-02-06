@@ -17,6 +17,7 @@ public:
 	void resetColour();
 	int getStrength();
 	void setStrength(int t_strength);
+	void setHealth(int t_health);
 	bool turnEnded = false;
 	bool targetSet = false;
 	int maxMoveDistance = 5;
@@ -37,6 +38,7 @@ private:
 	sf::Sprite goldmineSprite;
 	int goldmineCost = 750;
 	int goldmineIncome = 100;
+	int moveSpeed = 100;
 
 	sf::Vector2f worldTileOffset = sf::Vector2f(23, 23);
 

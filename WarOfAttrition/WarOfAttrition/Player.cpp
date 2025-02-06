@@ -163,6 +163,23 @@ std::vector<int> Player::collisionCheckerDamage(std::vector<sf::RectangleShape> 
 		{
 			if (playersSquads[index].getTroopContainter().getGlobalBounds().intersects(targetToCheck[enemySquadsIndex].getGlobalBounds()))
 			{
+				//damageTaken.push_back(playersSquads[index].getStrength());
+
+				//int randomChance = rand() % 100;
+				//if (randomChance < 30)
+				//{
+				//	t_strength = t_strength * 0.9f;
+				//	std::cout << "Damage reduced\n";
+				//}
+				//else if (randomChance > 70)
+				//{
+				//	t_strength = t_strength * 1.1f;
+				//	std::cout << "Damage increased\n";
+				//}
+
+				//int outcome = playersSquads[index].getSquadData().health - t_strength;
+				//playersSquads[index].setHealth(outcome);
+
 				if (t_strength < playersSquads[index].getStrength())
 				{
 					int outcome = playersSquads[index].getStrength() - t_strength;
@@ -186,7 +203,7 @@ std::vector<int> Player::collisionCheckerDamage(std::vector<sf::RectangleShape> 
 			}
 		}
 	}
-	
+
 	return damageTaken;//no targets found no damage done
 }
 
@@ -283,8 +300,9 @@ void Player::dealDamage(std::vector<int> t_damage)
 			std::cout << "Damage increased\n";
 		}
 
-		int outcome = playersSquads[squadsThatMoved[index]].getStrength() - t_damage[index];
-		playersSquads[squadsThatMoved[index]].setStrength(outcome);
+		int outcome = playersSquads[squadsThatMoved[index]].getSquadData().health - t_damage[index];
+		playersSquads[squadsThatMoved[index]].setHealth(outcome);
+
 		//playersSquadsStrenghts[index].setString(std::to_string(playersSquads[index].getStrength()));
 	/*	if (playersSquads[squadsThatMoved[index]].getStrength() <= 0)
 		{
@@ -360,7 +378,7 @@ void Player::checkForDeadSquads()
 	std::vector<int> deadSquads;
 	for (int index = 0; index < playerSquadsCount; index++)
 	{
-		if (playersSquads[index].getStrength() <= 0)
+		if (playersSquads[index].getSquadData().health <= 0)
 		{
 			deadSquads.push_back(index);//get units that are dead in order
 		}
