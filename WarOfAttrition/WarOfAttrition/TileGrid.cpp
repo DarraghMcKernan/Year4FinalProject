@@ -55,6 +55,7 @@ void TileGrid::findTargetedTile()
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && clickCooldown <= 0)
 	{
 		tiles[currentTile].setTarget(false);//unset previous target
+		resetTiles();
 
 		int column = mousePosViewPort.x / TILE_SIZE;
 		int row = mousePosViewPort.y / TILE_SIZE;
