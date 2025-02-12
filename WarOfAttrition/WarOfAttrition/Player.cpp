@@ -153,9 +153,10 @@ void Player::setTargetPosition(int t_cellNum)
 	}
 }
 
-std::vector<int> Player::collisionCheckerDamage(std::vector<sf::RectangleShape> targetToCheck,int t_strength)
+std::vector<int> Player::collisionCheckerDamage(std::vector<sf::RectangleShape> targetToCheck, std::vector<SquadData> t_strength)
 {
 	std::vector<int> damageTaken;
+	int currentStrength = 0;
 
 	for (int enemySquadsIndex = 0; enemySquadsIndex < targetToCheck.size(); enemySquadsIndex++)
 	{
@@ -163,43 +164,46 @@ std::vector<int> Player::collisionCheckerDamage(std::vector<sf::RectangleShape> 
 		{
 			if (playersSquads[index].getTroopContainter().getGlobalBounds().intersects(targetToCheck[enemySquadsIndex].getGlobalBounds()))
 			{
-				//damageTaken.push_back(playersSquads[index].getStrength());
+				int damage = t_strength[currentStrength].squadStrength;
 
-				//int randomChance = rand() % 100;
-				//if (randomChance < 30)
-				//{
-				//	t_strength = t_strength * 0.9f;
-				//	std::cout << "Damage reduced\n";
-				//}
-				//else if (randomChance > 70)
-				//{
-				//	t_strength = t_strength * 1.1f;
-				//	std::cout << "Damage increased\n";
-				//}
-
-				//int outcome = playersSquads[index].getSquadData().health - t_strength;
-				//playersSquads[index].setHealth(outcome);
-
-				if (t_strength < playersSquads[index].getStrength())
+				int randomChance = rand() % 100;
+				if (randomChance < 30)
 				{
-					int outcome = playersSquads[index].getStrength() - t_strength;
-					playersSquads[index].setStrength(outcome);
-					//playersSquadsStrenghts[index].setString(std::to_string(playersSquads[index].getStrength()));
-					//return t_strength;//lost the fight so is now 0
-					damageTaken.push_back(t_strength);
+					damage = damage * 0.9f;
+					std::cout << "Damage reduced\n";
 				}
-				else if (t_strength > playersSquads[index].getStrength())
+				else if (randomChance > 70)
 				{
-					int outcome = t_strength - playersSquads[index].getStrength();
-					eliminateUnit(index);
-					//return outcome;//won the fight but took damage
-					damageTaken.push_back(outcome);
+					damage = damage * 1.1f;
+					std::cout << "Damage increased\n";
 				}
-				else {
-					eliminateUnit(index);//both lose as equal health -- might change to defenders advantage
-					damageTaken.push_back(t_strength);
-					//return t_strength;
-				}
+				currentStrength++;
+
+				int outcome = playersSquads[index].getSquadData().health - damage;
+				playersSquads[index].setHealth(outcome);
+
+				damageTaken.push_back(damage);
+
+				//if (t_strength < playersSquads[index].getStrength())
+				//{
+				//	int outcome = playersSquads[index].getStrength() - t_strength;
+				//	playersSquads[index].setStrength(outcome);
+				//	//playersSquadsStrenghts[index].setString(std::to_string(playersSquads[index].getStrength()));
+				//	//return t_strength;//lost the fight so is now 0
+				//	damageTaken.push_back(t_strength);
+				//}
+				//else if (t_strength > playersSquads[index].getStrength())
+				//{
+				//	int outcome = t_strength - playersSquads[index].getStrength();
+				//	eliminateUnit(index);
+				//	//return outcome;//won the fight but took damage
+				//	damageTaken.push_back(outcome);
+				//}
+				//else {
+				//	eliminateUnit(index);//both lose as equal health -- might change to defenders advantage
+				//	damageTaken.push_back(t_strength);
+				//	//return t_strength;
+				//}
 			}
 		}
 	}
@@ -321,6 +325,18 @@ std::vector<sf::RectangleShape> Player::returnMovedSquads()
 	}
 
 	return allMovedSquads;
+}
+
+std::vector<SquadData> Player::returnMovedSquadsData()
+{
+	std::vector<SquadData> allMovedSquadsData;
+
+	for (int index = 0; index < squadsThatMoved.size(); index++)
+	{
+		allMovedSquadsData.push_back(playersSquads[squadsThatMoved[index]].getSquadData());
+	}
+
+	return allMovedSquadsData;
 }
 
 sf::Vector2f Player::getSquadPosition()

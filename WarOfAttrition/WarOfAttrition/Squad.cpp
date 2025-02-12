@@ -4,23 +4,25 @@ void Squad::init(sf::Vector2f t_startingPos,int t_teamNum, int t_unitType)
 {
 	if(t_unitType == 0)
 	{
+		squadData.health = 250;
 		squadData.squadStrength = 200;
 		moveSpeed = 80;
 	}
 	if(t_unitType == 1)
 	{
+		squadData.health = 50;
 		squadData.squadStrength = 50;
 		moveSpeed = 100;
 	}
 	if (t_unitType == 2)
 	{
+		squadData.health = 300;
 		squadData.squadStrength = 300;
 		moveSpeed = 65;
 	}
 	squadData.moveSpeed = moveSpeed;
 	squadData.teamNum = t_teamNum;
 	squadData.unitType = t_unitType;
-	squadData.health = 100;
 
 	resetColour();
 
