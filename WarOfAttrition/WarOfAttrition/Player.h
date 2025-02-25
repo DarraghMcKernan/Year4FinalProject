@@ -2,10 +2,12 @@
 #include "globals.h"
 #include "Squad.h"
 #include "Tower.h"
-
+#include "FormationManager.h"
 
 class Player
 {
+	Formation formationTemp;
+
 public:
 	void init(int t_teamNum, int t_unitType);
 	void update(sf::Time& t_deltaTime);

@@ -9,14 +9,15 @@ public:
 	sf::Vector2f getCurrentLeaderPos();//will get the position the leader is currently at
 	int getPositionInFormation();//will assign the smallest free number in the formation
 	sf::Vector2f getFormationPosition(int t_posInFormation);//returns the position the unit should be going to
-
+	void setLeaderInfo(sf::Sprite t_leaderSprite);
 
 private:
 	void generatePath();
 	sf::Vector2f leaderPosition = { 0,0 };
 	sf::Vector2f targetPosition = { 0,0 };
 	sf::Vector2f standardOffset = { 50,50 };
-	float cappedRotationSpeed = 5.0f;
+	sf::Sprite leaderCopy;
+	float cappedRotationSpeed = 5.0f; 
 	float maxFormationSpeed = 5.0f;
 	float formationXSpread = 1.0f;//used to modify the width and height of the formation to allow it to better navigate obstacles
 	float formationYSpread = 1.0f;
@@ -24,5 +25,7 @@ private:
 	int placeOnPath = 0;
 	bool goalReached = false;
 
-	int formationPositions[10];
+	const static int MAX_FORMATION_SIZE = 4;
+
+	int formationPositions[MAX_FORMATION_SIZE]{-1,-1,-1,-1};//used to know which positions are occupied and by which unit
 };

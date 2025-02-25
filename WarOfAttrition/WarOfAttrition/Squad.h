@@ -12,6 +12,8 @@ public:
 	void unlockMovement(bool t_allowed);
 	sf::RectangleShape getTroopContainter();
 	void setTargetPosition(sf::Vector2f t_targetPos);
+	void setPosition(sf::Vector2f t_debugPosition);
+	void moveToFormationPosition(sf::Vector2f t_formationPosition, sf::Time& t_deltaTime);
 	bool movingAllowed();
 	bool targetReached = false;
 	void resetColour();
@@ -22,11 +24,18 @@ public:
 	bool targetSet = false;
 	int maxMoveDistance = 5;
 
+	void setFormationNum(int t_formationPosition);
+	int getFormationNum();
+
 	SquadData getSquadData();
 	int getUnitType();
+	sf::Sprite getSprite();
+
+	bool formationActive = false;
+	bool formationLeader = false;
 private:
 	SquadData squadData;
-
+	
 	void setunitType();
 	sf::RectangleShape troopContainer;
 	sf::Vector2f targetPosition;
@@ -39,8 +48,9 @@ private:
 	int goldmineCost = 750;
 	int goldmineIncome = 100;
 	int moveSpeed = 100;
+	int posInFormation = -1;
 
-	sf::Vector2f worldTileOffset = sf::Vector2f(23, 23);
+	sf::Vector2f worldTileOffset = sf::Vector2f(TILE_SIZE/2, TILE_SIZE/2);
 
 	bool movementAllowed = false;
 	bool extraSpriteNeeded = false;

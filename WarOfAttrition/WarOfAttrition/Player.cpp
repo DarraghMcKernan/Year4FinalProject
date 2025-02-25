@@ -29,37 +29,74 @@ void Player::init(int t_teamNum, int t_unitType)
 
 	tileForColliding.setSize(sf::Vector2f(TILE_SIZE +3, TILE_SIZE+3));//used for making sure player cant select a tile that its own squads are on
 	tileForColliding.setOrigin(sf::Vector2f(TILE_SIZE / 2, TILE_SIZE / 2));
+
+	formationTemp.setLeaderInfo(playersSquads[0].getSprite());
+	playersSquads[0].formationLeader = true;
+	for (int index = 0; index < playerSquadsCount; index++)
+	{
+		playersSquads[index].formationActive = true;
+		playersSquads[index].setFormationNum(formationTemp.getPositionInFormation());
+	}
+
+
 }
 
 void Player::update(sf::Time& t_deltaTime)
 {
+	formationTemp.setLeaderInfo(playersSquads[0].getSprite());
+	/*for (int index = 1; index < playerSquadsCount; index++)
+	{
+		if (playersSquads[index].formationActive == true)
+		{
+			playersSquads[index].setPosition(formationTemp.getFormationPosition(playersSquads[index].getFormationNum()));
+		}		
+	}*/
+
 	int checkIfAllMoved = 0;
 	for (int index = 0; index < playerSquadsCount; index++)
 	{
-		if (playersSquads[index].targetReached == true && turnEnded == true)//all have reached their targets
+		if (playersSquads[index].formationLeader == true)// && playersSquads[index].movingAllowed() == true)
 		{
-			checkIfAllMoved++;
-		}
-		else if (playersSquads[index].movingAllowed() == false && turnEnded == true)//if they have not been set to move at all ignore them
-		{
-			checkIfAllMoved++;
-		}
-
-		if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && playersSquads[index].getTroopContainter().getGlobalBounds().contains(mousePos)
-			&& activeTargetTimer == 0 && turnEnded == false && unitsMoved < MAX_MOVES_PER_TURN && playersSquads[index].movingAllowed() == false)
-		{
-			if (squadSet == false)//allows for selected squad to be changed without wasting moves
+			for (int i = 0; i < playerSquadsCount; i++)
 			{
-				unitsMoved++;
+				if (i != index)
+				{
+					playersSquads[i].formationActive = true;
+					playersSquads[i].targetReached = false;
+				}
 			}
-			else playersSquads[squadBeingControlled].unlockMovement(false);
-
-			squadSet = true;
-			playersSquads[squadBeingControlled].resetColour();
-			squadBeingControlled = index;
-			playersSquads[index].unlockMovement(true);
-			activeTargetTimer = 10;
 		}
+		if (playersSquads[index].formationActive == true)// && playersSquads[index].formationLeader == false)
+		{
+			playersSquads[index].moveToFormationPosition(formationTemp.getFormationPosition(playersSquads[index].getFormationNum()),t_deltaTime);
+		}
+		else {
+			if (playersSquads[index].targetReached == true && turnEnded == true)//all have reached their targets
+			{
+				checkIfAllMoved++;
+			}
+			else if (playersSquads[index].movingAllowed() == false && turnEnded == true)//if they have not been set to move at all ignore them
+			{
+				checkIfAllMoved++;
+			}
+
+			if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && playersSquads[index].getTroopContainter().getGlobalBounds().contains(mousePos)
+				&& activeTargetTimer == 0 && turnEnded == false && unitsMoved < MAX_MOVES_PER_TURN && playersSquads[index].movingAllowed() == false)
+			{
+				if (squadSet == false)//allows for selected squad to be changed without wasting moves
+				{
+					unitsMoved++;
+				}
+				else playersSquads[squadBeingControlled].unlockMovement(false);
+
+				squadSet = true;
+				playersSquads[squadBeingControlled].resetColour();
+				squadBeingControlled = index;
+				playersSquads[index].unlockMovement(true);
+				activeTargetTimer = 10;
+			}
+		}
+		
 		playersSquads[index].update(t_deltaTime);
 	}
 
@@ -79,6 +116,32 @@ void Player::update(sf::Time& t_deltaTime)
 				playersSquads[index].resetColour();
 			}
 		}
+	}
+
+	int counter = 0;
+	for (int index = 0; index < playerSquadsCount; index++)
+	{
+		if (playersSquads[index].targetReached == true)
+		{
+			counter++;
+		}
+	}
+	if (counter == playerSquadsCount)
+	{
+		for (int index = 0; index < playerSquadsCount; index++)
+		{
+			playersSquads[index].targetReached = false;
+			//playersSquads[index].formationActive = false;
+			//playersSquads[index].formationLeader = false;
+			playersSquads[index].targetSet = false;
+			playersSquads[index].turnEnded = false;
+		}
+		squadBeingControlled = 1;
+		arrivedAtTarget = true;
+		turnEnded = false;
+		unitsMoved = 0;
+		timerForEnd = 0;
+		endTurnActive = false;
 	}
 
 	if (checkIfAllMoved == playerSquadsCount)//if all squads that were allowed to move have moved end turn

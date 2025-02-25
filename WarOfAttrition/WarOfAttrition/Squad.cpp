@@ -53,12 +53,15 @@ void Squad::update(sf::Time t_deltaTime)
 			if (distance <= 2.1)//lock player to target once close enough
 			{
 				troopContainer.setPosition(targetPosition);
-				UnitSprite.setPosition(troopContainer.getPosition() - worldTileOffset);
+				UnitSprite.setPosition(troopContainer.getPosition());
+				UnitSprite.setRotation(0);
 				if (extraSpriteNeeded == true)
 				{
 					unitSpriteExtras.setPosition(UnitSprite.getPosition());
+					unitSpriteExtras.setRotation(0);
 				}
-				teamOutlineSprite.setPosition(troopContainer.getPosition() - worldTileOffset);
+				teamOutlineSprite.setPosition(troopContainer.getPosition());
+				teamOutlineSprite.setRotation(0);
 				movementAllowed = false;
 				targetReached = true;
 				resetColour();
@@ -78,12 +81,17 @@ void Squad::update(sf::Time t_deltaTime)
 				//vectorToTarget = vectorToTarget * (distance);//slow down as we get closer to the target
 
 				troopContainer.move((vectorToTarget.x * t_deltaTime.asSeconds()) * (moveSpeed * SPEED_MULTIPLIER), (vectorToTarget.y * t_deltaTime.asSeconds()) * (moveSpeed * SPEED_MULTIPLIER));
-				UnitSprite.setPosition(troopContainer.getPosition() - worldTileOffset);
+				UnitSprite.setPosition(troopContainer.getPosition());
+
+				UnitSprite.setRotation((atan2(vectorToTarget.y, vectorToTarget.x) * 180 / 3.14159265) - 90);
+
 				if (extraSpriteNeeded == true)
 				{
 					unitSpriteExtras.setPosition(UnitSprite.getPosition());
+					unitSpriteExtras.setRotation((atan2(vectorToTarget.y, vectorToTarget.x) * 180 / 3.14159265) - 90);
 				}
-				teamOutlineSprite.setPosition(troopContainer.getPosition() - worldTileOffset);
+				teamOutlineSprite.setPosition(troopContainer.getPosition());
+				teamOutlineSprite.setRotation((atan2(vectorToTarget.y, vectorToTarget.x) * 180 / 3.14159265) - 90);
 			}
 		}
 	}
@@ -115,6 +123,48 @@ void Squad::setTargetPosition(sf::Vector2f t_targetPos)
 {
 	targetSet = true;
 	targetPosition = t_targetPos;
+}
+
+void Squad::setPosition(sf::Vector2f t_debugPosition)
+{
+	troopContainer.setPosition(t_debugPosition);
+	UnitSprite.setPosition(troopContainer.getPosition());
+	teamOutlineSprite.setPosition(troopContainer.getPosition());
+	if (extraSpriteNeeded == true)
+	{
+		unitSpriteExtras.setPosition(troopContainer.getPosition());
+	}
+}
+
+void Squad::moveToFormationPosition(sf::Vector2f t_formationPosition, sf::Time& t_deltaTime)
+{
+	sf::Vector2f vectorToTarget = t_formationPosition - troopContainer.getPosition();
+	float distance = sqrt((vectorToTarget.x * vectorToTarget.x) + (vectorToTarget.y * vectorToTarget.y));
+	vectorToTarget = { vectorToTarget.x / distance,vectorToTarget.y / distance };
+
+	float speed = moveSpeed * t_deltaTime.asSeconds();
+	troopContainer.move(vectorToTarget.x * (speed / 2), vectorToTarget.y * (speed/2));
+
+	float rotation = (atan2(vectorToTarget.y, vectorToTarget.x) * 180 / 3.14159265) - 90;
+	if (distance <= 2.1)
+	{
+		troopContainer.setPosition(t_formationPosition);
+		formationActive = false;
+		targetReached = true;
+		rotation = 0;
+	}
+
+	UnitSprite.setPosition(troopContainer.getPosition());
+	teamOutlineSprite.setPosition(troopContainer.getPosition());
+	if (extraSpriteNeeded == true)
+	{
+		unitSpriteExtras.setPosition(troopContainer.getPosition());
+		unitSpriteExtras.setRotation(rotation);
+	}
+
+	UnitSprite.setRotation(rotation);
+	teamOutlineSprite.setRotation(rotation);
+	
 }
 
 bool Squad::movingAllowed()
@@ -161,6 +211,16 @@ void Squad::setHealth(int t_health)
 	squadData.health = t_health;
 }
 
+void Squad::setFormationNum(int t_formationPosition)
+{
+	posInFormation = t_formationPosition;
+}
+
+int Squad::getFormationNum()
+{
+	return posInFormation;
+}
+
 SquadData Squad::getSquadData()
 {
 	return squadData;
@@ -169,6 +229,11 @@ SquadData Squad::getSquadData()
 int Squad::getUnitType()
 {
 	return squadData.unitType;
+}
+
+sf::Sprite Squad::getSprite()
+{
+	return UnitSprite;
 }
 
 void Squad::setunitType()
@@ -185,13 +250,13 @@ void Squad::setunitType()
 		}
 		UnitSprite.setTexture(tankTexture);
 		UnitSprite.setScale((UnitSprite.getScale().x / 128) * (TILE_SIZE), (UnitSprite.getScale().y / 128) * (TILE_SIZE));
-		UnitSprite.setOrigin(UnitSprite.getGlobalBounds().getSize().x / 2, UnitSprite.getGlobalBounds().getSize().y / 2);
-		UnitSprite.setPosition(troopContainer.getPosition() - worldTileOffset);
+		UnitSprite.setOrigin(96, 96);
+		UnitSprite.setPosition(troopContainer.getPosition());
 
 		teamOutlineSprite.setTexture(tankOutlineTexture);
 		teamOutlineSprite.setScale((teamOutlineSprite.getScale().x / 128) * (TILE_SIZE)+0.03, (teamOutlineSprite.getScale().y / 128) * (TILE_SIZE)+0.03);
-		teamOutlineSprite.setOrigin((teamOutlineSprite.getGlobalBounds().getSize().x / 2) + 1.25, (teamOutlineSprite.getGlobalBounds().getSize().y / 2) + 1.5);
-		teamOutlineSprite.setPosition(troopContainer.getPosition() - worldTileOffset);
+		teamOutlineSprite.setOrigin(96, 96);
+		teamOutlineSprite.setPosition(troopContainer.getPosition());
 	}
 	if (squadData.unitType == 1)
 	{
