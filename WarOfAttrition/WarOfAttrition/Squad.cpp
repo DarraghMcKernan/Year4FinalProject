@@ -151,7 +151,7 @@ void Squad::moveToFormationPosition(sf::Vector2f t_formationPosition, sf::Time& 
 		troopContainer.setPosition(t_formationPosition);
 		formationActive = false;
 		targetReached = true;
-		rotation = 0;
+		//rotation = 0;
 	}
 
 	UnitSprite.setPosition(troopContainer.getPosition());

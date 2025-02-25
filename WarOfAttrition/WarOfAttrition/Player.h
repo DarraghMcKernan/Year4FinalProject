@@ -47,6 +47,10 @@ public:
 	void addIncomeFromTurn();
 
 	void checkForDeadSquads();
+
+	bool formationCreationAllowed = false;
+	bool formationMovementUnlocked = false;
+	int currentFormationLeader = -1;
 private:
 	std::vector<Squad> playersSquads;//vector to hold the players squads
 	std::vector<Tower> playersTowers;

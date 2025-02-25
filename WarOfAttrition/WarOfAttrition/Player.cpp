@@ -16,57 +16,47 @@ void Player::init(int t_teamNum, int t_unitType)
 		startPos.y += t_teamNum * (TILE_SIZE * 3);
 		playersSquads[index].init(startPos, t_teamNum,0);
 
-		//playersSquadsStrenghts.push_back(newText);
-		//playersSquadsStrenghts[index].setFont(font);
-		//playersSquadsStrenghts[index].setString(std::to_string(playersSquads[index].getStrength()));
-		//playersSquadsStrenghts[index].setCharacterSize(100);//increase size and then downscale to prevent blurred text
-		//playersSquadsStrenghts[index].setFillColor(sf::Color::White);
-		//playersSquadsStrenghts[index].setOutlineThickness(5 );
-		//playersSquadsStrenghts[index].setScale(0.2, 0.2);
-		//playersSquadsStrenghts[index].setOrigin(sf::Vector2f(TILE_SIZE + playersSquadsStrenghts[index].getGlobalBounds().width/2, TILE_SIZE + playersSquadsStrenghts[index].getGlobalBounds().height / 2));
-		//playersSquadsStrenghts[index].setPosition((playersSquads[index].getTroopContainter().getPosition()));
 	}
 
 	tileForColliding.setSize(sf::Vector2f(TILE_SIZE +3, TILE_SIZE+3));//used for making sure player cant select a tile that its own squads are on
 	tileForColliding.setOrigin(sf::Vector2f(TILE_SIZE / 2, TILE_SIZE / 2));
 
-	formationTemp.setLeaderInfo(playersSquads[0].getSprite());
-	playersSquads[0].formationLeader = true;
-	for (int index = 0; index < playerSquadsCount; index++)
-	{
-		playersSquads[index].formationActive = true;
-		playersSquads[index].setFormationNum(formationTemp.getPositionInFormation());
-	}
-
-
+	//formationTemp.setLeaderInfo(playersSquads[0].getSprite());
+	//playersSquads[0].formationLeader = true;
+	//playersSquads[0].setFormationNum(formationTemp.getPositionInFormation());
+	//for (int index = 0; index < playerSquadsCount; index++)
+	//{
+	//	playersSquads[index].formationActive = true;
+	//	playersSquads[index].setFormationNum(formationTemp.getPositionInFormation());
+	//}
 }
 
 void Player::update(sf::Time& t_deltaTime)
 {
-	formationTemp.setLeaderInfo(playersSquads[0].getSprite());
-	/*for (int index = 1; index < playerSquadsCount; index++)
+	if (currentFormationLeader != -1)
 	{
-		if (playersSquads[index].formationActive == true)
-		{
-			playersSquads[index].setPosition(formationTemp.getFormationPosition(playersSquads[index].getFormationNum()));
-		}		
-	}*/
+		formationTemp.setLeaderInfo(playersSquads[currentFormationLeader].getSprite());
+	}
 
 	int checkIfAllMoved = 0;
 	for (int index = 0; index < playerSquadsCount; index++)
 	{
-		if (playersSquads[index].formationLeader == true)// && playersSquads[index].movingAllowed() == true)
+		if (formationCreationAllowed == true)
 		{
-			for (int i = 0; i < playerSquadsCount; i++)
+			if (playersSquads[index].formationLeader == false && playersSquads[index].formationActive == false)
 			{
-				if (i != index)
+				if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && playersSquads[index].getTroopContainter().getGlobalBounds().contains(mousePos)
+					&& activeTargetTimer == 0 && turnEnded == false && playersSquads[index].movingAllowed() == false)
 				{
-					playersSquads[i].formationActive = true;
-					playersSquads[i].targetReached = false;
+					playersSquads[index].formationActive = true;
+					std::cout << index << " added to formation\n";
+					playersSquads[index].setFormationNum(formationTemp.getPositionInFormation());
 				}
 			}
 		}
-		if (playersSquads[index].formationActive == true)// && playersSquads[index].formationLeader == false)
+
+
+		if (playersSquads[index].formationActive == true && formationMovementUnlocked == true)// && playersSquads[index].formationLeader == false)
 		{
 			playersSquads[index].moveToFormationPosition(formationTemp.getFormationPosition(playersSquads[index].getFormationNum()),t_deltaTime);
 		}
@@ -81,7 +71,8 @@ void Player::update(sf::Time& t_deltaTime)
 			}
 
 			if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && playersSquads[index].getTroopContainter().getGlobalBounds().contains(mousePos)
-				&& activeTargetTimer == 0 && turnEnded == false && unitsMoved < MAX_MOVES_PER_TURN && playersSquads[index].movingAllowed() == false)
+				&& activeTargetTimer == 0 && turnEnded == false && unitsMoved < MAX_MOVES_PER_TURN && playersSquads[index].movingAllowed() == false
+				&& playersSquads[index].formationActive == false)
 			{
 				if (squadSet == false)//allows for selected squad to be changed without wasting moves
 				{
@@ -89,8 +80,15 @@ void Player::update(sf::Time& t_deltaTime)
 				}
 				else playersSquads[squadBeingControlled].unlockMovement(false);
 
+				if (currentFormationLeader == -1)
+				{
+					currentFormationLeader = index;
+					playersSquads[index].formationLeader = true;
+					playersSquads[index].setFormationNum(formationTemp.getPositionInFormation());
+				}
 				squadSet = true;
 				playersSquads[squadBeingControlled].resetColour();
+				formationCreationAllowed = true;
 				squadBeingControlled = index;
 				playersSquads[index].unlockMovement(true);
 				activeTargetTimer = 10;
@@ -108,6 +106,7 @@ void Player::update(sf::Time& t_deltaTime)
 			{
 				playersSquads[index].turnEnded = true;
 				turnEnded = true;
+				formationMovementUnlocked = true;
 			}
 			else if (playersSquads[index].movingAllowed() == true && playersSquads[index].targetSet != true)
 			{
@@ -137,6 +136,8 @@ void Player::update(sf::Time& t_deltaTime)
 			playersSquads[index].turnEnded = false;
 		}
 		squadBeingControlled = 1;
+		formationCreationAllowed = false;
+		formationMovementUnlocked = false;
 		arrivedAtTarget = true;
 		turnEnded = false;
 		unitsMoved = 0;
@@ -144,19 +145,20 @@ void Player::update(sf::Time& t_deltaTime)
 		endTurnActive = false;
 	}
 
-	if (checkIfAllMoved == playerSquadsCount)//if all squads that were allowed to move have moved end turn
-	{
-		for (int index = 0; index < playerSquadsCount; index++)
-		{
-			playersSquads[index].targetReached = false;
-		}
-		squadBeingControlled = 1;
-		arrivedAtTarget = true;
-		turnEnded = false;
-		unitsMoved = 0;
-		timerForEnd = 0;
-		endTurnActive = false;
-	}
+	//if (checkIfAllMoved == playerSquadsCount)//if all squads that were allowed to move have moved end turn
+	//{
+	//	for (int index = 0; index < playerSquadsCount; index++)
+	//	{
+	//		playersSquads[index].targetReached = false;
+	//	}
+	//	squadBeingControlled = 1;
+	//	formationCreationAllowed = false;
+	//	arrivedAtTarget = true;
+	//	turnEnded = false;
+	//	unitsMoved = 0;
+	//	timerForEnd = 0;
+	//	endTurnActive = false;
+	//}
 }
 
 void Player::fixedUpdate()
@@ -205,6 +207,7 @@ void Player::setTargetPosition(int t_cellNum)
 {
 	squadSet = false;
 	targetNeeded = false;
+	formationCreationAllowed = false;
 	squadsThatMoved.push_back(squadBeingControlled);
 
 	targetPosition = { (t_cellNum % TILE_COLUMNS) * TILE_SIZE, (t_cellNum / TILE_COLUMNS) * TILE_SIZE };//the tile that the player wants to move to
@@ -454,6 +457,7 @@ void Player::addIncomeFromTurn()
 void Player::checkForDeadSquads()
 {
 	squadBeingControlled = 0;
+	formationCreationAllowed = false;
 	std::vector<int> deadSquads;
 	for (int index = 0; index < playerSquadsCount; index++)
 	{
