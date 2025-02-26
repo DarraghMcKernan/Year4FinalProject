@@ -200,10 +200,6 @@ void Player::fixedUpdate()
 		}
 		activeTargetTimer--;
 	}
-	//for (int index = 0; index < playerSquadsCount; index++)
-	//{
-	//	//playersSquadsStrenghts[index].setPosition((playersSquads[index].getTroopContainter().getPosition()));
-	//}
 }
 
 void Player::render(sf::RenderWindow& t_window)
@@ -270,27 +266,6 @@ std::vector<int> Player::collisionCheckerDamage(std::vector<sf::RectangleShape> 
 				playersSquads[index].setHealth(outcome);
 
 				damageTaken.push_back(damage);
-
-				//if (t_strength < playersSquads[index].getStrength())
-				//{
-				//	int outcome = playersSquads[index].getStrength() - t_strength;
-				//	playersSquads[index].setStrength(outcome);
-				//	//playersSquadsStrenghts[index].setString(std::to_string(playersSquads[index].getStrength()));
-				//	//return t_strength;//lost the fight so is now 0
-				//	damageTaken.push_back(t_strength);
-				//}
-				//else if (t_strength > playersSquads[index].getStrength())
-				//{
-				//	int outcome = t_strength - playersSquads[index].getStrength();
-				//	eliminateUnit(index);
-				//	//return outcome;//won the fight but took damage
-				//	damageTaken.push_back(outcome);
-				//}
-				//else {
-				//	eliminateUnit(index);//both lose as equal health -- might change to defenders advantage
-				//	damageTaken.push_back(t_strength);
-				//	//return t_strength;
-				//}
 			}
 		}
 	}
@@ -491,4 +466,26 @@ void Player::checkForDeadSquads()
     {
 		eliminateUnit(deadSquads[index]);
     }
+}
+
+void Player::resetPlayerForThisTurn()
+{	
+	for (int index = 0; index < playerSquadsCount; index++)
+	{
+		playersSquads[index].targetReached = false;
+		playersSquads[index].formationActive = false;
+		playersSquads[index].formationLeader = false;
+		playersSquads[index].targetSet = false;
+		playersSquads[index].turnEnded = false;
+		playersSquads[index].formationLeaderReachedGoal = false;
+		playersSquads[index].resetColour();
+	}
+	currentFormationLeader = -1;
+	squadBeingControlled = 1;
+	formationCreationAllowed = false;
+	formationMovementUnlocked = false;
+	formationCreated = false;
+	turnEnded = false;
+	unitsMoved = 0;
+	endTurnActive = false;
 }

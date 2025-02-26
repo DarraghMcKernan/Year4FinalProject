@@ -40,6 +40,13 @@ void GameManager::startGame()//setup variables needed before the game starts
 	openTowerMenuButton.setOutlineColor(sf::Color::Black);
 	openTowerMenuButton.setOutlineThickness(3);
 
+	resetTurnButton.setSize({ hudBacking.getSize().y / 4, hudBacking.getSize().y / 4 });
+	resetTurnButton.setOrigin({ resetTurnButton.getSize().x / 2 ,resetTurnButton.getSize().y / 2 });
+	resetTurnButton.setPosition({ (SCREEN_WIDTH / 2.58),SCREEN_HEIGHT - (SCREEN_HEIGHT / 10) / 2 });
+	resetTurnButton.setFillColor(sf::Color(200, 100, 100));
+	resetTurnButton.setOutlineColor(sf::Color::Black);
+	resetTurnButton.setOutlineThickness(3);
+
 	unitMenuBacking.setSize({ SCREEN_WIDTH/ 4, SCREEN_HEIGHT / 2 });
 	unitMenuBacking.setOrigin({ unitMenuBacking.getSize().x / 2 ,unitMenuBacking.getSize().y / 2 });
 	unitMenuBacking.setPosition({ SCREEN_WIDTH - (SCREEN_WIDTH / 7),SCREEN_HEIGHT - (SCREEN_HEIGHT / 2.65) });
@@ -467,6 +474,7 @@ void GameManager::displayHUD(sf::RenderWindow& t_window,sf::View& t_fixedWindow)
 	t_window.draw(endTurnButton);
 	t_window.draw(openUnitMenuButton);
 	t_window.draw(openTowerMenuButton);
+	t_window.draw(resetTurnButton);
 	t_window.draw(playerTurnDisplay);
 	t_window.draw(endTurnText);
 	t_window.draw(createUnitText);
@@ -585,6 +593,12 @@ void GameManager::menuInteractions()
 			clickTimer = 30;
 			openCreateTowerMenu = false;
 		}
+		else if ((sf::Mouse::isButtonPressed(sf::Mouse::Left) && resetTurnButton.getGlobalBounds().contains({ static_cast<float>(mousePos.x),static_cast<float>(mousePos.y) })) && clickTimer == 0)
+		{
+			resetTurnButton.setFillColor(sf::Color(150, 50, 50));
+			clickTimer = 30;
+			player[whosTurn - 1].resetPlayerForThisTurn();
+		}
 		else if ((sf::Mouse::isButtonPressed(sf::Mouse::Left) && createTankUnit.getGlobalBounds().contains({ static_cast<float>(mousePos.x),static_cast<float>(mousePos.y) })) && openCreateUnitMenu == true && clickTimer == 0)
 		{
 			clickTimer = 30;
@@ -644,6 +658,7 @@ void GameManager::menuInteractions()
 		endTurnButton.setFillColor(sf::Color(100, 200, 100));
 		openUnitMenuButton.setFillColor(sf::Color(100, 200, 150));
 		openTowerMenuButton.setFillColor(sf::Color(100, 150, 200));
+		resetTurnButton.setFillColor(sf::Color(200, 100, 100));
 		createTankUnit.setFillColor(sf::Color(200, 200, 100));
 		createHeavyTankUnit.setFillColor(sf::Color(200, 100, 200));
 		createGoldMineTower.setFillColor(sf::Color(200, 200, 100));

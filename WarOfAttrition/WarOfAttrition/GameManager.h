@@ -41,6 +41,7 @@ private:
 	sf::RectangleShape endTurnButton;//button to allow player to end their turn
 	sf::RectangleShape openUnitMenuButton;//button that brings up the menu to create units
 	sf::RectangleShape openTowerMenuButton;
+	sf::RectangleShape resetTurnButton;//button to reset all unit moves the player made during this turn
 	sf::RectangleShape unitMenuBacking;//just a background ui for the buttons to create units
 	sf::RectangleShape createTankUnit;//button to create a tank unit
 	sf::RectangleShape createPistolUnit;//button to create a pistol unit

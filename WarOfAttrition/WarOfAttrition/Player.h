@@ -47,6 +47,7 @@ public:
 	void addIncomeFromTurn();
 
 	void checkForDeadSquads();
+	void resetPlayerForThisTurn();
 
 	bool formationCreationAllowed = false;
 	bool formationMovementUnlocked = false;
