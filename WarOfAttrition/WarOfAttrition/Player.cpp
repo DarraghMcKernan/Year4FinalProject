@@ -41,6 +41,15 @@ void Player::update(sf::Time& t_deltaTime)
 	int checkIfAllMoved = 0;
 	for (int index = 0; index < playerSquadsCount; index++)
 	{
+		if (playersSquads[index].formationLeader == true && playersSquads[index].formationLeaderReachedGoal == true)
+		{
+			for (int i = 0; i < playerSquadsCount; i++)
+			{
+				playersSquads[i].formationLeaderReachedGoal = true;
+				playersSquads[i].checkIfTargetReached();
+			}
+		}
+
 		if (formationCreationAllowed == true)
 		{
 			if (playersSquads[index].formationLeader == false && playersSquads[index].formationActive == false)
@@ -48,6 +57,14 @@ void Player::update(sf::Time& t_deltaTime)
 				if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && playersSquads[index].getTroopContainter().getGlobalBounds().contains(mousePos)
 					&& activeTargetTimer == 0 && turnEnded == false && playersSquads[index].movingAllowed() == false)
 				{
+					if (playersSquads[currentFormationLeader].formationLeader == false)
+					{
+						playersSquads[currentFormationLeader].formationLeader = true;
+						std::cout << currentFormationLeader << " is now the temp leader\n";
+						playersSquads[currentFormationLeader].setFormationNum(formationTemp.getPositionInFormation());
+						formationCreated = true;
+					}					
+
 					playersSquads[index].formationActive = true;
 					std::cout << index << " added to formation\n";
 					playersSquads[index].setFormationNum(formationTemp.getPositionInFormation());
@@ -80,11 +97,16 @@ void Player::update(sf::Time& t_deltaTime)
 				}
 				else playersSquads[squadBeingControlled].unlockMovement(false);
 
-				if (currentFormationLeader == -1)
+				if (currentFormationLeader == -1)//////issue is here
 				{
 					currentFormationLeader = index;
-					playersSquads[index].formationLeader = true;
-					playersSquads[index].setFormationNum(formationTemp.getPositionInFormation());
+					//playersSquads[index].formationLeader = true;
+					//std::cout << index << " is now the temp leader\n";
+					//playersSquads[index].setFormationNum(formationTemp.getPositionInFormation());
+				}
+				else if (formationCreated == false)
+				{
+					currentFormationLeader = index;
 				}
 				squadSet = true;
 				playersSquads[squadBeingControlled].resetColour();
@@ -134,10 +156,12 @@ void Player::update(sf::Time& t_deltaTime)
 			//playersSquads[index].formationLeader = false;
 			playersSquads[index].targetSet = false;
 			playersSquads[index].turnEnded = false;
+			playersSquads[index].formationLeaderReachedGoal = false;
 		}
 		squadBeingControlled = 1;
 		formationCreationAllowed = false;
 		formationMovementUnlocked = false;
+		formationCreated = false;
 		arrivedAtTarget = true;
 		turnEnded = false;
 		unitsMoved = 0;

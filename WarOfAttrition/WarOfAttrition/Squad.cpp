@@ -52,6 +52,14 @@ void Squad::update(sf::Time t_deltaTime)
 			vectorToTarget = { vectorToTarget.x / distance,vectorToTarget.y / distance };
 			if (distance <= 2.1)//lock player to target once close enough
 			{
+				if (formationLeader == true)
+				{
+					formationLeaderReachedGoal = true;
+					formationActive = false;
+					targetReached = true;
+					std::cout << "formation leader position reached" << std::endl;
+				}
+
 				troopContainer.setPosition(targetPosition);
 				UnitSprite.setPosition(troopContainer.getPosition());
 				UnitSprite.setRotation(0);
@@ -110,6 +118,7 @@ void Squad::render(sf::RenderWindow& t_window)
 
 void Squad::unlockMovement(bool t_allowed)
 {
+	targetReached = false;
 	movementAllowed = t_allowed;
 	troopContainer.setFillColor(sf::Color(0, 255, 0, 150));
 }
@@ -148,9 +157,21 @@ void Squad::moveToFormationPosition(sf::Vector2f t_formationPosition, sf::Time& 
 	float rotation = (atan2(vectorToTarget.y, vectorToTarget.x) * 180 / 3.14159265) - 90;
 	if (distance <= 2.1)
 	{
-		troopContainer.setPosition(t_formationPosition);
-		formationActive = false;
-		targetReached = true;
+		if (formationLeader == true)
+		{
+			formationLeaderReachedGoal = true;
+			troopContainer.setPosition(t_formationPosition);
+			formationActive = false;
+			targetReached = true;
+			std::cout << "formation leader position reached" << std::endl;
+		}
+		else if(formationLeaderReachedGoal == true){
+			troopContainer.setPosition(t_formationPosition);
+			formationActive = false;
+			targetReached = true;
+			std::cout << "formation position reached" << std::endl;
+		}
+		
 		//rotation = 0;
 	}
 
@@ -234,6 +255,25 @@ int Squad::getUnitType()
 sf::Sprite Squad::getSprite()
 {
 	return UnitSprite;
+}
+
+void Squad::checkIfTargetReached()
+{
+	sf::Vector2f vectorToTarget = targetPosition - troopContainer.getPosition();
+	float distance = sqrt((vectorToTarget.x * vectorToTarget.x) + (vectorToTarget.y * vectorToTarget.y));
+	if (distance <= 2.1)
+	{
+		if (formationLeader == true)
+		{
+			formationLeaderReachedGoal = true;
+			formationActive = false;
+			targetReached = true;
+		}
+		else if (formationLeaderReachedGoal == true) {
+			formationActive = false;
+			targetReached = true;
+		}
+	}
 }
 
 void Squad::setunitType()

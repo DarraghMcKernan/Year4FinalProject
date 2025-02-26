@@ -73,4 +73,5 @@ private:
 
 	bool endTurnActive = false;
 	bool squadSet = false;
+	bool formationCreated = false;
 };

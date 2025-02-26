@@ -15,7 +15,7 @@ public:
 	void setPosition(sf::Vector2f t_debugPosition);
 	void moveToFormationPosition(sf::Vector2f t_formationPosition, sf::Time& t_deltaTime);
 	bool movingAllowed();
-	bool targetReached = false;
+	bool targetReached = true;
 	void resetColour();
 	int getStrength();
 	void setStrength(int t_strength);
@@ -30,9 +30,11 @@ public:
 	SquadData getSquadData();
 	int getUnitType();
 	sf::Sprite getSprite();
+	void checkIfTargetReached();
 
 	bool formationActive = false;
 	bool formationLeader = false;
+	bool formationLeaderReachedGoal = false;
 private:
 	SquadData squadData;
 	
