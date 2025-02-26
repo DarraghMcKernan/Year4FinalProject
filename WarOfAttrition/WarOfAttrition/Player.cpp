@@ -97,12 +97,9 @@ void Player::update(sf::Time& t_deltaTime)
 				}
 				else playersSquads[squadBeingControlled].unlockMovement(false);
 
-				if (currentFormationLeader == -1)//////issue is here
+				if (currentFormationLeader == -1)
 				{
 					currentFormationLeader = index;
-					//playersSquads[index].formationLeader = true;
-					//std::cout << index << " is now the temp leader\n";
-					//playersSquads[index].setFormationNum(formationTemp.getPositionInFormation());
 				}
 				else if (formationCreated == false)
 				{
@@ -169,20 +166,20 @@ void Player::update(sf::Time& t_deltaTime)
 		endTurnActive = false;
 	}
 
-	//if (checkIfAllMoved == playerSquadsCount)//if all squads that were allowed to move have moved end turn
-	//{
-	//	for (int index = 0; index < playerSquadsCount; index++)
-	//	{
-	//		playersSquads[index].targetReached = false;
-	//	}
-	//	squadBeingControlled = 1;
-	//	formationCreationAllowed = false;
-	//	arrivedAtTarget = true;
-	//	turnEnded = false;
-	//	unitsMoved = 0;
-	//	timerForEnd = 0;
-	//	endTurnActive = false;
-	//}
+	if (checkIfAllMoved == playerSquadsCount)//if all squads that were allowed to move have moved end turn
+	{
+		for (int index = 0; index < playerSquadsCount; index++)
+		{
+			playersSquads[index].targetReached = false;
+		}
+		squadBeingControlled = 1;
+		formationCreationAllowed = false;
+		arrivedAtTarget = true;
+		turnEnded = false;
+		unitsMoved = 0;
+		timerForEnd = 0;
+		endTurnActive = false;
+	}
 }
 
 void Player::fixedUpdate()

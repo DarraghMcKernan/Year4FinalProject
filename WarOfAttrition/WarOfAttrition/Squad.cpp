@@ -62,14 +62,15 @@ void Squad::update(sf::Time t_deltaTime)
 
 				troopContainer.setPosition(targetPosition);
 				UnitSprite.setPosition(troopContainer.getPosition());
-				UnitSprite.setRotation(0);
+				float rotatiion = (atan2(vectorToTarget.y, vectorToTarget.x) * 180 / 3.14159265) - 90;
+				UnitSprite.setRotation(rotatiion);
 				if (extraSpriteNeeded == true)
 				{
 					unitSpriteExtras.setPosition(UnitSprite.getPosition());
-					unitSpriteExtras.setRotation(0);
+					unitSpriteExtras.setRotation(rotatiion);
 				}
 				teamOutlineSprite.setPosition(troopContainer.getPosition());
-				teamOutlineSprite.setRotation(0);
+				teamOutlineSprite.setRotation(rotatiion);
 				movementAllowed = false;
 				targetReached = true;
 				resetColour();
