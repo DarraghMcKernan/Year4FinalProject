@@ -65,6 +65,10 @@ sf::Vector2f Formation::getFormationPosition(int t_posInFormation)
 
 	actualFormationPoint += leaderPosition;
 
+	PositionNormaliser normaliser;
+
+	actualFormationPoint = normaliser.normalizeToTileCenter(actualFormationPoint);
+
 	return actualFormationPoint;
 }
 

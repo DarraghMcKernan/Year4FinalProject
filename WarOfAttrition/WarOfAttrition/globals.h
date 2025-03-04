@@ -9,7 +9,7 @@ const float VIEWPORT_WIDTH = 600.0f;//can be any size
 const float VIEWPORT_HEIGHT = 500.0f;
 
 const float TILE_SIZE = 50.0f;//define the size of the square tiles that make up the world
-const static float SPEED_MULTIPLIER = 1.2f;//allows the entire games units to be sped up or slowed down
+const static float SPEED_MULTIPLIER = 0.6f;//allows the entire games units to be sped up or slowed down
 
 const int TILE_ROWS = SCREEN_HEIGHT / TILE_SIZE;
 const int TILE_COLUMNS = SCREEN_WIDTH / TILE_SIZE;
@@ -42,4 +42,19 @@ struct SquadData
 	int squadStrength = 100;
 	int unitType = 0;
 	int health = 100;
+};
+
+class PositionNormaliser {
+public:
+
+    virtual sf::Vector2f normalizeToTileCenter(const sf::Vector2f& position) const {
+        float tileSize = 50.0f;
+
+        float tileX = std::floor(position.x / tileSize) * tileSize;
+        float tileY = std::floor(position.y / tileSize) * tileSize;
+
+        return sf::Vector2f(tileX + tileSize / 2.0f, tileY + tileSize / 2.0f);
+    }
+
+    virtual ~PositionNormaliser() = default;
 };

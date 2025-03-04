@@ -22,7 +22,7 @@ public:
 	void setHealth(int t_health);
 	bool turnEnded = false;
 	bool targetSet = false;
-	int maxMoveDistance = 5;
+	int maxMoveDistance = 10;
 
 	void setFormationNum(int t_formationPosition);
 	int getFormationNum();

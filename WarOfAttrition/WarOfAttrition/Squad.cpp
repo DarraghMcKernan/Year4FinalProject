@@ -152,8 +152,11 @@ void Squad::moveToFormationPosition(sf::Vector2f t_formationPosition, sf::Time& 
 	float distance = sqrt((vectorToTarget.x * vectorToTarget.x) + (vectorToTarget.y * vectorToTarget.y));
 	vectorToTarget = { vectorToTarget.x / distance,vectorToTarget.y / distance };
 
-	float speed = moveSpeed * t_deltaTime.asSeconds();
-	troopContainer.move(vectorToTarget.x * (speed / 2), vectorToTarget.y * (speed/2));
+	if (distance > 2.1)
+	{
+		float speed = moveSpeed * t_deltaTime.asSeconds();
+		troopContainer.move(vectorToTarget.x * (speed), vectorToTarget.y * (speed));
+	}
 
 	float rotation = (atan2(vectorToTarget.y, vectorToTarget.x) * 180 / 3.14159265) - 90;
 	if (distance <= 2.1)
