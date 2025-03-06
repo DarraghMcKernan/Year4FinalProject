@@ -35,6 +35,7 @@ public:
 	bool formationActive = false;
 	bool formationLeader = false;
 	bool formationLeaderReachedGoal = false;
+	bool formationFrontReachedGoal = false;
 private:
 	SquadData squadData;
 	

@@ -21,21 +21,20 @@ void Player::init(int t_teamNum, int t_unitType)
 	tileForColliding.setSize(sf::Vector2f(TILE_SIZE +3, TILE_SIZE+3));//used for making sure player cant select a tile that its own squads are on
 	tileForColliding.setOrigin(sf::Vector2f(TILE_SIZE / 2, TILE_SIZE / 2));
 
-	//formationTemp.setLeaderInfo(playersSquads[0].getSprite());
-	//playersSquads[0].formationLeader = true;
-	//playersSquads[0].setFormationNum(formationTemp.getPositionInFormation());
-	//for (int index = 0; index < playerSquadsCount; index++)
-	//{
-	//	playersSquads[index].formationActive = true;
-	//	playersSquads[index].setFormationNum(formationTemp.getPositionInFormation());
-	//}
 }
 
 void Player::update(sf::Time& t_deltaTime)
 {
-	if (currentFormationLeader != -1)
+	if (currentFormationLeader != -1 && formationTemp.formationMovingActive == false && targetPosition != sf::Vector2f(0,0))
 	{
 		formationTemp.setLeaderInfo(playersSquads[currentFormationLeader].getSprite());
+		formationTemp.setLeaderPosAndTarget(playersSquads[currentFormationLeader].getSprite().getPosition(), targetPosition);
+		formationTemp.formationMovingActive = true;
+	}
+
+	if (formationTemp.formationMovingActive == true)
+	{
+		formationTemp.update(t_deltaTime);
 	}
 
 	int checkIfAllMoved = 0;
@@ -72,10 +71,14 @@ void Player::update(sf::Time& t_deltaTime)
 			}
 		}
 
-
+		playersSquads[index].moveToFormationPosition(formationTemp.getFormationPosition(playersSquads[index].getFormationNum()), t_deltaTime);
+		if (formationTemp.leaderTargetReached == true && index == currentFormationLeader)
+		{
+			playersSquads[index].formationFrontReachedGoal = true;
+		}
 		if (playersSquads[index].formationActive == true && formationMovementUnlocked == true)// && playersSquads[index].formationLeader == false)
 		{
-			playersSquads[index].moveToFormationPosition(formationTemp.getFormationPosition(playersSquads[index].getFormationNum()),t_deltaTime);
+			//playersSquads[index].moveToFormationPosition(formationTemp.getFormationPosition(playersSquads[index].getFormationNum()),t_deltaTime);
 		}
 		else {
 			if (playersSquads[index].targetReached == true && turnEnded == true)//all have reached their targets
@@ -113,8 +116,10 @@ void Player::update(sf::Time& t_deltaTime)
 				activeTargetTimer = 10;
 			}
 		}
-		
-		playersSquads[index].update(t_deltaTime);
+		if (playersSquads[index].formationLeader == false)
+		{
+			playersSquads[index].update(t_deltaTime);
+		}
 	}
 
 	if (endTurnActive == true)//if space is pressed allow all squads to move

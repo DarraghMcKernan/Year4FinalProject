@@ -2,11 +2,33 @@
 
 void Formation::update(sf::Time t_deltaTime)
 {
+	sf::Vector2f vectorToTarget = targetPosition - formationFront;
+	float distance = sqrt((vectorToTarget.x * vectorToTarget.x) + (vectorToTarget.y * vectorToTarget.y));
+	vectorToTarget = { vectorToTarget.x / distance,vectorToTarget.y / distance };
 
+	//std::cout << "Leader pos: " << leaderPosition.x << " " << leaderPosition.y << "\n";
+	//std::cout << "Target pos: " << targetPosition.x << " " << targetPosition.y << "\n\n";
+	//std::cout << "formation front pos: " << formationFront.x << " " << formationFront.y << "\n";
+
+	//std::cout << distance << "\n"; 
+
+	if (distance > 2.1)
+	{
+		float speed = formationMoveSpeed * t_deltaTime.asSeconds();
+		formationFront = sf::Vector2f(formationFront.x + (vectorToTarget.x * speed), formationFront.y + (vectorToTarget.y * speed));
+	}
+	
+	if (distance <= 2.1)
+	{
+		formationFront = targetPosition;
+		formationMovingActive = false;
+		leaderTargetReached = true;
+	}
 }
 
 void Formation::setLeaderPosAndTarget(sf::Vector2f t_leaderPos, sf::Vector2f t_targetPos)
 {
+	formationFront = t_leaderPos;
 	leaderPosition = t_leaderPos;
 	targetPosition = t_targetPos;
 }
@@ -34,12 +56,19 @@ sf::Vector2f Formation::getFormationPosition(int t_posInFormation)
 {
 	float radians = leaderCopy.getRotation() * (3.14159f / 180.0f);
 
-	sf::Vector2f offset;
+	if (formationFront == sf::Vector2f(0, 0))
+	{
+		return sf::Vector2f(0, 0);
+	}
+
+	PositionNormaliser normaliser;
+
+	sf::Vector2f offset = sf::Vector2f(0,0);
 	if (t_posInFormation == 0)
 	{
-		return leaderPosition;
+		return normaliser.normalizeToTileCenter(formationFront);
 	}
-	if (t_posInFormation == 1)
+	else if (t_posInFormation == 1)
 	{
 		offset = sf::Vector2f(standardOffset.x * formationXSpread, -standardOffset.y * formationYSpread);
 	}
@@ -63,9 +92,7 @@ sf::Vector2f Formation::getFormationPosition(int t_posInFormation)
 
 	sf::Vector2f actualFormationPoint = sf::Vector2f(tempPos.x * cosTheta - tempPos.y * sinTheta, tempPos.x * sinTheta + tempPos.y * cosTheta);
 
-	actualFormationPoint += leaderPosition;
-
-	PositionNormaliser normaliser;
+	actualFormationPoint += formationFront;
 
 	actualFormationPoint = normaliser.normalizeToTileCenter(actualFormationPoint);
 

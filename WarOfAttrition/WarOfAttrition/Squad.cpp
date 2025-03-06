@@ -148,48 +148,50 @@ void Squad::setPosition(sf::Vector2f t_debugPosition)
 
 void Squad::moveToFormationPosition(sf::Vector2f t_formationPosition, sf::Time& t_deltaTime)
 {
-	sf::Vector2f vectorToTarget = t_formationPosition - troopContainer.getPosition();
-	float distance = sqrt((vectorToTarget.x * vectorToTarget.x) + (vectorToTarget.y * vectorToTarget.y));
-	vectorToTarget = { vectorToTarget.x / distance,vectorToTarget.y / distance };
-
-	if (distance > 2.1)
+	if (t_formationPosition != sf::Vector2f(0, 0))
 	{
-		float speed = moveSpeed * t_deltaTime.asSeconds();
-		troopContainer.move(vectorToTarget.x * (speed), vectorToTarget.y * (speed));
-	}
+		sf::Vector2f vectorToTarget = t_formationPosition - troopContainer.getPosition();
+		float distance = sqrt((vectorToTarget.x * vectorToTarget.x) + (vectorToTarget.y * vectorToTarget.y));
+		vectorToTarget = { vectorToTarget.x / distance,vectorToTarget.y / distance };
 
-	float rotation = (atan2(vectorToTarget.y, vectorToTarget.x) * 180 / 3.14159265) - 90;
-	if (distance <= 2.1)
-	{
-		if (formationLeader == true)
+		if (distance > 2.1)
 		{
-			formationLeaderReachedGoal = true;
-			troopContainer.setPosition(t_formationPosition);
-			formationActive = false;
-			targetReached = true;
-			std::cout << "formation leader position reached" << std::endl;
+			float speed = moveSpeed * t_deltaTime.asSeconds();
+			troopContainer.move(vectorToTarget.x * (speed), vectorToTarget.y * (speed));
 		}
-		else if(formationLeaderReachedGoal == true){
-			troopContainer.setPosition(t_formationPosition);
-			formationActive = false;
-			targetReached = true;
-			std::cout << "formation position reached" << std::endl;
+
+		float rotation = (atan2(vectorToTarget.y, vectorToTarget.x) * 180 / 3.14159265) - 90;
+		if (distance <= 2.1)
+		{
+			if (formationLeader == true && formationFrontReachedGoal == true)
+			{
+				formationLeaderReachedGoal = true;
+				troopContainer.setPosition(t_formationPosition);
+				formationActive = false;
+				targetReached = true;
+				std::cout << "formation leader position reached" << std::endl;
+			}
+			else if (formationLeaderReachedGoal == true) {
+				troopContainer.setPosition(t_formationPosition);
+				formationActive = false;
+				targetReached = true;
+				std::cout << "formation position reached" << std::endl;
+			}
+
+			//rotation = 0;
 		}
-		
-		//rotation = 0;
-	}
 
-	UnitSprite.setPosition(troopContainer.getPosition());
-	teamOutlineSprite.setPosition(troopContainer.getPosition());
-	if (extraSpriteNeeded == true)
-	{
-		unitSpriteExtras.setPosition(troopContainer.getPosition());
-		unitSpriteExtras.setRotation(rotation);
-	}
+		UnitSprite.setPosition(troopContainer.getPosition());
+		teamOutlineSprite.setPosition(troopContainer.getPosition());
+		if (extraSpriteNeeded == true)
+		{
+			unitSpriteExtras.setPosition(troopContainer.getPosition());
+			unitSpriteExtras.setRotation(rotation);
+		}
 
-	UnitSprite.setRotation(rotation);
-	teamOutlineSprite.setRotation(rotation);
-	
+		UnitSprite.setRotation(rotation);
+		teamOutlineSprite.setRotation(rotation);
+	}
 }
 
 bool Squad::movingAllowed()
