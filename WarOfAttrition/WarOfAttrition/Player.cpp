@@ -73,7 +73,7 @@ void Player::update(sf::Time& t_deltaTime)
 		}
 
 		//playersSquads[index].moveToFormationPosition(formationTemp.getFormationPosition(playersSquads[index].getFormationNum()), t_deltaTime);
-		if (formationTemp.leaderTargetReached == true && index == currentFormationLeader)
+		 if (formationTemp.leaderTargetReached == true && index == currentFormationLeader)
 		{
 			playersSquads[index].formationFrontReachedGoal = true;
 		}

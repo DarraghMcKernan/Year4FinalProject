@@ -1,7 +1,7 @@
 #pragma once
 #include "WorldTile.h"
 #include "globals.h"
-
+#include <queue>
 class TileGrid
 {
 public:
@@ -29,6 +29,8 @@ public:
 	bool positionUpdated = false;
 	bool targetMoving = false;
 	int tilesSelected[MAX_MOVES_PER_TURN];
+
+	std::vector<int> getPathToTarget(sf::Vector2f StartPos, sf::Vector2f targetPos);
 private:
 	std::vector<Tile> tiles;
 	std::vector<sf::Sprite> worldTileTemp;

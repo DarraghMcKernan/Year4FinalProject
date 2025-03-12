@@ -30,6 +30,8 @@ void TileGrid::init()
 	{
 		tiles[tileSetAsWalls.at(index)].setType(1);//1 is a wall type
 	}
+
+	getPathToTarget(sf::Vector2f(100, 100), sf::Vector2f(500, 500));
 }
 
 void TileGrid::update(sf::Time& t_deltaTime)
@@ -180,7 +182,7 @@ void TileGrid::resetTiles()
 		tiles[tilesSelected[index]].tileSetAsTarget = false;
 	}
 	deactiveateTile();
-	deactiveateAllTiles();
+	//deactiveateAllTiles();
 	//for (int index = 0; index < MAX_MOVES_PER_TURN; index++)
 	//{
 	//	tiles[tilesSelected[index]].tileSetAsTarget = false;
@@ -205,6 +207,91 @@ void TileGrid::updateTileType(int t_type)
 	tiles[tileHoveredOverNum()].setType(t_type);
 	updateTileTexture(tileHoveredOverNum(),0);
 }
+
+std::vector<int> TileGrid::getPathToTarget(sf::Vector2f startPos, sf::Vector2f targetPos)
+{
+	std::vector<int> path;
+	std::queue<int> queue;
+	std::vector<int> cameFrom(TILE_ROWS * TILE_COLUMNS, -1);
+
+	int startTile = (int(startPos.y) / TILE_SIZE) * TILE_COLUMNS + (int(startPos.x) / TILE_SIZE);//normalise coord to nearest tile
+	int targetTile = (int(targetPos.y) / TILE_SIZE) * TILE_COLUMNS + (int(targetPos.x) / TILE_SIZE);
+
+	if (checkIfWall(startTile) || checkIfWall(targetTile))
+	{
+		return path;
+	}
+
+	queue.push(startTile);
+	cameFrom[startTile] = startTile;
+
+	std::vector<int> directions = { -1, 1, -TILE_COLUMNS, TILE_COLUMNS, -TILE_COLUMNS - 1, -TILE_COLUMNS + 1, TILE_COLUMNS - 1, TILE_COLUMNS + 1 };//diagonals
+	//std::vector<int> directions = { -1, 1, -TILE_COLUMNS, TILE_COLUMNS };//no diagonals
+
+	while (!queue.empty()) {
+		int current = queue.front();
+		queue.pop();
+
+		if (current == targetTile)//goal reached
+		{
+			break;
+		}
+		int row = current / TILE_COLUMNS;
+		int col = current % TILE_COLUMNS;
+
+		for (int index = 0; index < directions.size(); index++)//check all neighbouring cells
+		{
+			int dir = directions[index];
+			int neighbour = current + dir;
+			int nRow = neighbour / TILE_COLUMNS;
+			int nCol = neighbour % TILE_COLUMNS;
+
+			if (neighbour < 0 || neighbour >= TILE_ROWS * TILE_COLUMNS || cameFrom[neighbour] != -1)
+			{
+				continue;
+			}
+
+			if (checkIfWall(neighbour) == true)
+			{
+				continue;
+			}
+
+			if ((dir == -1 || dir == 1) && (nRow != row))//reached outer tiles
+			{
+				continue;
+			}
+
+			if ((dir == -TILE_COLUMNS - 1 || dir == -TILE_COLUMNS + 1 || dir == TILE_COLUMNS - 1 || dir == TILE_COLUMNS + 1) && (abs(nRow - row) != 1 || abs(nCol - col) != 1))
+			{
+				continue;
+			}
+
+			queue.push(neighbour);//add the neighbour to the list of tiles that we need to now check
+			cameFrom[neighbour] = current;
+		}
+	}
+
+	if (cameFrom[targetTile] == -1)//if this is a wall ignore and return nothing
+	{
+		return path;
+	}
+
+	for (int index = targetTile; index != startTile; index = cameFrom[index])
+	{
+		path.push_back(index);//add all tiles to list
+	}
+	path.push_back(startTile);
+
+	std::reverse(path.begin(), path.end());
+
+	for (int index = 0; index < path.size(); index++)
+	{
+		tiles[path[index]].setType(3);//set the path to a new type so we can visually see it for debugging
+	}
+
+	return path;
+}
+
 
 void TileGrid::setupTextures()
 {
