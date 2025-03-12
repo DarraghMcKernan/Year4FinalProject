@@ -11,6 +11,7 @@ public:
 	void render(sf::RenderWindow& t_window);
 	void findTargetedTile();
 	void deactiveateTile();
+	void deactiveateAllTiles();
 	int currentPlayerTarget(int t_turnNum);
 	sf::Vector2f mousePosViewport();
 	sf::Vector2f tileHoveredOverPos();

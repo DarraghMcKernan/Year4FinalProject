@@ -64,6 +64,7 @@ void Player::update(sf::Time& t_deltaTime)
 						formationCreated = true;
 					}					
 
+					playersSquads[currentFormationLeader].formationActive = true;
 					playersSquads[index].formationActive = true;
 					std::cout << index << " added to formation\n";
 					playersSquads[index].setFormationNum(formationTemp.getPositionInFormation());
@@ -71,14 +72,14 @@ void Player::update(sf::Time& t_deltaTime)
 			}
 		}
 
-		playersSquads[index].moveToFormationPosition(formationTemp.getFormationPosition(playersSquads[index].getFormationNum()), t_deltaTime);
+		//playersSquads[index].moveToFormationPosition(formationTemp.getFormationPosition(playersSquads[index].getFormationNum()), t_deltaTime);
 		if (formationTemp.leaderTargetReached == true && index == currentFormationLeader)
 		{
 			playersSquads[index].formationFrontReachedGoal = true;
 		}
 		if (playersSquads[index].formationActive == true && formationMovementUnlocked == true)// && playersSquads[index].formationLeader == false)
 		{
-			//playersSquads[index].moveToFormationPosition(formationTemp.getFormationPosition(playersSquads[index].getFormationNum()),t_deltaTime);
+			playersSquads[index].moveToFormationPosition(formationTemp.getFormationPosition(playersSquads[index].getFormationNum()),t_deltaTime);
 		}
 		else {
 			if (playersSquads[index].targetReached == true && turnEnded == true)//all have reached their targets

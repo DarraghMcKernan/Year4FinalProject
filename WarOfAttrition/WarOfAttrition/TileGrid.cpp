@@ -23,6 +23,7 @@ void TileGrid::init()
 		tileSetAsWalls.push_back(105 + index);
 		tileSetAsWalls.push_back(105 + index + TILE_ROWS + 3);
 		tileSetAsWalls.push_back(105 + index + 17 + TILE_ROWS*2);
+		tileSetAsWalls.push_back(105 + index + 20 + TILE_ROWS*5);
 	}
 
 	for (int index = 0; index < tileSetAsWalls.size(); index++)
@@ -97,6 +98,17 @@ void TileGrid::deactiveateTile()
 	}
 }
 
+void TileGrid::deactiveateAllTiles()
+{
+	for (int index = 0; index < TILE_ROWS * TILE_COLUMNS; index++)
+	{
+		if (tiles[index].getType() != 1)//wall
+		{
+			tiles[index].setTarget(false);
+		}		
+	}
+}
+
 void TileGrid::render(sf::RenderWindow& t_window)
 {
 	mousePos = sf::Mouse::getPosition(t_window);
@@ -168,6 +180,7 @@ void TileGrid::resetTiles()
 		tiles[tilesSelected[index]].tileSetAsTarget = false;
 	}
 	deactiveateTile();
+	deactiveateAllTiles();
 	//for (int index = 0; index < MAX_MOVES_PER_TURN; index++)
 	//{
 	//	tiles[tilesSelected[index]].tileSetAsTarget = false;
