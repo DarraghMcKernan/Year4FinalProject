@@ -1,5 +1,6 @@
 #pragma once
 #include "WorldTile.h"
+#include "globals.h"
 
 class TileGrid
 {

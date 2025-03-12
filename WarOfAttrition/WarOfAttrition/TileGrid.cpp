@@ -21,6 +21,8 @@ void TileGrid::init()
 	for (int index = 0; index < 5; index++)//would eventually be read from a file
 	{
 		tileSetAsWalls.push_back(105 + index);
+		tileSetAsWalls.push_back(105 + index + TILE_ROWS + 3);
+		tileSetAsWalls.push_back(105 + index + 17 + TILE_ROWS*2);
 	}
 
 	for (int index = 0; index < tileSetAsWalls.size(); index++)
