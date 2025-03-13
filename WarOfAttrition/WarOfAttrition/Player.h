@@ -25,6 +25,9 @@ public:
 	void dealDamage(std::vector<int> t_damage);
 	std::vector<sf::RectangleShape> returnMovedSquads();
 	std::vector<SquadData> returnMovedSquadsData();
+	sf::Vector2f getFormationTarget();
+	sf::Vector2f getFormationStart();
+	void givePathToFormation(std::vector<int> t_path);
 
 	bool targetNeeded = false;//do we need a target for a squad
 	bool arrivedAtTarget = false;//has the squad reached its target
@@ -33,6 +36,7 @@ public:
 	bool distanceOK = false;
 	int squadTargetSet[MAX_MOVES_PER_TURN];
 	int unitsMoved = 0;
+	bool searchForPath = false;
 
 	bool playerEliminated = false;
 

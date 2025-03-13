@@ -12,11 +12,15 @@ public:
 	void setLeaderInfo(sf::Sprite t_leaderSprite);
 	bool leaderTargetReached = false;
 	bool formationMovingActive = false;
+	sf::Vector2f getTargetPosition();
+	sf::Vector2f getStartPosition();
+	void setFoundPath(std::vector<int> t_path);
 private:
 	void generatePath();
 	sf::Vector2f leaderPosition = { 0,0 };
 	sf::Vector2f formationFront = { 0,0 };
 	sf::Vector2f targetPosition = { 0,0 };
+	sf::Vector2f startPosition = { 0,0 };
 	sf::Vector2f standardOffset = { 50,50 };
 	sf::Sprite leaderCopy;
 	float cappedRotationSpeed = 5.0f; 

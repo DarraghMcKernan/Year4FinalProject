@@ -334,6 +334,13 @@ void GameManager::updatePlayers(sf::Time& t_deltaTime)
 				}
 			}
 			player[index].update(t_deltaTime);
+
+			if (player[index].searchForPath == true)
+			{
+				player[index].searchForPath = false;
+				player[index].givePathToFormation(worldTiles.getPathToTarget(player[index].getFormationStart(), player[index].getFormationTarget()));
+			}
+
 			if (player[index].arrivedAtTarget == true)//if the players turn is over as all units have moved
 			{
 				for (int playersIndex = 0; playersIndex < MAX_PLAYERS; playersIndex++)

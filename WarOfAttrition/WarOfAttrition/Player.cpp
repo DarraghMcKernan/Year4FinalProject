@@ -73,7 +73,7 @@ void Player::update(sf::Time& t_deltaTime)
 		}
 
 		//playersSquads[index].moveToFormationPosition(formationTemp.getFormationPosition(playersSquads[index].getFormationNum()), t_deltaTime);
-		 if (formationTemp.leaderTargetReached == true && index == currentFormationLeader)
+		if (formationTemp.leaderTargetReached == true && index == currentFormationLeader)
 		{
 			playersSquads[index].formationFrontReachedGoal = true;
 		}
@@ -405,6 +405,21 @@ std::vector<SquadData> Player::returnMovedSquadsData()
 	}
 
 	return allMovedSquadsData;
+}
+
+sf::Vector2f Player::getFormationTarget()
+{
+	return formationTemp.getTargetPosition();
+}
+
+sf::Vector2f Player::getFormationStart()
+{
+	return formationTemp.getStartPosition();
+}
+
+void Player::givePathToFormation(std::vector<int> t_path)
+{
+	formationTemp.setFoundPath(t_path);
 }
 
 sf::Vector2f Player::getSquadPosition()

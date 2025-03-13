@@ -31,7 +31,7 @@ void TileGrid::init()
 		tiles[tileSetAsWalls.at(index)].setType(1);//1 is a wall type
 	}
 
-	getPathToTarget(sf::Vector2f(100, 100), sf::Vector2f(500, 500));
+	//getPathToTarget(sf::Vector2f(100, 100), sf::Vector2f(500, 500));
 }
 
 void TileGrid::update(sf::Time& t_deltaTime)
@@ -182,7 +182,7 @@ void TileGrid::resetTiles()
 		tiles[tilesSelected[index]].tileSetAsTarget = false;
 	}
 	deactiveateTile();
-	//deactiveateAllTiles();
+	deactiveateAllTiles();//needs to be called to prevent tiles from staying claimed
 	//for (int index = 0; index < MAX_MOVES_PER_TURN; index++)
 	//{
 	//	tiles[tilesSelected[index]].tileSetAsTarget = false;
@@ -210,6 +210,8 @@ void TileGrid::updateTileType(int t_type)
 
 std::vector<int> TileGrid::getPathToTarget(sf::Vector2f startPos, sf::Vector2f targetPos)
 {
+	std::cout << "generate path to target\n";
+
 	std::vector<int> path;
 	std::queue<int> queue;
 	std::vector<int> cameFrom(TILE_ROWS * TILE_COLUMNS, -1);

@@ -28,6 +28,7 @@ void Formation::update(sf::Time t_deltaTime)
 
 void Formation::setLeaderPosAndTarget(sf::Vector2f t_leaderPos, sf::Vector2f t_targetPos)
 {
+	startPosition = t_leaderPos;
 	formationFront = t_leaderPos;
 	leaderPosition = t_leaderPos;
 	targetPosition = t_targetPos;
@@ -105,6 +106,21 @@ void Formation::setLeaderInfo(sf::Sprite t_leaderSprite)
 {
 	leaderCopy = t_leaderSprite;
 	leaderPosition = t_leaderSprite.getPosition();
+}
+
+sf::Vector2f Formation::getTargetPosition()
+{
+	return targetPosition;
+}
+
+sf::Vector2f Formation::getStartPosition()
+{
+	return startPosition;
+}
+
+void Formation::setFoundPath(std::vector<int> t_path)
+{
+	pathToTarget = t_path;
 }
 
 void Formation::generatePath()
