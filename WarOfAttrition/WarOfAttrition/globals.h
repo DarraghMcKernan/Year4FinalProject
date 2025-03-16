@@ -42,6 +42,7 @@ struct SquadData
 	int squadStrength = 100;
 	int unitType = 0;
 	int health = 100;
+	int moveDistance = 10;
 };
 
 class PositionNormaliser {

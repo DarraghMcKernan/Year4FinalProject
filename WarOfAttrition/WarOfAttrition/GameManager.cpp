@@ -178,6 +178,13 @@ void GameManager::startGame()//setup variables needed before the game starts
 	squadTeamDisplay.setOrigin({ (squadSpeedDisplay.getGlobalBounds().getSize().x / 2),(squadSpeedDisplay.getGlobalBounds().getSize().y / 2) });
 	squadTeamDisplay.setPosition(50, 130);
 
+	squadDistanceDisplay.setFont(font);
+	squadDistanceDisplay.setCharacterSize(30);//increase size and then downscale to prevent blurred text
+	squadDistanceDisplay.setFillColor(sf::Color::Black);
+	squadDistanceDisplay.setScale(0.75, 0.75);
+	squadDistanceDisplay.setOrigin({ (squadSpeedDisplay.getGlobalBounds().getSize().x / 2),(squadSpeedDisplay.getGlobalBounds().getSize().y / 2) });
+	squadDistanceDisplay.setPosition(50, 150);
+
 	squadTypeDisplay.setFont(font);
 	squadTypeDisplay.setCharacterSize(30);//increase size and then downscale to prevent blurred text
 	squadTypeDisplay.setFillColor(sf::Color::Black);
@@ -510,6 +517,7 @@ void GameManager::displayHUD(sf::RenderWindow& t_window,sf::View& t_fixedWindow)
 		t_window.draw(squadTypeDisplay);
 		t_window.draw(squadHealthDisplay);
 		t_window.draw(squadTeamDisplay);
+		t_window.draw(squadDistanceDisplay);
 	}
 
 	if (openCreateUnitMenu == true)
@@ -787,6 +795,7 @@ void GameManager::updateUnitDataDisplay()
 	squadStrengthDisplay.setPosition(unitDataDisplayBacking.getPosition().x - (xSize / 2.25), unitDataDisplayBacking.getPosition().y - (ySize / 2.25)+ ySize / 8*2);
 	squadHealthDisplay.setPosition(unitDataDisplayBacking.getPosition().x - (xSize / 2.25), unitDataDisplayBacking.getPosition().y - (ySize / 2.25)+ ySize / 8*3);
 	squadSpeedDisplay.setPosition(unitDataDisplayBacking.getPosition().x - (xSize / 2.25), unitDataDisplayBacking.getPosition().y - (ySize / 2.25)+ ySize / 8*4);
+	squadDistanceDisplay.setPosition(unitDataDisplayBacking.getPosition().x - (xSize / 2.25), unitDataDisplayBacking.getPosition().y - (ySize / 2.25)+ ySize / 8*5);
 
 	allowSquadDataDisplay = true;
 
@@ -795,4 +804,5 @@ void GameManager::updateUnitDataDisplay()
 	squadTypeDisplay.setString("Type: " + std::to_string(squadData.unitType));
 	squadHealthDisplay.setString("Health: " + std::to_string(squadData.health));
 	squadTeamDisplay.setString("Team: " + std::to_string(squadData.teamNum + 1));
+	squadDistanceDisplay.setString("Move Distance: " + std::to_string(squadData.moveDistance));
 }

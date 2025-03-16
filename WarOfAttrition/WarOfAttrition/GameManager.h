@@ -70,6 +70,7 @@ private:
 	sf::Text squadSpeedDisplay;
 	sf::Text squadTeamDisplay;
 	sf::Text squadHealthDisplay;
+	sf::Text squadDistanceDisplay;
 
 	sf::Sprite moneyIcon;
 	sf::Texture moneyIconTexture;

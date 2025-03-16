@@ -23,6 +23,7 @@ void Squad::init(sf::Vector2f t_startingPos,int t_teamNum, int t_unitType)
 	squadData.moveSpeed = moveSpeed;
 	squadData.teamNum = t_teamNum;
 	squadData.unitType = t_unitType;
+	squadData.moveDistance = maxMoveDistance;
 
 	resetColour();
 
