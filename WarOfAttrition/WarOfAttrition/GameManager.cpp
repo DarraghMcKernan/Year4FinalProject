@@ -430,16 +430,12 @@ void GameManager::userControls(sf::View& t_viewport,sf::Time& t_deltaTime)
 		clickTimer = 30;
 		player[1].eliminateUnit(0);
 	}
-	//else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3) && clickTimer == 0)//debug
-	//{
-	//	clickTimer = 30;
-	//	player[2].eliminateUnit(0);
-	//}
-	//else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num4) && clickTimer == 0)//debug
-	//{
-	//	clickTimer = 30;
-	//	player[3].eliminateUnit(0);
-	//}
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::C) && clickTimer == 0)
+	{
+		clickTimer = 30;
+		std::cout << "Mouse x pos: " << mousePosFloat.x << " y: " << mousePosFloat.y << "\n";
+	}
 
 	if (createUnitActive == true)
 	{

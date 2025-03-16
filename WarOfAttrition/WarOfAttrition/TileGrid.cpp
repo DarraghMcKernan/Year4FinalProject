@@ -31,7 +31,7 @@ void TileGrid::init()
 		tiles[tileSetAsWalls.at(index)].setType(1);//1 is a wall type
 	}
 
-	//getPathToTarget(sf::Vector2f(100, 100), sf::Vector2f(500, 500));
+	//getPathToTarget(sf::Vector2f(155, 220), sf::Vector2f(550, 550));
 }
 
 void TileGrid::update(sf::Time& t_deltaTime)
@@ -182,12 +182,7 @@ void TileGrid::resetTiles()
 		tiles[tilesSelected[index]].tileSetAsTarget = false;
 	}
 	deactiveateTile();
-	deactiveateAllTiles();//needs to be called to prevent tiles from staying claimed
-	//for (int index = 0; index < MAX_MOVES_PER_TURN; index++)
-	//{
-	//	tiles[tilesSelected[index]].tileSetAsTarget = false;
-	//	tilesSelected[index] = 0;
-	//}
+	//deactiveateAllTiles();//needs to be called to prevent tiles from staying claimed
 }
 
 bool TileGrid::checkIfWall(int t_tileNum)
@@ -208,27 +203,36 @@ void TileGrid::updateTileType(int t_type)
 	updateTileTexture(tileHoveredOverNum(),0);
 }
 
-std::vector<int> TileGrid::getPathToTarget(sf::Vector2f startPos, sf::Vector2f targetPos)
+std::vector<int> TileGrid::getPathToTarget(sf::Vector2f t_startPos, sf::Vector2f t_targetPos)
 {
 	std::cout << "generate path to target\n";
+
+	std::cout << t_startPos.x << " " << t_startPos.y << "\n";
+	std::cout << t_targetPos.x << " " << t_targetPos.y << "\n";
+
+	sf::Vector2f startPosNormalised = sf::Vector2f(static_cast<int>(t_startPos.x/100) * 100,static_cast<int>(t_startPos.y/100) * 100);//normalise it because the path was weird without doing it
+	sf::Vector2f targetPosNormalised = sf::Vector2f(static_cast<int>(t_targetPos.x/100) * 100,static_cast<int>(t_targetPos.y/100) * 100);
+
+	std::cout << startPosNormalised.x << " " << startPosNormalised.y << "\n";
+	std::cout << targetPosNormalised.x << " " << targetPosNormalised.y << "\n";
 
 	std::vector<int> path;
 	std::queue<int> queue;
 	std::vector<int> cameFrom(TILE_ROWS * TILE_COLUMNS, -1);
 
-	int startTile = (int(startPos.y) / TILE_SIZE) * TILE_COLUMNS + (int(startPos.x) / TILE_SIZE);//normalise coord to nearest tile
-	int targetTile = (int(targetPos.y) / TILE_SIZE) * TILE_COLUMNS + (int(targetPos.x) / TILE_SIZE);
+	int startTile = (int(startPosNormalised.y) / TILE_SIZE) * TILE_COLUMNS + (int(startPosNormalised.x + TILE_SIZE) / TILE_SIZE);//go from coords to tiles
+	int targetTile = (int(targetPosNormalised.y + 50) / TILE_SIZE) * TILE_COLUMNS + (int(targetPosNormalised.x) / TILE_SIZE);
 
-	if (checkIfWall(startTile) || checkIfWall(targetTile))
-	{
-		return path;
-	}
+	//if (checkIfWall(startTile) || checkIfWall(targetTile))
+	//{
+	//	return path;
+	//}
 
 	queue.push(startTile);
 	cameFrom[startTile] = startTile;
 
-	std::vector<int> directions = { -1, 1, -TILE_COLUMNS, TILE_COLUMNS, -TILE_COLUMNS - 1, -TILE_COLUMNS + 1, TILE_COLUMNS - 1, TILE_COLUMNS + 1 };//diagonals
-	//std::vector<int> directions = { -1, 1, -TILE_COLUMNS, TILE_COLUMNS };//no diagonals
+	//std::vector<int> directions = { -1, 1, -TILE_COLUMNS, TILE_COLUMNS, -TILE_COLUMNS - 1, -TILE_COLUMNS + 1, TILE_COLUMNS - 1, TILE_COLUMNS + 1 };//diagonals
+	std::vector<int> directions = { -1, 1, -TILE_COLUMNS, TILE_COLUMNS };//no diagonals
 
 	while (!queue.empty()) {
 		int current = queue.front();

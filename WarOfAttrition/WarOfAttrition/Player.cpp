@@ -29,6 +29,7 @@ void Player::update(sf::Time& t_deltaTime)
 	{
 		formationTemp.setLeaderInfo(playersSquads[currentFormationLeader].getSprite());
 		formationTemp.setLeaderPosAndTarget(playersSquads[currentFormationLeader].getSprite().getPosition(), targetPosition);
+		searchForPath = true;
 		formationTemp.formationMovingActive = true;
 	}
 
