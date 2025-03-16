@@ -210,8 +210,8 @@ std::vector<int> TileGrid::getPathToTarget(sf::Vector2f t_startPos, sf::Vector2f
 	std::cout << t_startPos.x << " " << t_startPos.y << "\n";
 	std::cout << t_targetPos.x << " " << t_targetPos.y << "\n";
 
-	sf::Vector2f startPosNormalised = sf::Vector2f(static_cast<int>(t_startPos.x/100) * 100,static_cast<int>(t_startPos.y/100) * 100);//normalise it because the path was weird without doing it
-	sf::Vector2f targetPosNormalised = sf::Vector2f(static_cast<int>(t_targetPos.x/100) * 100,static_cast<int>(t_targetPos.y/100) * 100);
+	sf::Vector2f startPosNormalised = sf::Vector2f(static_cast<int>(t_startPos.x/ TILE_SIZE) * TILE_SIZE,static_cast<int>(t_startPos.y/ TILE_SIZE) * TILE_SIZE);//normalise it because the path was weird without doing it
+	sf::Vector2f targetPosNormalised = sf::Vector2f(static_cast<int>(t_targetPos.x/ TILE_SIZE) * TILE_SIZE,static_cast<int>(t_targetPos.y/ TILE_SIZE) * TILE_SIZE);
 
 	std::cout << startPosNormalised.x << " " << startPosNormalised.y << "\n";
 	std::cout << targetPosNormalised.x << " " << targetPosNormalised.y << "\n";
@@ -220,8 +220,8 @@ std::vector<int> TileGrid::getPathToTarget(sf::Vector2f t_startPos, sf::Vector2f
 	std::queue<int> queue;
 	std::vector<int> cameFrom(TILE_ROWS * TILE_COLUMNS, -1);
 
-	int startTile = (int(startPosNormalised.y) / TILE_SIZE) * TILE_COLUMNS + (int(startPosNormalised.x + TILE_SIZE) / TILE_SIZE);//go from coords to tiles
-	int targetTile = (int(targetPosNormalised.y + 50) / TILE_SIZE) * TILE_COLUMNS + (int(targetPosNormalised.x) / TILE_SIZE);
+	int startTile = (int(startPosNormalised.y) / TILE_SIZE) * TILE_COLUMNS + (int(startPosNormalised.x) / TILE_SIZE);//go from coords to tiles
+	int targetTile = (int(targetPosNormalised.y) / TILE_SIZE) * TILE_COLUMNS + (int(targetPosNormalised.x ) / TILE_SIZE);
 
 	//if (checkIfWall(startTile) || checkIfWall(targetTile))
 	//{
