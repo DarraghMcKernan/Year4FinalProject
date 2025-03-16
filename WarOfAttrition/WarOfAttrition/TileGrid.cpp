@@ -205,16 +205,16 @@ void TileGrid::updateTileType(int t_type)
 
 std::vector<int> TileGrid::getPathToTarget(sf::Vector2f t_startPos, sf::Vector2f t_targetPos)
 {
-	std::cout << "generate path to target\n";
+	//std::cout << "generate path to target\n";
 
-	std::cout << t_startPos.x << " " << t_startPos.y << "\n";
-	std::cout << t_targetPos.x << " " << t_targetPos.y << "\n";
+	//std::cout << t_startPos.x << " " << t_startPos.y << "\n";
+	//std::cout << t_targetPos.x << " " << t_targetPos.y << "\n";
 
 	sf::Vector2f startPosNormalised = sf::Vector2f(static_cast<int>(t_startPos.x/ TILE_SIZE) * TILE_SIZE,static_cast<int>(t_startPos.y/ TILE_SIZE) * TILE_SIZE);//normalise it because the path was weird without doing it
 	sf::Vector2f targetPosNormalised = sf::Vector2f(static_cast<int>(t_targetPos.x/ TILE_SIZE) * TILE_SIZE,static_cast<int>(t_targetPos.y/ TILE_SIZE) * TILE_SIZE);
 
-	std::cout << startPosNormalised.x << " " << startPosNormalised.y << "\n";
-	std::cout << targetPosNormalised.x << " " << targetPosNormalised.y << "\n";
+	//std::cout << startPosNormalised.x << " " << startPosNormalised.y << "\n";
+	//std::cout << targetPosNormalised.x << " " << targetPosNormalised.y << "\n";
 
 	std::vector<int> path;
 	std::queue<int> queue;

@@ -434,7 +434,7 @@ void GameManager::userControls(sf::View& t_viewport,sf::Time& t_deltaTime)
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::C) && clickTimer == 0)
 	{
 		clickTimer = 30;
-		std::cout << "Mouse x pos: " << mousePosFloat.x << " y: " << mousePosFloat.y << "\n";
+		std::cout << "Mouse pos X: " << mousePosFloat.x << " Y: " << mousePosFloat.y << "\n";
 	}
 
 	if (createUnitActive == true)
