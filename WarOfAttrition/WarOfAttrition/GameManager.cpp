@@ -391,18 +391,34 @@ void GameManager::userControls(sf::View& t_viewport,sf::Time& t_deltaTime)
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))//move viewport around the screen
 	{
 		t_viewport.move(0, -400*t_deltaTime.asSeconds());
+		if (t_viewport.getCenter().y < TILE_SIZE * 4.975)
+		{
+			t_viewport.setCenter(t_viewport.getCenter().x, TILE_SIZE * 4.975);
+		}
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
 	{
 		t_viewport.move(0, 400 * t_deltaTime.asSeconds());
+		if (t_viewport.getCenter().y > (TILE_SIZE * TILE_COLUMNS) - (TILE_SIZE * 7.9))
+		{
+			t_viewport.setCenter(t_viewport.getCenter().x, (TILE_SIZE * TILE_COLUMNS) - (TILE_SIZE * 7.9));
+		}
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 	{
 		t_viewport.move(-400 * t_deltaTime.asSeconds(), 0);
+		if (t_viewport.getCenter().x < TILE_SIZE * 5.975)
+		{
+			t_viewport.setCenter(TILE_SIZE * 5.975, t_viewport.getCenter().y);
+		}
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 	{
 		t_viewport.move(400 * t_deltaTime.asSeconds(), 0);
+		if (t_viewport.getCenter().x > (TILE_SIZE * TILE_COLUMNS) - (TILE_SIZE * 5.975))
+		{
+			t_viewport.setCenter((TILE_SIZE * TILE_COLUMNS) - (TILE_SIZE * 5.975), t_viewport.getCenter().y);
+		}
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)&& sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))//fast zoom
 	{
