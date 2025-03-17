@@ -200,6 +200,16 @@ bool TileGrid::checkIfWall(int t_tileNum)
 void TileGrid::updateTileType(int t_type)
 {
 	tiles[tileHoveredOverNum()].setType(t_type);
+	
+	tileSetAsWalls.clear();
+	for (int index = 0; index < TILE_ROWS * TILE_COLUMNS; index++)
+	{
+		if (tiles[index].getType() == 1)//wall
+		{
+			tileSetAsWalls.push_back(index);
+		}
+	}
+
 	updateTileTexture(tileHoveredOverNum(),0);
 }
 

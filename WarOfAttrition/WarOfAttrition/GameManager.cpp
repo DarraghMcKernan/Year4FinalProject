@@ -666,14 +666,13 @@ void GameManager::menuInteractions()
 				createUnitActive = false;
 			}
 		}
-		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter) && clickTimer == 0)
-		{
-			clickTimer = 30;
-			worldEditingEnabled = !worldEditingEnabled;
-			std::cout << worldEditingEnabled;
-		}
 	}
-
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter) && clickTimer == 0)
+	{
+		clickTimer = 60;
+		worldEditingEnabled = !worldEditingEnabled;
+		std::cout << worldEditingEnabled;
+	}
 
 	clickTimer--;
 	if (clickTimer < 0)
