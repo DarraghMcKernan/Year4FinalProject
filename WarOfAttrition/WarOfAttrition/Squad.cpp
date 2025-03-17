@@ -1,14 +1,14 @@
 #include "Squad.h"
 
-void Squad::init(sf::Vector2f t_startingPos,int t_teamNum, int t_unitType)
+void Squad::init(sf::Vector2f t_startingPos, int t_teamNum, int t_unitType)
 {
-	if(t_unitType == 0)
+	if (t_unitType == 0)
 	{
 		squadData.health = 250;
 		squadData.squadStrength = 200;
 		moveSpeed = 80;
 	}
-	if(t_unitType == 1)
+	if (t_unitType == 1)
 	{
 		squadData.health = 50;
 		squadData.squadStrength = 50;
@@ -27,7 +27,7 @@ void Squad::init(sf::Vector2f t_startingPos,int t_teamNum, int t_unitType)
 
 	resetColour();
 
-	troopContainer.setSize(sf::Vector2f(TILE_SIZE -5, TILE_SIZE - 5));
+	troopContainer.setSize(sf::Vector2f(TILE_SIZE - 5, TILE_SIZE - 5));
 	//troopContainer.setRotation(45);//can be used to have collision checks in all 9 surrounding squares or the 4 immediate squares
 
 	//troopContainer.setSize(sf::Vector2f(TILE_SIZE + 15, TILE_SIZE + 15));// used to expand the squad to allow for collision checks of surrounding cells
@@ -35,7 +35,7 @@ void Squad::init(sf::Vector2f t_startingPos,int t_teamNum, int t_unitType)
 
 	//troopContainer.setOutlineColor(sf::Color::Black);
 	//troopContainer.setOutlineThickness(1.5);
-	troopContainer.setOrigin(troopContainer.getSize().x/2, troopContainer.getSize().y/2);
+	troopContainer.setOrigin(troopContainer.getSize().x / 2, troopContainer.getSize().y / 2);
 	troopContainer.setPosition(t_startingPos.x - (TILE_SIZE / 2), t_startingPos.y - (TILE_SIZE / 2));//spawn player in the center of the map
 	targetPosition = troopContainer.getPosition();
 
@@ -90,6 +90,17 @@ void Squad::update(sf::Time t_deltaTime)
 				}
 				//vectorToTarget = vectorToTarget * (distance);//slow down as we get closer to the target
 
+				int column = static_cast<int>(UnitSprite.getPosition().x / TILE_SIZE);
+				int row = static_cast<int>(UnitSprite.getPosition().y / TILE_SIZE);
+
+				if (currentCell != (row * TILE_COLUMNS) + column)
+				{
+					mostRecentCell = currentCell;
+				}
+				currentCell = (row * TILE_COLUMNS) + column;
+
+				//std::cout << "current cell: " << currentCell << " most recent: " << mostRecentCell << "\n";
+
 				troopContainer.move((vectorToTarget.x * t_deltaTime.asSeconds()) * (moveSpeed * SPEED_MULTIPLIER), (vectorToTarget.y * t_deltaTime.asSeconds()) * (moveSpeed * SPEED_MULTIPLIER));
 				UnitSprite.setPosition(troopContainer.getPosition());
 
@@ -121,6 +132,7 @@ void Squad::render(sf::RenderWindow& t_window)
 void Squad::unlockMovement(bool t_allowed)
 {
 	targetReached = false;
+	attacker = true;
 	movementAllowed = t_allowed;
 	troopContainer.setFillColor(sf::Color(0, 255, 0, 150));
 }
@@ -182,6 +194,15 @@ void Squad::moveToFormationPosition(sf::Vector2f t_formationPosition, sf::Time& 
 			//rotation = 0;
 		}
 
+		int column = static_cast<int>(UnitSprite.getPosition().x / TILE_SIZE);
+		int row = static_cast<int>(UnitSprite.getPosition().y / TILE_SIZE);
+
+		if (currentCell != (row * TILE_COLUMNS) + column)
+		{
+			mostRecentCell = currentCell;
+		}
+		currentCell = (row * TILE_COLUMNS) + column;
+
 		UnitSprite.setPosition(troopContainer.getPosition());
 		teamOutlineSprite.setPosition(troopContainer.getPosition());
 		if (extraSpriteNeeded == true)
@@ -192,6 +213,24 @@ void Squad::moveToFormationPosition(sf::Vector2f t_formationPosition, sf::Time& 
 
 		UnitSprite.setRotation(rotation);
 		teamOutlineSprite.setRotation(rotation);
+	}
+}
+
+void Squad::placeOnRecentCell()
+{
+	int row = mostRecentCell / TILE_COLUMNS;
+	int column = mostRecentCell % TILE_COLUMNS;
+
+	sf::Vector2f recentCellPos;
+
+	recentCellPos.x = column * TILE_SIZE + TILE_SIZE / 2.0f;
+	recentCellPos.y = row * TILE_SIZE + TILE_SIZE / 2.0f;
+
+	UnitSprite.setPosition(recentCellPos);
+	teamOutlineSprite.setPosition(recentCellPos);
+	if (extraSpriteNeeded == true)
+	{
+		unitSpriteExtras.setPosition(recentCellPos);
 	}
 }
 
@@ -236,6 +275,11 @@ void Squad::setStrength(int t_strength)
 
 void Squad::setHealth(int t_health)
 {
+	if (attacker == true && t_health > 0)
+	{
+		attacker = false;
+		needToMove = true;
+	}
 	squadData.health = t_health;
 }
 

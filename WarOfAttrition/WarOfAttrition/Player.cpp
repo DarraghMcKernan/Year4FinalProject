@@ -423,6 +423,11 @@ void Player::givePathToFormation(std::vector<int> t_path)
 	formationTemp.setFoundPath(t_path);
 }
 
+void Player::resetMovedUnitsAfterFight(int t_unit)
+{
+	playersSquads[t_unit].placeOnRecentCell();
+}
+
 sf::Vector2f Player::getSquadPosition()
 {
 	return playersSquads.at(squadBeingControlled).getTroopContainter().getPosition();
@@ -482,6 +487,11 @@ void Player::checkForDeadSquads()
 		if (playersSquads[index].getSquadData().health <= 0)
 		{
 			deadSquads.push_back(index);//get units that are dead in order
+		}
+		else if (playersSquads[index].needToMove == true)
+		{
+			playersSquads[index].needToMove = false;
+			resetMovedUnitsAfterFight(index);
 		}
 	}
     for (int index = deadSquads.size() - 1; index >= 0; index--)//go in reverse order and remove units

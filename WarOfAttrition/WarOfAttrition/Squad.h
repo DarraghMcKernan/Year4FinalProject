@@ -14,6 +14,7 @@ public:
 	void setTargetPosition(sf::Vector2f t_targetPos);
 	void setPosition(sf::Vector2f t_debugPosition);
 	void moveToFormationPosition(sf::Vector2f t_formationPosition, sf::Time& t_deltaTime);
+	void placeOnRecentCell();
 	bool movingAllowed();
 	bool targetReached = true;
 	void resetColour();
@@ -36,6 +37,8 @@ public:
 	bool formationLeader = false;
 	bool formationLeaderReachedGoal = false;
 	bool formationFrontReachedGoal = false;
+	bool attacker = false;
+	bool needToMove = false;
 private:
 	SquadData squadData;
 	
@@ -52,6 +55,8 @@ private:
 	int goldmineIncome = 100;
 	int moveSpeed = 100;
 	int posInFormation = -1;
+	int mostRecentCell = 0;
+	int currentCell = 0;
 
 	sf::Vector2f worldTileOffset = sf::Vector2f(TILE_SIZE/2, TILE_SIZE/2);
 
