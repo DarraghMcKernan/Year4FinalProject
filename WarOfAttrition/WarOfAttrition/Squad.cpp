@@ -226,6 +226,7 @@ void Squad::placeOnRecentCell()
 	recentCellPos.x = column * TILE_SIZE + TILE_SIZE / 2.0f;
 	recentCellPos.y = row * TILE_SIZE + TILE_SIZE / 2.0f;
 
+	troopContainer.setPosition(recentCellPos);
 	UnitSprite.setPosition(recentCellPos);
 	teamOutlineSprite.setPosition(recentCellPos);
 	if (extraSpriteNeeded == true)
@@ -279,6 +280,7 @@ void Squad::setHealth(int t_health)
 	{
 		attacker = false;
 		needToMove = true;
+		std::cout << "moved attacker needs to return to previous cell\n";
 	}
 	squadData.health = t_health;
 }

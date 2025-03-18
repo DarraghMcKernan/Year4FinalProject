@@ -354,7 +354,7 @@ void GameManager::updatePlayers(sf::Time& t_deltaTime)
 				{
 					if (playersIndex != whosTurn - 1 && player[playersIndex].playerEliminated == false)
 					{
-						std::vector<int> damageTaken = player[playersIndex].collisionCheckerDamage(player[whosTurn - 1].returnMovedSquads(), player[whosTurn -1].returnMovedSquadsData());//only hurts defending squad currently
+						std::vector<int> damageTaken = player[playersIndex].collisionCheckerDamage(player[whosTurn - 1].returnMovedSquads(), player[whosTurn -1].returnMovedSquadsData());
 						
 						player[whosTurn-1].dealDamage(damageTaken);//this player needs to also take damage
 					}

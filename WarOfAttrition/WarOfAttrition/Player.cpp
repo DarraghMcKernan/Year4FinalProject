@@ -250,6 +250,11 @@ std::vector<int> Player::collisionCheckerDamage(std::vector<sf::RectangleShape> 
 
 	for (int enemySquadsIndex = 0; enemySquadsIndex < targetToCheck.size(); enemySquadsIndex++)
 	{
+		damageTaken.push_back(0);
+	}
+
+	for (int enemySquadsIndex = 0; enemySquadsIndex < targetToCheck.size(); enemySquadsIndex++)
+	{
 		for (int index = 0; index < playerSquadsCount; index++)
 		{
 			if (playersSquads[index].getTroopContainter().getGlobalBounds().intersects(targetToCheck[enemySquadsIndex].getGlobalBounds()))
@@ -272,7 +277,8 @@ std::vector<int> Player::collisionCheckerDamage(std::vector<sf::RectangleShape> 
 				int outcome = playersSquads[index].getSquadData().health - damage;
 				playersSquads[index].setHealth(outcome);
 
-				damageTaken.push_back(damage);
+				damageTaken[enemySquadsIndex] = damage;
+				//damageTaken.push_back(damage);
 			}
 		}
 	}
@@ -361,20 +367,23 @@ void Player::dealDamage(std::vector<int> t_damage)
 {
 	for (int index = 0; index < t_damage.size(); index++)
 	{
-		int randomChance = rand() % 100;
-		if (randomChance < 30)
+		if (t_damage[index] != 0)
 		{
-			t_damage[index] = t_damage[index] * 0.9f;
-			std::cout << "Damage reduced\n";
-		}
-		else if (randomChance > 70)
-		{
-			t_damage[index] = t_damage[index] * 1.1f;
-			std::cout << "Damage increased\n";
-		}
+			int randomChance = rand() % 100;
+			if (randomChance < 30)
+			{
+				t_damage[index] = t_damage[index] * 0.9f;
+				std::cout << "Damage reduced\n";
+			}
+			else if (randomChance > 70)
+			{
+				t_damage[index] = t_damage[index] * 1.1f;
+				std::cout << "Damage increased\n";
+			}
 
-		int outcome = playersSquads[squadsThatMoved[index]].getSquadData().health - t_damage[index];
-		playersSquads[squadsThatMoved[index]].setHealth(outcome);
+			int outcome = playersSquads[squadsThatMoved[index]].getSquadData().health - t_damage[index];
+			playersSquads[squadsThatMoved[index]].setHealth(outcome);
+		}
 
 		//playersSquadsStrenghts[index].setString(std::to_string(playersSquads[index].getStrength()));
 	/*	if (playersSquads[squadsThatMoved[index]].getStrength() <= 0)
@@ -492,7 +501,7 @@ void Player::checkForDeadSquads()
 	std::vector<int> deadSquads;
 	for (int index = 0; index < playerSquadsCount; index++)
 	{
-		playersSquads[index].attacker = false;
+		//playersSquads[index].attacker = false;
 		if (playersSquads[index].getSquadData().health <= 0)
 		{
 			deadSquads.push_back(index);//get units that are dead in order

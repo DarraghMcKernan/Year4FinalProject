@@ -76,7 +76,7 @@ private:
 	int health = 100;
 	int activeTargetTimer = 0;//a cooldown to prevent the player from trying to select the tile its on
 	int timerForEnd = 0;
-	int money = 1000;
+	int money = 975;
 	int sendLeaderDataCooldown = 0;
 
 	bool endTurnActive = false;
