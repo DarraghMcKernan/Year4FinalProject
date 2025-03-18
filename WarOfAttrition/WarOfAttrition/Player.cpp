@@ -428,6 +428,14 @@ void Player::resetMovedUnitsAfterFight(int t_unit)
 	playersSquads[t_unit].placeOnRecentCell();
 }
 
+void Player::playerLateTurnEnd()
+{
+	for (int index = 0; index < playerSquadsCount; index++)
+	{
+		playersSquads[index].attacker = false;
+	}
+}
+
 sf::Vector2f Player::getSquadPosition()
 {
 	return playersSquads.at(squadBeingControlled).getTroopContainter().getPosition();
@@ -484,6 +492,7 @@ void Player::checkForDeadSquads()
 	std::vector<int> deadSquads;
 	for (int index = 0; index < playerSquadsCount; index++)
 	{
+		playersSquads[index].attacker = false;
 		if (playersSquads[index].getSquadData().health <= 0)
 		{
 			deadSquads.push_back(index);//get units that are dead in order

@@ -29,6 +29,7 @@ public:
 	sf::Vector2f getFormationStart();
 	void givePathToFormation(std::vector<int> t_path);
 	void resetMovedUnitsAfterFight(int t_unit);
+	void playerLateTurnEnd();
 
 	bool targetNeeded = false;//do we need a target for a squad
 	bool arrivedAtTarget = false;//has the squad reached its target

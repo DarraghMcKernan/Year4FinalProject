@@ -65,21 +65,22 @@ void TileGrid::findTargetedTile()
 		int column = mousePosViewPort.x / TILE_SIZE;
 		int row = mousePosViewPort.y / TILE_SIZE;
 
-		int temp = row * TILE_COLUMNS + column;
+		int tempTile = row * TILE_COLUMNS + column;
 		int tileInvalid = 0;
 
-		if (temp > 0 || temp < (TILE_ROWS * TILE_COLUMNS))//ensure new tile is within the list
+		if (tempTile > 0 || tempTile < (TILE_ROWS * TILE_COLUMNS))//ensure new tile is within the list
 		{
 			for (int index = 0; index < MAX_MOVES_PER_TURN; index++)
 			{
-				if (temp == tilesSelected[index] || checkIfWall(temp) == true)//if any of the tiles are already taken
+				if (checkIfWall(tempTile) == true)//if any of the tiles are already taken
 				{
 					tileInvalid++;
+					std::cout << "tile not valid\n";
 				}
 			}
 			if (tileInvalid == 0)//make sure none of the tiles are already taken
 			{
-				currentTile = temp;
+				currentTile = tempTile;
 
 				tiles[currentTile].setTarget(true);//update target
 
@@ -182,7 +183,7 @@ void TileGrid::resetTiles()
 		tiles[tilesSelected[index]].tileSetAsTarget = false;
 	}
 	deactiveateTile();
-	//deactiveateAllTiles();//needs to be called to prevent tiles from staying claimed
+	deactiveateAllTiles();//needs to be called to prevent tiles from staying claimed
 }
 
 bool TileGrid::checkIfWall(int t_tileNum)
