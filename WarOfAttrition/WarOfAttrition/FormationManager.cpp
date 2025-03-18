@@ -169,8 +169,9 @@ sf::Vector2f Formation::getFormationPosition(int t_posInFormation)
 
 
 
-void Formation::setLeaderInfo(sf::Sprite t_leaderSprite)
+void Formation::setLeaderInfo(sf::Sprite t_leaderSprite,float t_leaderSpeed)
 {
+	formationMoveSpeed = t_leaderSpeed * 0.5f;//50% of leaders speed so it stops on cell for a bit
 	leaderCopy = t_leaderSprite;
 	leaderPosition = t_leaderSprite.getPosition();
 }

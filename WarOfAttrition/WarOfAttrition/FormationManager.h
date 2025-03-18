@@ -9,7 +9,7 @@ public:
 	sf::Vector2f getCurrentLeaderPos();//will get the position the leader is currently at
 	int getPositionInFormation();//will assign the smallest free number in the formation
 	sf::Vector2f getFormationPosition(int t_posInFormation);//returns the position the unit should be going to
-	void setLeaderInfo(sf::Sprite t_leaderSprite);
+	void setLeaderInfo(sf::Sprite t_leaderSprite, float t_leaderSpeed);
 	bool leaderTargetReached = false;
 	bool formationMovingActive = false;
 	sf::Vector2f getTargetPosition();

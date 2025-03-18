@@ -27,7 +27,7 @@ void Player::update(sf::Time& t_deltaTime)
 {
 	if (currentFormationLeader != -1 && formationTemp.formationMovingActive == false && targetPosition != sf::Vector2f(0,0))
 	{
-		formationTemp.setLeaderInfo(playersSquads[currentFormationLeader].getSprite());
+		formationTemp.setLeaderInfo(playersSquads[currentFormationLeader].getSprite(), playersSquads[currentFormationLeader].getSquadData().moveSpeed);
 		formationTemp.setLeaderPosAndTarget(playersSquads[currentFormationLeader].getSprite().getPosition(), targetPosition);
 		searchForPath = true;
 		formationTemp.formationMovingActive = true;
