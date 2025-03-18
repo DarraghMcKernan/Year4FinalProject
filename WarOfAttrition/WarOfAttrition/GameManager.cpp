@@ -298,6 +298,7 @@ void GameManager::updatePlayers(sf::Time& t_deltaTime)
 	}
 	for (int index = 0; index < MAX_PLAYERS; index++)
 	{
+		//player[index].turnFirstCheck();
 		if (player[index].getSquadNumHovered(mousePosFloat) != -1)
 		{
 			squadData = player[index].getSquadData(player[index].getSquadNumHovered(worldTiles.tileHoveredOverPos()));
@@ -372,6 +373,7 @@ void GameManager::updatePlayers(sf::Time& t_deltaTime)
 				while (playerValid == false)
 				{
 					player[index].addIncomeFromTurn();
+					player[index].playerLateTurnEnd();
 					whosTurn++;
 					if (whosTurn > MAX_PLAYERS)
 					{

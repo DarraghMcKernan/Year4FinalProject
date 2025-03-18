@@ -48,10 +48,27 @@ void Squad::update(sf::Time t_deltaTime)
 	{
 		if (troopContainer.getPosition() != targetPosition && squadData.squadStrength > 0 && turnEnded == true)
 		{
-			sf::Vector2f vectorToTarget = targetPosition - troopContainer.getPosition();
+			if (pathToTarget.size() == 0)
+			{
+				return;
+			}
+			if (positionOnPath == 0)
+			{
+				positionOnPath = 1;
+
+				nextPlaceOnPath = { (pathToTarget[positionOnPath] % TILE_COLUMNS) * TILE_SIZE, (pathToTarget[positionOnPath] / TILE_COLUMNS) * TILE_SIZE };//the tile that the player wants to move to
+				nextPlaceOnPath = { nextPlaceOnPath.x + (TILE_SIZE / 2) , nextPlaceOnPath.y + (TILE_SIZE / 2) };//center the target on a tile
+			}
+
+			sf::Vector2f vectorToTarget = nextPlaceOnPath - troopContainer.getPosition();
+			sf::Vector2f vectorToEnd = targetPosition - troopContainer.getPosition();
+
 			float distance = sqrt((vectorToTarget.x * vectorToTarget.x) + (vectorToTarget.y * vectorToTarget.y));
 			vectorToTarget = { vectorToTarget.x / distance,vectorToTarget.y / distance };
-			if (distance <= 2.1)//lock player to target once close enough
+
+			float distanceToTarget = sqrt((vectorToEnd.x * vectorToEnd.x) + (vectorToEnd.y * vectorToEnd.y));
+
+			if (distanceToTarget <= 2.1)//lock player to target once close enough
 			{
 				if (formationLeader == true)
 				{
@@ -80,6 +97,16 @@ void Squad::update(sf::Time t_deltaTime)
 			}
 			else
 			{
+				if (distance <= 2.1)
+				{
+					positionOnPath++;
+
+					nextPlaceOnPath = { (pathToTarget[positionOnPath] % TILE_COLUMNS) * TILE_SIZE, (pathToTarget[positionOnPath] / TILE_COLUMNS) * TILE_SIZE };//the tile that the player wants to move to
+					nextPlaceOnPath = { nextPlaceOnPath.x + (TILE_SIZE / 2) , nextPlaceOnPath.y + (TILE_SIZE / 2) };//center the target on a tile
+
+					std::cout << "path point reached, next cell selected\n";
+				}
+
 				if (distance > 500)//artificially cap speed
 				{
 					distance = 500;

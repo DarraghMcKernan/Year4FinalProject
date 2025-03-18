@@ -25,16 +25,20 @@ void Player::init(int t_teamNum, int t_unitType)
 
 void Player::update(sf::Time& t_deltaTime)
 {
-	if (currentFormationLeader != -1 && formationTemp.formationMovingActive == false && targetPosition != sf::Vector2f(0,0))
+	//std::cout << currentFormationLeader << " leader\n";
+
+	if (currentFormationLeader != -1 && formationTemp.formationMovingActive == false && targetPosition != sf::Vector2f(0,0) && formationTemp.leaderTargetReached == false)
 	{
 		formationTemp.setLeaderInfo(playersSquads[currentFormationLeader].getSprite(), playersSquads[currentFormationLeader].getSquadData().moveSpeed);
 		formationTemp.setLeaderPosAndTarget(playersSquads[currentFormationLeader].getSprite().getPosition(), targetPosition);
 		searchForPath = true;
 		formationTemp.formationMovingActive = true;
+		std::cout << currentFormationLeader << " leader setup\n";
 	}
 
 	if (formationTemp.formationMovingActive == true)
 	{
+		formationTemp.updateLeaderCopy(playersSquads[currentFormationLeader].getSprite());
 		formationTemp.update(t_deltaTime);
 	}
 
@@ -63,7 +67,7 @@ void Player::update(sf::Time& t_deltaTime)
 						std::cout << currentFormationLeader << " is now the temp leader\n";
 						playersSquads[currentFormationLeader].setFormationNum(formationTemp.getPositionInFormation());
 						formationCreated = true;
-					}					
+					}
 
 					playersSquads[currentFormationLeader].formationActive = true;
 					playersSquads[index].formationActive = true;
@@ -77,10 +81,12 @@ void Player::update(sf::Time& t_deltaTime)
 		if (formationTemp.leaderTargetReached == true && index == currentFormationLeader)
 		{
 			playersSquads[index].formationFrontReachedGoal = true;
+			//std::cout << "leader doing something \n";
 		}
 		if (playersSquads[index].formationActive == true && formationMovementUnlocked == true)// && playersSquads[index].formationLeader == false)
 		{
 			playersSquads[index].moveToFormationPosition(formationTemp.getFormationPosition(playersSquads[index].getFormationNum()),t_deltaTime);
+			//std::cout << "leader doing something \n";
 		}
 		else {
 			if (playersSquads[index].targetReached == true && turnEnded == true)//all have reached their targets
@@ -116,8 +122,11 @@ void Player::update(sf::Time& t_deltaTime)
 				squadBeingControlled = index;
 				playersSquads[index].unlockMovement(true);
 				activeTargetTimer = 10;
+
+				std::cout << "unit selected \n";
 			}
 		}
+
 		if (playersSquads[index].formationLeader == false)
 		{
 			playersSquads[index].update(t_deltaTime);
@@ -438,12 +447,35 @@ sf::Vector2f Player::getFormationStart()
 
 void Player::givePathToFormation(std::vector<int> t_path)
 {
-	formationTemp.setFoundPath(t_path);
+	if (formationCreated == true)
+	{
+		formationTemp.setFoundPath(t_path);
+	}
+	
+	playersSquads[squadBeingControlled].pathToTarget = t_path;
 }
 
-void Player::resetMovedUnitsAfterFight(int t_unit)
+void Player::resetMovedUnitsAfterFight(int t_unit)//should be the last function to run this turn
 {
 	playersSquads[t_unit].placeOnRecentCell();
+
+	targetPosition = sf::Vector2f(0, 0);
+	currentFormationLeader = -1;
+	formationTemp.formationMovingActive = false;
+
+	formationTemp.pathToTarget.clear();
+	formationTemp.placeOnPath = 0;
+	formationTemp.leaderTargetReached = false;
+	formationTemp.formationMovingActive = false;
+	formationTemp.clearData();
+
+	turnBegan = false;
+
+	for (int index = 0; index < playerSquadsCount; index++)
+	{
+		playersSquads[index].attacker = false;
+		playersSquads[index].formationLeader = false;
+	}
 }
 
 void Player::playerLateTurnEnd()
@@ -451,7 +483,22 @@ void Player::playerLateTurnEnd()
 	for (int index = 0; index < playerSquadsCount; index++)
 	{
 		playersSquads[index].attacker = false;
+		playersSquads[index].formationLeader = false;
+		playersSquads[index].pathToTarget.clear();
+		playersSquads[index].positionOnPath = 0;
+		playersSquads[index].nextPlaceOnPath = sf::Vector2f(0, 0);
 	}
+
+	targetPosition = sf::Vector2f(0, 0);
+	currentFormationLeader = -1;
+	formationTemp.formationMovingActive = false;
+
+	formationTemp.pathToTarget.clear();
+	formationTemp.placeOnPath = 0;
+	formationTemp.leaderTargetReached = false;
+	formationTemp.formationMovingActive = false;
+
+	turnBegan = false;
 }
 
 sf::Vector2f Player::getSquadPosition()
@@ -547,4 +594,22 @@ void Player::resetPlayerForThisTurn()
 	turnEnded = false;
 	unitsMoved = 0;
 	endTurnActive = false;
+	turnBegan = false;
+}
+
+void Player::turnFirstCheck()
+{
+	if (turnBegan == false)
+	{
+		turnBegan = true;
+
+		targetPosition = sf::Vector2f(0, 0);
+		currentFormationLeader = -1;
+		formationTemp.formationMovingActive = false;
+
+		formationTemp.pathToTarget.clear();
+		formationTemp.placeOnPath = 0;
+		formationTemp.leaderTargetReached = false;
+		formationTemp.formationMovingActive = false;
+	}
 }

@@ -108,7 +108,8 @@ void TileGrid::deactiveateAllTiles()
 		if (tiles[index].getType() != 1)//wall
 		{
 			tiles[index].setTarget(false);
-		}		
+			tiles[index].setType(0);
+		}
 	}
 }
 

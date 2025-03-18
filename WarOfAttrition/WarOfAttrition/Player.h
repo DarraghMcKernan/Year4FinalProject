@@ -9,6 +9,8 @@ class Player
 	Formation formationTemp;
 
 public:
+	//std::vector<Formation> formations;
+
 	void init(int t_teamNum, int t_unitType);
 	void update(sf::Time& t_deltaTime);
 	void fixedUpdate();
@@ -55,6 +57,8 @@ public:
 	void checkForDeadSquads();
 	void resetPlayerForThisTurn();
 
+	void turnFirstCheck();
+
 	bool formationCreationAllowed = false;
 	bool formationMovementUnlocked = false;
 	int currentFormationLeader = -1;
@@ -82,4 +86,5 @@ private:
 	bool endTurnActive = false;
 	bool squadSet = false;
 	bool formationCreated = false;
+	bool turnBegan = false;
 };

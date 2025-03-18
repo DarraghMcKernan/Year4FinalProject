@@ -65,6 +65,7 @@ void Formation::setLeaderPosAndTarget(sf::Vector2f t_leaderPos, sf::Vector2f t_t
 	formationCircleDebugLeader.setRadius(5);
 	formationCircleDebugLeader.setOrigin(5, 5);
 	formationCircleDebugLeader.setFillColor(sf::Color::Red);
+	formationCircleDebugLeader.setPosition(t_leaderPos);
 
 	formationCircleDebug1.setRadius(5);
 	formationCircleDebug1.setOrigin(5, 5);
@@ -201,6 +202,19 @@ std::vector<sf::CircleShape> Formation::getDebugCirclesToDraw()
 	circles.push_back(formationCircleDebug3);
 
 	return circles;
+}
+
+void Formation::updateLeaderCopy(sf::Sprite t_leaderSprite)
+{
+	leaderCopy = t_leaderSprite;
+}
+
+void Formation::clearData()
+{
+	formationPositions[0] = -1;
+	formationPositions[1] = -1;
+	formationPositions[2] = -1;
+	formationPositions[3] = -1;
 }
 
 void Formation::generatePath()

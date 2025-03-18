@@ -39,6 +39,10 @@ public:
 	bool formationFrontReachedGoal = false;
 	bool attacker = false;
 	bool needToMove = false;
+
+	std::vector<int> pathToTarget;
+	int positionOnPath = 0;
+	sf::Vector2f nextPlaceOnPath;
 private:
 	SquadData squadData;
 	
