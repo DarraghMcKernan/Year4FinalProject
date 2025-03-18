@@ -2,9 +2,25 @@
 
 void Formation::update(sf::Time t_deltaTime)
 {
-	sf::Vector2f vectorToTarget = targetPosition - formationFront;
+	if (pathToTarget.size() == 0)
+	{
+		return;
+	}
+
+	if (placeOnPath == 0)
+	{
+		placeOnPath = 1;
+
+		nextPlaceOnPath = { (pathToTarget[placeOnPath] % TILE_COLUMNS) * TILE_SIZE, (pathToTarget[placeOnPath] / TILE_COLUMNS) * TILE_SIZE};//the tile that the player wants to move to
+		nextPlaceOnPath = { nextPlaceOnPath.x + (TILE_SIZE / 2) , nextPlaceOnPath.y + (TILE_SIZE / 2) };//center the target on a tile
+	}
+
+	sf::Vector2f vectorToTarget = nextPlaceOnPath - formationFront;
+	sf::Vector2f vectorToEnd = targetPosition - formationFront;
 	float distance = sqrt((vectorToTarget.x * vectorToTarget.x) + (vectorToTarget.y * vectorToTarget.y));
 	vectorToTarget = { vectorToTarget.x / distance,vectorToTarget.y / distance };
+
+	float distanceToTarget = sqrt((vectorToEnd.x * vectorToEnd.x) + (vectorToEnd.y * vectorToEnd.y));
 
 	//std::cout << "Leader pos: " << leaderPosition.x << " " << leaderPosition.y << "\n";
 	//std::cout << "Target pos: " << targetPosition.x << " " << targetPosition.y << "\n\n";
@@ -12,17 +28,30 @@ void Formation::update(sf::Time t_deltaTime)
 
 	//std::cout << distance << "\n"; 
 
+	if (distanceToTarget <= 2.1)
+	{
+		formationFront = targetPosition;
+		formationMovingActive = false;
+		leaderTargetReached = true;
+
+		std::cout << "leader reached target\n";
+
+		return;
+	}
+
 	if (distance > 2.1)
 	{
 		float speed = formationMoveSpeed * t_deltaTime.asSeconds();
 		formationFront = sf::Vector2f(formationFront.x + (vectorToTarget.x * speed), formationFront.y + (vectorToTarget.y * speed));
 	}
-	
 	if (distance <= 2.1)
 	{
-		formationFront = targetPosition;
-		formationMovingActive = false;
-		leaderTargetReached = true;
+		placeOnPath++;
+
+		nextPlaceOnPath = { (pathToTarget[placeOnPath] % TILE_COLUMNS) * TILE_SIZE, (pathToTarget[placeOnPath] / TILE_COLUMNS) * TILE_SIZE };//the tile that the player wants to move to
+		nextPlaceOnPath = { nextPlaceOnPath.x + (TILE_SIZE / 2) , nextPlaceOnPath.y + (TILE_SIZE / 2) };//center the target on a tile
+
+		std::cout << "path point reached, next cell selected\n";
 	}
 }
 
@@ -32,6 +61,22 @@ void Formation::setLeaderPosAndTarget(sf::Vector2f t_leaderPos, sf::Vector2f t_t
 	formationFront = t_leaderPos;
 	leaderPosition = t_leaderPos;
 	targetPosition = t_targetPos;
+
+	formationCircleDebugLeader.setRadius(5);
+	formationCircleDebugLeader.setOrigin(5, 5);
+	formationCircleDebugLeader.setFillColor(sf::Color::Red);
+
+	formationCircleDebug1.setRadius(5);
+	formationCircleDebug1.setOrigin(5, 5);
+	formationCircleDebug1.setFillColor(sf::Color::Yellow);
+
+	formationCircleDebug2.setRadius(5);
+	formationCircleDebug2.setOrigin(5, 5);
+	formationCircleDebug2.setFillColor(sf::Color::Yellow);
+
+	formationCircleDebug3.setRadius(5);
+	formationCircleDebug3.setOrigin(5, 5);
+	formationCircleDebug3.setFillColor(sf::Color::Yellow);
 }
 
 sf::Vector2f Formation::getCurrentLeaderPos()
@@ -61,24 +106,28 @@ sf::Vector2f Formation::getFormationPosition(int t_posInFormation)
 	{
 		return sf::Vector2f(0, 0);
 	}
-
+	int pos = 0;
 	PositionNormaliser normaliser;
 
 	sf::Vector2f offset = sf::Vector2f(0,0);
 	if (t_posInFormation == 0)
 	{
+		formationCircleDebugLeader.setPosition(formationFront);
 		return normaliser.normalizeToTileCenter(formationFront);
 	}
 	else if (t_posInFormation == 1)
 	{
+		pos = 1;
 		offset = sf::Vector2f(standardOffset.x * formationXSpread, -standardOffset.y * formationYSpread);
 	}
 	else if (t_posInFormation == 2)
 	{
+		pos = 2;
 		offset = sf::Vector2f(-standardOffset.x * formationXSpread, -standardOffset.y * formationYSpread);
 	}
 	else if (t_posInFormation == 3)
 	{
+		pos = 3;
 		offset = sf::Vector2f((standardOffset.x * formationXSpread)*2, (-standardOffset.y * formationYSpread) * 2);
 	}
 	else if (t_posInFormation == 4)
@@ -88,12 +137,30 @@ sf::Vector2f Formation::getFormationPosition(int t_posInFormation)
 
 	sf::Vector2f tempPos = offset;
 
+	//if (leaderCopy.getRotation() > 90 && leaderCopy.getRotation() < 270)
+	//{
+	//	tempPos.y = -tempPos.y;
+	//}
+
 	float cosTheta = std::cos(radians);
 	float sinTheta = std::sin(radians);
 
 	sf::Vector2f actualFormationPoint = sf::Vector2f(tempPos.x * cosTheta - tempPos.y * sinTheta, tempPos.x * sinTheta + tempPos.y * cosTheta);
 
 	actualFormationPoint += formationFront;
+
+	if (pos == 1)
+	{
+		formationCircleDebug1.setPosition(actualFormationPoint);
+	}
+	else if (pos == 2)
+	{
+		formationCircleDebug2.setPosition(actualFormationPoint);
+	}
+	else if (pos == 3)
+	{
+		formationCircleDebug3.setPosition(actualFormationPoint);
+	}
 
 	actualFormationPoint = normaliser.normalizeToTileCenter(actualFormationPoint);
 
@@ -121,6 +188,18 @@ sf::Vector2f Formation::getStartPosition()
 void Formation::setFoundPath(std::vector<int> t_path)
 {
 	pathToTarget = t_path;
+}
+
+std::vector<sf::CircleShape> Formation::getDebugCirclesToDraw()
+{
+	std::vector<sf::CircleShape> circles;
+
+	circles.push_back(formationCircleDebugLeader);
+	circles.push_back(formationCircleDebug1);
+	circles.push_back(formationCircleDebug2);
+	circles.push_back(formationCircleDebug3);
+
+	return circles;
 }
 
 void Formation::generatePath()

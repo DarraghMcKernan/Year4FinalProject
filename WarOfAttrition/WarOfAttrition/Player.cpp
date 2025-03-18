@@ -225,6 +225,15 @@ void Player::render(sf::RenderWindow& t_window)
 			playersTowers[index].render(t_window);
 		}
 	}
+
+	std::vector<sf::CircleShape> debug = formationTemp.getDebugCirclesToDraw();
+	if (debug.size() > 0)
+	{
+		for (int index = 0; index < debug.size(); index++)
+		{
+			t_window.draw(debug[index]);
+		}
+	}
 }
 
 void Player::setTargetPosition(int t_cellNum)

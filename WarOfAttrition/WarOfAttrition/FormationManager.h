@@ -15,6 +15,7 @@ public:
 	sf::Vector2f getTargetPosition();
 	sf::Vector2f getStartPosition();
 	void setFoundPath(std::vector<int> t_path);
+	std::vector<sf::CircleShape> getDebugCirclesToDraw();
 private:
 	void generatePath();
 	sf::Vector2f leaderPosition = { 0,0 };
@@ -22,6 +23,8 @@ private:
 	sf::Vector2f targetPosition = { 0,0 };
 	sf::Vector2f startPosition = { 0,0 };
 	sf::Vector2f standardOffset = { 50,50 };
+	sf::Vector2f nextPlaceOnPath;
+
 	sf::Sprite leaderCopy;
 	float cappedRotationSpeed = 5.0f; 
 	float maxFormationSpeed = 5.0f;
@@ -32,6 +35,10 @@ private:
 	int placeOnPath = 0;
 	bool goalReached = false;
 	
+	sf::CircleShape formationCircleDebugLeader;
+	sf::CircleShape formationCircleDebug1;
+	sf::CircleShape formationCircleDebug2;
+	sf::CircleShape formationCircleDebug3;
 
 	const static int MAX_FORMATION_SIZE = 4;
 
