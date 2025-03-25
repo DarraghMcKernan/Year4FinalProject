@@ -27,12 +27,12 @@ void Player::update(sf::Time& t_deltaTime)
 {
 	//std::cout << currentFormationLeader << " leader\n";
 
-	if (currentFormationLeader != -1 && formationTemp.formationMovingActive == false && targetPosition != sf::Vector2f(0,0) && formationTemp.leaderTargetReached == false)
+	if (currentFormationLeader != -1 && formationTemp.formationMovingActive == false && targetPosition != sf::Vector2f(0,0) && formationTemp.leaderTargetReached == false && formationTemp.leaderInfoSet == false)
 	{
 		formationTemp.setLeaderInfo(playersSquads[currentFormationLeader].getSprite(), playersSquads[currentFormationLeader].getSquadData().moveSpeed);
 		formationTemp.setLeaderPosAndTarget(playersSquads[currentFormationLeader].getSprite().getPosition(), targetPosition);
+		formationTemp.leaderInfoSet = true;
 		searchForPath = true;
-		formationTemp.formationMovingActive = true;
 		std::cout << currentFormationLeader << " leader setup\n";
 	}
 
@@ -120,6 +120,7 @@ void Player::update(sf::Time& t_deltaTime)
 				playersSquads[squadBeingControlled].resetColour();
 				formationCreationAllowed = true;
 				squadBeingControlled = index;
+				std::cout << "squad being controlled " << squadBeingControlled << "\n";
 				playersSquads[index].unlockMovement(true);
 				activeTargetTimer = 10;
 
@@ -150,6 +151,8 @@ void Player::update(sf::Time& t_deltaTime)
 				playersSquads[index].resetColour();
 			}
 		}
+
+		formationTemp.formationMovingActive = true;
 	}
 
 	int counter = 0;
@@ -180,6 +183,8 @@ void Player::update(sf::Time& t_deltaTime)
 		unitsMoved = 0;
 		timerForEnd = 0;
 		endTurnActive = false;
+		formationTemp.formationMovingActive = false;
+		formationTemp.leaderInfoSet = false;
 	}
 
 	if (checkIfAllMoved == playerSquadsCount)//if all squads that were allowed to move have moved end turn
@@ -195,6 +200,8 @@ void Player::update(sf::Time& t_deltaTime)
 		unitsMoved = 0;
 		timerForEnd = 0;
 		endTurnActive = false;
+		formationTemp.leaderInfoSet = false;
+		formationTemp.formationMovingActive = false;
 	}
 }
 
@@ -595,6 +602,8 @@ void Player::resetPlayerForThisTurn()
 	unitsMoved = 0;
 	endTurnActive = false;
 	turnBegan = false;
+	formationTemp.leaderInfoSet = false;
+	formationTemp.formationMovingActive = false;
 }
 
 void Player::turnFirstCheck()

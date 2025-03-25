@@ -2,6 +2,10 @@
 
 void Formation::update(sf::Time t_deltaTime)
 {
+	if (formationMovingActive == false)
+	{
+		return;
+	}
 	if (pathToTarget.size() == 0)
 	{
 		return;

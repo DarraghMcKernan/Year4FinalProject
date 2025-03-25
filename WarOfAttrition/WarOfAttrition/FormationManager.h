@@ -12,6 +12,7 @@ public:
 	void setLeaderInfo(sf::Sprite t_leaderSprite, float t_leaderSpeed);
 	bool leaderTargetReached = false;
 	bool formationMovingActive = false;
+	bool leaderInfoSet = false;
 	sf::Vector2f getTargetPosition();
 	sf::Vector2f getStartPosition();
 	void setFoundPath(std::vector<int> t_path);
