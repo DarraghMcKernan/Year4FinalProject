@@ -46,7 +46,8 @@ void Squad::update(sf::Time t_deltaTime)
 {
 	if (movementAllowed == true)
 	{
-		if (troopContainer.getPosition() != targetPosition && squadData.squadStrength > 0 && turnEnded == true)
+		sf::Vector2f troopPos = troopContainer.getPosition();
+		if (troopPos != targetPosition && squadData.squadStrength > 0 && turnEnded == true)
 		{
 			if (pathToTarget.size() == 0)
 			{

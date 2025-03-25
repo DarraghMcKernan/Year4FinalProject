@@ -77,7 +77,6 @@ void Player::update(sf::Time& t_deltaTime)
 			}
 		}
 
-		//playersSquads[index].moveToFormationPosition(formationTemp.getFormationPosition(playersSquads[index].getFormationNum()), t_deltaTime);
 		if (formationTemp.leaderTargetReached == true && index == currentFormationLeader)
 		{
 			playersSquads[index].formationFrontReachedGoal = true;
@@ -117,6 +116,7 @@ void Player::update(sf::Time& t_deltaTime)
 					currentFormationLeader = index;
 				}
 				squadSet = true;
+				searchForPath = true;
 				playersSquads[squadBeingControlled].resetColour();
 				formationCreationAllowed = true;
 				squadBeingControlled = index;
@@ -128,9 +128,9 @@ void Player::update(sf::Time& t_deltaTime)
 			}
 		}
 
-		if (playersSquads[index].formationLeader == false)
+		if (playersSquads[index].formationLeader == false && playersSquads[index].movingAllowed() == true)
 		{
-			playersSquads[index].update(t_deltaTime);
+ 			playersSquads[index].update(t_deltaTime);//not getting path to target
 		}
 	}
 
@@ -253,7 +253,7 @@ void Player::render(sf::RenderWindow& t_window)
 }
 
 void Player::setTargetPosition(int t_cellNum)
-{
+{//////////
 	squadSet = false;
 	targetNeeded = false;
 	formationCreationAllowed = false;
@@ -449,7 +449,7 @@ sf::Vector2f Player::getFormationTarget()
 
 sf::Vector2f Player::getFormationStart()
 {
-	return formationTemp.getStartPosition();
+	return playersSquads[squadBeingControlled].getTroopContainter().getPosition();
 }
 
 void Player::givePathToFormation(std::vector<int> t_path)
@@ -458,8 +458,9 @@ void Player::givePathToFormation(std::vector<int> t_path)
 	{
 		formationTemp.setFoundPath(t_path);
 	}
-	
+	std::cout << "path given to " << squadBeingControlled << "\n";
 	playersSquads[squadBeingControlled].pathToTarget = t_path;
+	targetPosition = sf::Vector2f(0, 0);
 }
 
 void Player::resetMovedUnitsAfterFight(int t_unit)//should be the last function to run this turn
@@ -506,6 +507,13 @@ void Player::playerLateTurnEnd()
 	formationTemp.formationMovingActive = false;
 
 	turnBegan = false;
+}
+
+sf::Vector2f Player::getTargetPosition()
+{
+
+	return targetPosition;
+	//return playersSquads[squadBeingControlled].targetPosition;
 }
 
 sf::Vector2f Player::getSquadPosition()

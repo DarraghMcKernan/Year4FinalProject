@@ -345,8 +345,14 @@ void GameManager::updatePlayers(sf::Time& t_deltaTime)
 
 			if (player[index].searchForPath == true)
 			{
-				player[index].searchForPath = false;
-				player[index].givePathToFormation(worldTiles.getPathToTarget(player[index].getFormationStart(), player[index].getFormationTarget()));
+				sf::Vector2f playerTarget = player[index].getTargetPosition();
+				if (playerTarget != sf::Vector2f(0, 0))
+				{
+					std::cout << "player " << index << " requested path\n";
+					player[index].searchForPath = false;
+					player[index].givePathToFormation(worldTiles.getPathToTarget(player[index].getFormationStart(), playerTarget));//player[index].getFormationTarget()));
+				}
+				//else std::cout << "target not yet set";
 			}
 
 			if (player[index].arrivedAtTarget == true)//if the players turn is over as all units have moved

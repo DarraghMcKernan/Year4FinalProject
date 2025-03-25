@@ -43,12 +43,13 @@ public:
 	std::vector<int> pathToTarget;
 	int positionOnPath = 0;
 	sf::Vector2f nextPlaceOnPath;
+	sf::Vector2f targetPosition = sf::Vector2f(0,0);
 private:
 	SquadData squadData;
 	
 	void setunitType();
 	sf::RectangleShape troopContainer;
-	sf::Vector2f targetPosition;
+	
 
 	sf::Sprite UnitSprite;
 	sf::Sprite teamOutlineSprite;
