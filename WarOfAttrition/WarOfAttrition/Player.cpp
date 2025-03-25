@@ -27,7 +27,7 @@ void Player::update(sf::Time& t_deltaTime)
 {
 	//std::cout << currentFormationLeader << " leader\n";
 
-	if (currentFormationLeader != -1 && formationTemp.formationMovingActive == false && targetPosition != sf::Vector2f(0,0) && formationTemp.leaderTargetReached == false && formationTemp.leaderInfoSet == false)
+	if (currentFormationLeader != -1 && formationTemp.formationMovingActive == false && targetPosition != sf::Vector2f(0,0) && formationTemp.leaderTargetReached == false && formationTemp.leaderInfoSet == false && formationCreated == true)
 	{
 		formationTemp.setLeaderInfo(playersSquads[currentFormationLeader].getSprite(), playersSquads[currentFormationLeader].getSquadData().moveSpeed);
 		formationTemp.setLeaderPosAndTarget(playersSquads[currentFormationLeader].getSprite().getPosition(), targetPosition);
@@ -454,7 +454,7 @@ sf::Vector2f Player::getFormationStart()
 
 void Player::givePathToFormation(std::vector<int> t_path)
 {
-	if (formationCreated == true)
+	if (formationCreated == true && currentFormationLeader == squadBeingControlled)
 	{
 		formationTemp.setFoundPath(t_path);
 	}
