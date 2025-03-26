@@ -1,7 +1,13 @@
 #pragma once
 #include "globals.h"
 
-
+enum SquadMovementState
+{
+	MoveToFormationPoint,
+	TakeLeadersPath,
+	SteerAroundObstacle,
+	BreakFormation
+};
 
 class Squad 
 {
@@ -47,10 +53,18 @@ public:
 	sf::Vector2f targetPosition = sf::Vector2f(0,0);
 private:
 	SquadData squadData;
-	
+	SquadMovementState currentMovementState = MoveToFormationPoint;
+	PositionNormaliser normaliser;
+
 	void setunitType();
+	void moveToFormation(sf::Vector2f t_formationPosition,sf::Time t_deltaTime);
+	void steerAroundObstacle(sf::Vector2f t_formationPosition,sf::Time t_deltaTime);
+	void takeLeadersPath(sf::Vector2f t_formationPosition,sf::Time t_deltaTime);
+	void breakFormation(sf::Vector2f t_formationPosition,sf::Time t_deltaTime);
+	bool checkFormationPointValid();
+
 	sf::RectangleShape troopContainer;
-	
+	sf::RectangleShape movableCollider;
 
 	sf::Sprite UnitSprite;
 	sf::Sprite teamOutlineSprite;

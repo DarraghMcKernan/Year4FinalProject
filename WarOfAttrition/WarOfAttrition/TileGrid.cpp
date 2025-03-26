@@ -211,7 +211,7 @@ void TileGrid::updateTileType(int t_type)
 			tileSetAsWalls.push_back(index);
 		}
 	}
-
+	allInvalidTiles = tileSetAsWalls;
 	updateTileTexture(tileHoveredOverNum(),0);
 }
 

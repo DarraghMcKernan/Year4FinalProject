@@ -35,6 +35,8 @@ static sf::Texture unitSpriteExtrasTexture;
 
 static sf::Texture goldmineTexture;
 
+static std::vector<int> allInvalidTiles;
+
 struct SquadData
 {
 	int teamNum = 0;
@@ -56,6 +58,18 @@ public:
 
         return sf::Vector2f(tileX + tileSize / 2.0f, tileY + tileSize / 2.0f);
     }
+
+    virtual sf::Vector2f convertCellNumToCoords(const int t_cellNum) const {
+		int row = t_cellNum / TILE_COLUMNS;
+		int column = t_cellNum % TILE_COLUMNS;
+
+		sf::Vector2f recentCellPos;
+
+		recentCellPos.x = column * TILE_SIZE + TILE_SIZE / 2.0f;
+		recentCellPos.y = row * TILE_SIZE + TILE_SIZE / 2.0f;
+
+		return recentCellPos;
+	}
 
     virtual ~PositionNormaliser() = default;
 };

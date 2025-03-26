@@ -459,6 +459,13 @@ void Player::givePathToFormation(std::vector<int> t_path)
 	if (formationCreated == true && currentFormationLeader == squadBeingControlled)
 	{
 		formationTemp.setFoundPath(t_path);
+		for (int index = 0; index < playerSquadsCount; index++)
+		{
+			if (playersSquads[index].formationActive == true)//give all squads the leaders path so that they can default to it if needed
+			{
+				playersSquads[index].pathToTarget = t_path;
+			}			
+		}
 	}
 	std::cout << "path given to " << squadBeingControlled << "\n";
 	playersSquads[squadBeingControlled].pathToTarget = t_path;

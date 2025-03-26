@@ -189,58 +189,20 @@ void Squad::setPosition(sf::Vector2f t_debugPosition)
 
 void Squad::moveToFormationPosition(sf::Vector2f t_formationPosition, sf::Time& t_deltaTime)
 {
-	if (t_formationPosition != sf::Vector2f(0, 0))
+	switch (currentMovementState)
 	{
-		sf::Vector2f vectorToTarget = t_formationPosition - troopContainer.getPosition();
-		float distance = sqrt((vectorToTarget.x * vectorToTarget.x) + (vectorToTarget.y * vectorToTarget.y));
-		vectorToTarget = { vectorToTarget.x / distance,vectorToTarget.y / distance };
-
-		if (distance > 2.1)
-		{
-			float speed = moveSpeed * t_deltaTime.asSeconds();
-			troopContainer.move(vectorToTarget.x * (speed), vectorToTarget.y * (speed));
-		}
-
-		float rotation = (atan2(vectorToTarget.y, vectorToTarget.x) * 180 / 3.14159265) - 90;
-		if (distance <= 2.1)
-		{
-			if (formationLeader == true && formationFrontReachedGoal == true)
-			{
-				formationLeaderReachedGoal = true;
-				troopContainer.setPosition(t_formationPosition);
-				formationActive = false;
-				targetReached = true;
-				std::cout << "formation leader position reached" << std::endl;
-			}
-			else if (formationLeaderReachedGoal == true) {
-				troopContainer.setPosition(t_formationPosition);
-				formationActive = false;
-				targetReached = true;
-				std::cout << "formation position reached" << std::endl;
-			}
-
-			//rotation = 0;
-		}
-
-		int column = static_cast<int>(UnitSprite.getPosition().x / TILE_SIZE);
-		int row = static_cast<int>(UnitSprite.getPosition().y / TILE_SIZE);
-
-		if (currentCell != (row * TILE_COLUMNS) + column)
-		{
-			mostRecentCell = currentCell;
-		}
-		currentCell = (row * TILE_COLUMNS) + column;
-
-		UnitSprite.setPosition(troopContainer.getPosition());
-		teamOutlineSprite.setPosition(troopContainer.getPosition());
-		if (extraSpriteNeeded == true)
-		{
-			unitSpriteExtras.setPosition(troopContainer.getPosition());
-			unitSpriteExtras.setRotation(rotation);
-		}
-
-		UnitSprite.setRotation(rotation);
-		teamOutlineSprite.setRotation(rotation);
+	case MoveToFormationPoint:
+		moveToFormation(t_formationPosition, t_deltaTime);
+		break;
+	case SteerAroundObstacle:
+		steerAroundObstacle(t_formationPosition, t_deltaTime);
+		break;
+	case TakeLeadersPath:
+		takeLeadersPath(t_formationPosition, t_deltaTime);
+		break;
+	case BreakFormation:
+		breakFormation(t_formationPosition, t_deltaTime);
+		break;
 	}
 }
 
@@ -435,4 +397,83 @@ void Squad::setunitType()
 		unitSpriteExtras.setOrigin(64, 64);
 		unitSpriteExtras.setPosition(troopContainer.getPosition());
 	}
+}
+
+void Squad::moveToFormation(sf::Vector2f t_formationPosition,sf::Time t_deltaTime)
+{
+	if (t_formationPosition != sf::Vector2f(0, 0))
+	{
+		sf::Vector2f vectorToTarget = t_formationPosition - troopContainer.getPosition();
+		float distance = sqrt((vectorToTarget.x * vectorToTarget.x) + (vectorToTarget.y * vectorToTarget.y));
+		vectorToTarget = { vectorToTarget.x / distance,vectorToTarget.y / distance };
+
+		if (distance > 2.1)
+		{
+			float speed = moveSpeed * t_deltaTime.asSeconds();
+			troopContainer.move(vectorToTarget.x * (speed), vectorToTarget.y * (speed));
+		}
+
+		float rotation = (atan2(vectorToTarget.y, vectorToTarget.x) * 180 / 3.14159265) - 90;
+		if (distance <= 2.1)
+		{
+			if (formationLeader == true && formationFrontReachedGoal == true)
+			{
+				formationLeaderReachedGoal = true;
+				troopContainer.setPosition(t_formationPosition);
+				formationActive = false;
+				targetReached = true;
+				std::cout << "formation leader position reached" << std::endl;
+			}
+			else if (formationLeaderReachedGoal == true) {
+				troopContainer.setPosition(t_formationPosition);
+				formationActive = false;
+				targetReached = true;
+				std::cout << "formation position reached" << std::endl;
+			}
+
+			//rotation = 0;
+		}
+
+		int column = static_cast<int>(UnitSprite.getPosition().x / TILE_SIZE);
+		int row = static_cast<int>(UnitSprite.getPosition().y / TILE_SIZE);
+
+		if (currentCell != (row * TILE_COLUMNS) + column)
+		{
+			mostRecentCell = currentCell;
+		}
+		currentCell = (row * TILE_COLUMNS) + column;
+
+		UnitSprite.setPosition(troopContainer.getPosition());
+		teamOutlineSprite.setPosition(troopContainer.getPosition());
+		if (extraSpriteNeeded == true)
+		{
+			unitSpriteExtras.setPosition(troopContainer.getPosition());
+			unitSpriteExtras.setRotation(rotation);
+		}
+
+		UnitSprite.setRotation(rotation);
+		teamOutlineSprite.setRotation(rotation);
+	}
+}
+
+void Squad::steerAroundObstacle(sf::Vector2f t_formationPosition, sf::Time t_deltaTime)
+{
+
+}
+
+void Squad::takeLeadersPath(sf::Vector2f t_formationPosition, sf::Time t_deltaTime)
+{
+
+}
+
+void Squad::breakFormation(sf::Vector2f t_formationPosition, sf::Time t_deltaTime)
+{
+
+}
+
+bool Squad::checkFormationPointValid()
+{
+	sf::Vector2f positionOfPoint = normaliser.convertCellNumToCoords(posInFormation);
+
+	return true;
 }
