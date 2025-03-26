@@ -598,10 +598,12 @@ void GameManager::menuInteractions()
 		else if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 		{
 			worldTiles.updateTileType(editingTerrainType);
+			worldTilesModified = true;
 		}
 		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
 		{
 			worldTiles.updateTileType(editingTerrainType);
+			worldTilesModified = true;
 		}
 	}
 	else {
