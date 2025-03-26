@@ -59,6 +59,7 @@ public:
 	void resetPlayerForThisTurn();
 
 	void turnFirstCheck();
+	void passInvalidTiles(std::vector<int> t_invalidTiles);
 
 	bool formationCreationAllowed = false;
 	bool formationMovementUnlocked = false;

@@ -30,7 +30,7 @@ void TileGrid::init()
 	{
 		tiles[tileSetAsWalls.at(index)].setType(1);//1 is a wall type
 	}
-
+	allInvalidTiles = tileSetAsWalls;
 	//getPathToTarget(sf::Vector2f(155, 220), sf::Vector2f(550, 550));
 }
 
@@ -308,6 +308,11 @@ std::vector<int> TileGrid::getPathToTarget(sf::Vector2f t_startPos, sf::Vector2f
 	}
 
 	return path;
+}
+
+std::vector<int> TileGrid::getInvalidTiles()
+{
+	return allInvalidTiles;
 }
 
 

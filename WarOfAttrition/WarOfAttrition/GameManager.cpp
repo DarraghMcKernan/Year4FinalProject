@@ -278,10 +278,20 @@ void GameManager::updateLoop()
 		{
 			for (int index = 0; index < MAX_PLAYERS; index++)
 			{
+				if (worldTilesModified == true)
+				{
+					worldTilesDataUpdated = true;
+					player[index].passInvalidTiles(worldTiles.getInvalidTiles());
+				}
 				if (player[whosTurn - 1].playerEliminated == false)
 				{
 					player[index].fixedUpdate();
 				}				
+			}
+			if (worldTilesDataUpdated == true)
+			{
+				worldTilesModified = false;
+				worldTilesDataUpdated = false;
 			}
 			handleCollisions();
 			menuInteractions();

@@ -90,4 +90,6 @@ private:
 	bool gameOver = false;
 	bool worldEditingEnabled = false;
 	bool allowSquadDataDisplay = false;
+	bool worldTilesModified = true;
+	bool worldTilesDataUpdated = false;
 };

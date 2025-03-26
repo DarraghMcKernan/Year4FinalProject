@@ -642,3 +642,11 @@ void Player::turnFirstCheck()
 		formationTemp.formationMovingActive = false;
 	}
 }
+
+void Player::passInvalidTiles(std::vector<int> t_invalidTiles)
+{
+	for (int index = 0; index < playerSquadsCount; index++)
+	{
+		playersSquads[index].passInvalidTiles(t_invalidTiles);
+	}
+}

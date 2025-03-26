@@ -51,6 +51,7 @@ public:
 	int positionOnPath = 0;
 	sf::Vector2f nextPlaceOnPath;
 	sf::Vector2f targetPosition = sf::Vector2f(0,0);
+	void passInvalidTiles(std::vector<int> t_invalidTiles);
 private:
 	SquadData squadData;
 	SquadMovementState currentMovementState = MoveToFormationPoint;
@@ -61,7 +62,7 @@ private:
 	void steerAroundObstacle(sf::Vector2f t_formationPosition,sf::Time t_deltaTime);
 	void takeLeadersPath(sf::Vector2f t_formationPosition,sf::Time t_deltaTime);
 	void breakFormation(sf::Vector2f t_formationPosition,sf::Time t_deltaTime);
-	bool checkFormationPointValid();
+	bool checkFormationPointValid(sf::Vector2f t_formationPosition);
 
 	sf::RectangleShape troopContainer;
 	sf::RectangleShape movableCollider;
@@ -79,7 +80,7 @@ private:
 	int currentCell = 0;
 
 	sf::Vector2f worldTileOffset = sf::Vector2f(TILE_SIZE/2, TILE_SIZE/2);
-
+	std::vector<int> allInvalidTiles;
 	bool movementAllowed = false;
 	bool extraSpriteNeeded = false;
 	

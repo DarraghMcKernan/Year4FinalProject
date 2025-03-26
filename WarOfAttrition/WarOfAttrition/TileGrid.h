@@ -31,8 +31,10 @@ public:
 	int tilesSelected[MAX_MOVES_PER_TURN];
 	//std::vector<int> allInvalidTiles;
 	std::vector<int> getPathToTarget(sf::Vector2f StartPos, sf::Vector2f targetPos);
+	std::vector<int> getInvalidTiles();
 private:
 	std::vector<Tile> tiles;
+	std::vector<int> allInvalidTiles;
 	std::vector<sf::Sprite> worldTileTemp;
 	std::vector<int> tileSetAsWalls;
 	std::vector<int> tilesToBeChecked;

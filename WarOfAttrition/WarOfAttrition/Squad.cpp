@@ -39,6 +39,10 @@ void Squad::init(sf::Vector2f t_startingPos, int t_teamNum, int t_unitType)
 	troopContainer.setPosition(t_startingPos.x - (TILE_SIZE / 2), t_startingPos.y - (TILE_SIZE / 2));//spawn player in the center of the map
 	targetPosition = troopContainer.getPosition();
 
+	movableCollider.setSize(sf::Vector2f(TILE_SIZE, TILE_SIZE));
+	movableCollider.setOrigin(sf::Vector2f(TILE_SIZE / 2, TILE_SIZE / 2));
+	movableCollider.setFillColor(sf::Color::Magenta);
+
 	setunitType();
 }
 
@@ -151,6 +155,7 @@ void Squad::render(sf::RenderWindow& t_window)
 	t_window.draw(troopContainer);
 	t_window.draw(teamOutlineSprite);
 	t_window.draw(UnitSprite);
+	t_window.draw(movableCollider);
 	if(extraSpriteNeeded == true)
 	{
 		t_window.draw(unitSpriteExtras);
@@ -324,6 +329,11 @@ void Squad::stopMovement()
 	movementAllowed = false;
 }
 
+void Squad::passInvalidTiles(std::vector<int> t_invalidTiles)
+{
+	allInvalidTiles = t_invalidTiles;
+}
+
 void Squad::setunitType()
 {
 	if (squadData.unitType == 0)
@@ -401,7 +411,7 @@ void Squad::setunitType()
 
 void Squad::moveToFormation(sf::Vector2f t_formationPosition,sf::Time t_deltaTime)
 {
-	if (t_formationPosition != sf::Vector2f(0, 0))
+	if (t_formationPosition != sf::Vector2f(0, 0))		
 	{
 		sf::Vector2f vectorToTarget = t_formationPosition - troopContainer.getPosition();
 		float distance = sqrt((vectorToTarget.x * vectorToTarget.x) + (vectorToTarget.y * vectorToTarget.y));
@@ -453,6 +463,18 @@ void Squad::moveToFormation(sf::Vector2f t_formationPosition,sf::Time t_deltaTim
 
 		UnitSprite.setRotation(rotation);
 		teamOutlineSprite.setRotation(rotation);
+
+		if (formationLeader == false)
+		{
+			//std::cout << "formation pos X:  " << troopContainer.getPosition().x << "  formation pos Y: " << troopContainer.getPosition().y << "\n";
+
+			bool outcome = checkFormationPointValid(troopContainer.getPosition());
+			if (outcome == false)
+			{
+				std::cout << "position invalid\n";
+				return;
+			}
+		}
 	}
 }
 
@@ -471,9 +493,21 @@ void Squad::breakFormation(sf::Vector2f t_formationPosition, sf::Time t_deltaTim
 
 }
 
-bool Squad::checkFormationPointValid()
+bool Squad::checkFormationPointValid(sf::Vector2f t_formationPosition)
 {
-	sf::Vector2f positionOfPoint = normaliser.convertCellNumToCoords(posInFormation);
+	sf::Vector2f positionOfPoint = normaliser.normalizeToTileCenter(t_formationPosition);
+	//std::cout << "formation pos X:  " << t_formationPosition.x << "  formation pos Y: " << t_formationPosition.y << "\n";
+	for (int index = 0; index < allInvalidTiles.size(); index++)
+	{
+		sf::Vector2f tempPosFromCell = normaliser.convertCellNumToCoords(allInvalidTiles[index]);
+		//std::cout << "movable pos X:  " << tempPosFromCell.x << "  movable pos Y: " << tempPosFromCell.y << "\n";
 
+		movableCollider.setPosition(tempPosFromCell);
+		if (movableCollider.getGlobalBounds().contains(positionOfPoint))
+		{
+			//std::cout << "overlap found\n";
+			return false;
+		}
+	}
 	return true;
 }

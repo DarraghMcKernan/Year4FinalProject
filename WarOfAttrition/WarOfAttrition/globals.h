@@ -35,8 +35,6 @@ static sf::Texture unitSpriteExtrasTexture;
 
 static sf::Texture goldmineTexture;
 
-static std::vector<int> allInvalidTiles;
-
 struct SquadData
 {
 	int teamNum = 0;
