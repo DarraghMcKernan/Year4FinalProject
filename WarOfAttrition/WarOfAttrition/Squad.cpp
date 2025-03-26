@@ -413,6 +413,16 @@ void Squad::moveToFormation(sf::Vector2f t_formationPosition,sf::Time t_deltaTim
 {
 	if (t_formationPosition != sf::Vector2f(0, 0))		
 	{
+		if (formationLeader == false)
+		{
+			bool outcome = checkFormationPointValid(t_formationPosition);
+			if (outcome == false)
+			{
+				//std::cout << "position invalid\n";
+				return;
+			}
+		}
+
 		sf::Vector2f vectorToTarget = t_formationPosition - troopContainer.getPosition();
 		float distance = sqrt((vectorToTarget.x * vectorToTarget.x) + (vectorToTarget.y * vectorToTarget.y));
 		vectorToTarget = { vectorToTarget.x / distance,vectorToTarget.y / distance };
@@ -463,18 +473,6 @@ void Squad::moveToFormation(sf::Vector2f t_formationPosition,sf::Time t_deltaTim
 
 		UnitSprite.setRotation(rotation);
 		teamOutlineSprite.setRotation(rotation);
-
-		if (formationLeader == false)
-		{
-			//std::cout << "formation pos X:  " << troopContainer.getPosition().x << "  formation pos Y: " << troopContainer.getPosition().y << "\n";
-
-			bool outcome = checkFormationPointValid(troopContainer.getPosition());
-			if (outcome == false)
-			{
-				std::cout << "position invalid\n";
-				return;
-			}
-		}
 	}
 }
 
