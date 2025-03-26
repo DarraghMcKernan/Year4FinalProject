@@ -490,15 +490,13 @@ void Squad::breakFormation(sf::Vector2f t_formationPosition, sf::Time t_deltaTim
 {
 
 }
-
+// if its invalid move the tile left and right of current heading to see if they are available and use that for steering
 bool Squad::checkFormationPointValid(sf::Vector2f t_formationPosition)
 {
 	sf::Vector2f positionOfPoint = normaliser.normalizeToTileCenter(t_formationPosition);
-	//std::cout << "formation pos X:  " << t_formationPosition.x << "  formation pos Y: " << t_formationPosition.y << "\n";
 	for (int index = 0; index < allInvalidTiles.size(); index++)
 	{
 		sf::Vector2f tempPosFromCell = normaliser.convertCellNumToCoords(allInvalidTiles[index]);
-		//std::cout << "movable pos X:  " << tempPosFromCell.x << "  movable pos Y: " << tempPosFromCell.y << "\n";
 
 		movableCollider.setPosition(tempPosFromCell);
 		if (movableCollider.getGlobalBounds().contains(positionOfPoint))
