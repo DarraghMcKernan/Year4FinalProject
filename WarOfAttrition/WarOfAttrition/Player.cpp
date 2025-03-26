@@ -173,6 +173,7 @@ void Player::update(sf::Time& t_deltaTime)
 			playersSquads[index].targetSet = false;
 			playersSquads[index].turnEnded = false;
 			playersSquads[index].formationLeaderReachedGoal = false;
+			playersSquads[index].stopMovement();
 		}
 		squadBeingControlled = 1;
 		formationCreationAllowed = false;
@@ -192,6 +193,7 @@ void Player::update(sf::Time& t_deltaTime)
 		for (int index = 0; index < playerSquadsCount; index++)
 		{
 			playersSquads[index].targetReached = false;
+			playersSquads[index].stopMovement();
 		}
 		squadBeingControlled = 1;
 		formationCreationAllowed = false;
@@ -483,6 +485,7 @@ void Player::resetMovedUnitsAfterFight(int t_unit)//should be the last function 
 	{
 		playersSquads[index].attacker = false;
 		playersSquads[index].formationLeader = false;
+		playersSquads[index].stopMovement();
 	}
 }
 
@@ -495,6 +498,7 @@ void Player::playerLateTurnEnd()
 		playersSquads[index].pathToTarget.clear();
 		playersSquads[index].positionOnPath = 0;
 		playersSquads[index].nextPlaceOnPath = sf::Vector2f(0, 0);
+		playersSquads[index].stopMovement();
 	}
 
 	targetPosition = sf::Vector2f(0, 0);
@@ -600,6 +604,7 @@ void Player::resetPlayerForThisTurn()
 		playersSquads[index].turnEnded = false;
 		playersSquads[index].formationLeaderReachedGoal = false;
 		playersSquads[index].resetColour();
+		playersSquads[index].stopMovement();
 	}
 	currentFormationLeader = -1;
 	squadBeingControlled = 1;

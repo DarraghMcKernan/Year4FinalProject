@@ -32,6 +32,7 @@ public:
 	int getUnitType();
 	sf::Sprite getSprite();
 	void checkIfTargetReached();
+	void stopMovement();
 
 	bool formationActive = false;
 	bool formationLeader = false;

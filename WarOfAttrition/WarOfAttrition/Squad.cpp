@@ -357,6 +357,11 @@ void Squad::checkIfTargetReached()
 	}
 }
 
+void Squad::stopMovement()
+{
+	movementAllowed = false;
+}
+
 void Squad::setunitType()
 {
 	if (squadData.unitType == 0)
