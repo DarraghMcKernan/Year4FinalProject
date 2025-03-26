@@ -43,7 +43,26 @@ void Formation::update(sf::Time t_deltaTime)
 		return;
 	}
 
-	if (distance > 2.1)
+	if (turning == true)
+	{
+		float desiredAngle = std::atan2(vectorToTarget.y, vectorToTarget.x) * (180.0f / 3.14159f);
+		desiredAngle -= 90;
+		if (desiredAngle < 0.0f) {
+			desiredAngle += 360.0f;
+		}
+		leaderRotation += rotationSpeed * t_deltaTime.asSeconds();
+
+		int checkLeaderRotation = static_cast<int>(leaderRotation);
+		int checkDesiredRotation = static_cast<int>(desiredAngle);
+
+		if (checkLeaderRotation == checkDesiredRotation)
+		{
+			turning = false;
+			leaderRotation = checkDesiredRotation;
+		}
+	}
+
+	if (distance > 2.1 && turning == false)
 	{
 		float speed = formationMoveSpeed * t_deltaTime.asSeconds();
 		formationFront = sf::Vector2f(formationFront.x + (vectorToTarget.x * speed), formationFront.y + (vectorToTarget.y * speed));
@@ -51,11 +70,10 @@ void Formation::update(sf::Time t_deltaTime)
 	if (distance <= 2.1)
 	{
 		placeOnPath++;
-
 		nextPlaceOnPath = { (pathToTarget[placeOnPath] % TILE_COLUMNS) * TILE_SIZE, (pathToTarget[placeOnPath] / TILE_COLUMNS) * TILE_SIZE };//the tile that the player wants to move to
 		nextPlaceOnPath = { nextPlaceOnPath.x + (TILE_SIZE / 2) , nextPlaceOnPath.y + (TILE_SIZE / 2) };//center the target on a tile
-
 		std::cout << "path point reached, next cell selected\n";
+		turning = true;
 	}
 }
 
@@ -179,6 +197,7 @@ void Formation::setLeaderInfo(sf::Sprite t_leaderSprite,float t_leaderSpeed)
 	formationMoveSpeed = t_leaderSpeed * 0.5f;//50% of leaders speed so it stops on cell for a bit
 	leaderCopy = t_leaderSprite;
 	leaderPosition = t_leaderSprite.getPosition();
+	leaderRotation = t_leaderSprite.getRotation();
 }
 
 sf::Vector2f Formation::getTargetPosition()
@@ -211,6 +230,7 @@ std::vector<sf::CircleShape> Formation::getDebugCirclesToDraw()
 void Formation::updateLeaderCopy(sf::Sprite t_leaderSprite)
 {
 	leaderCopy = t_leaderSprite;
+	leaderRotation = t_leaderSprite.getRotation();
 }
 
 void Formation::clearData()
@@ -219,6 +239,11 @@ void Formation::clearData()
 	formationPositions[1] = -1;
 	formationPositions[2] = -1;
 	formationPositions[3] = -1;
+}
+
+float Formation::updatedLeaderRotation()
+{
+	return leaderRotation;
 }
 
 void Formation::generatePath()

@@ -19,8 +19,9 @@ public:
 	std::vector<sf::CircleShape> getDebugCirclesToDraw();
 	void updateLeaderCopy(sf::Sprite t_leaderSprite);
 	int placeOnPath = 0;
-	std::vector<int> pathToTarget;//the path that the formation will roughly follow
+	std::vector<int> pathToTarget;//the path that the formation will follow
 	void clearData();
+	float updatedLeaderRotation();
 private:
 	void generatePath();
 	sf::Vector2f leaderPosition = { 0,0 };
@@ -36,7 +37,10 @@ private:
 	float formationXSpread = 1.0f;//used to modify the width and height of the formation to allow it to better navigate obstacles
 	float formationYSpread = 1.0f;
 	float formationMoveSpeed = 20.0f;
+	float leaderRotation = 0.f;
+	float rotationSpeed = 50.f;
 	bool goalReached = false;
+	bool turning = false;
 	
 	sf::CircleShape formationCircleDebugLeader;
 	sf::CircleShape formationCircleDebug1;

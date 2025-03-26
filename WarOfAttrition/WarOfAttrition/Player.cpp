@@ -40,6 +40,7 @@ void Player::update(sf::Time& t_deltaTime)
 	{
 		formationTemp.updateLeaderCopy(playersSquads[currentFormationLeader].getSprite());
 		formationTemp.update(t_deltaTime);
+		playersSquads[currentFormationLeader].setRotation(formationTemp.updatedLeaderRotation());
 	}
 
 	int checkIfAllMoved = 0;

@@ -334,6 +334,17 @@ void Squad::passInvalidTiles(std::vector<int> t_invalidTiles)
 	allInvalidTiles = t_invalidTiles;
 }
 
+void Squad::setRotation(float t_rotation)
+{
+	troopContainer.setRotation(t_rotation);
+	UnitSprite.setRotation(troopContainer.getRotation());
+	teamOutlineSprite.setRotation(troopContainer.getRotation());
+	if (extraSpriteNeeded == true)
+	{
+		unitSpriteExtras.setRotation(troopContainer.getRotation());
+	}
+}
+
 void Squad::setunitType()
 {
 	if (squadData.unitType == 0)
@@ -470,9 +481,11 @@ void Squad::moveToFormation(sf::Vector2f t_formationPosition,sf::Time t_deltaTim
 			unitSpriteExtras.setPosition(troopContainer.getPosition());
 			unitSpriteExtras.setRotation(rotation);
 		}
-
-		UnitSprite.setRotation(rotation);
-		teamOutlineSprite.setRotation(rotation);
+		if (formationLeader == false)
+		{
+			UnitSprite.setRotation(rotation);
+			teamOutlineSprite.setRotation(rotation);
+		}
 	}
 }
 

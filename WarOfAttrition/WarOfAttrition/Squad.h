@@ -52,6 +52,8 @@ public:
 	sf::Vector2f nextPlaceOnPath;
 	sf::Vector2f targetPosition = sf::Vector2f(0,0);
 	void passInvalidTiles(std::vector<int> t_invalidTiles);
+
+	void setRotation(float t_rotation);
 private:
 	SquadData squadData;
 	SquadMovementState currentMovementState = MoveToFormationPoint;
