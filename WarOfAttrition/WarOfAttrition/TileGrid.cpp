@@ -18,16 +18,16 @@ void TileGrid::init()
 		tempSprite.setPosition(tiles[index].getTileShape().getPosition());
 		worldTileTemp.push_back(tempSprite);
 	}
-	for (int index = 0; index < 5; index++)//would eventually be read from a file
-	{
-		tileSetAsWalls.push_back(105 + index);
-		tileSetAsWalls.push_back(105 + index + TILE_ROWS + 3);
-		tileSetAsWalls.push_back(105 + index + 17 + TILE_ROWS*2);
-		tileSetAsWalls.push_back(105 + index + 20 + TILE_ROWS*5);
-	}
+	//for (int index = 0; index < 5; index++)//would eventually be read from a file
+	//{
+	//	tileSetAsWalls.push_back(105 + index);
+	//	tileSetAsWalls.push_back(105 + index + TILE_ROWS + 3);
+	//	tileSetAsWalls.push_back(105 + index + 17 + TILE_ROWS*2);
+	//	tileSetAsWalls.push_back(105 + index + 20 + TILE_ROWS*5);
+	//}
 
 	std::ifstream wallsData("walls.txt");
-	std::vector<int> tileSetAsWalls; // Store wall tile indices
+	tileSetAsWalls;
 
 	if (wallsData.is_open()) {
 		int tileIndex;
@@ -40,8 +40,8 @@ void TileGrid::init()
 		std::cerr << "Failed to open walls.txt" << std::endl;
 	}
 
-	// Now set the tile types
-	for (int index : tileSetAsWalls) {
+	for (int index : tileSetAsWalls)
+	{
 		tiles[index].setType(1); // 1 is a wall type
 	}
 
