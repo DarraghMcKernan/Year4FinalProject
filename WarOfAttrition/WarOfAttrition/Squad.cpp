@@ -429,6 +429,8 @@ void Squad::moveToFormation(sf::Vector2f t_formationPosition,sf::Time t_deltaTim
 			bool outcome = checkFormationPointValid(t_formationPosition);
 			if (outcome == false)
 			{
+				currentMovementState = SquadMovementState::TakeLeadersPath;
+				std::cout << "Take Leaders Path\n";
 				//std::cout << "position invalid\n";
 				return;
 			}
@@ -496,7 +498,38 @@ void Squad::steerAroundObstacle(sf::Vector2f t_formationPosition, sf::Time t_del
 
 void Squad::takeLeadersPath(sf::Vector2f t_formationPosition, sf::Time t_deltaTime)
 {
+	if (formationLeader == false)
+	{
+		bool outcome = checkFormationPointValid(t_formationPosition);
+		if (outcome == true)
+		{
+			currentMovementState = SquadMovementState::MoveToFormationPoint;
+			std::cout << "Move to Formation Point\n";
+			return;
+		}
 
+		float distance = 9999999;
+		int closestCell = -1;
+
+		for (int index = 0; index < pathToTarget.size(); index++)
+		{
+			int cell = pathToTarget[index];
+			sf::Vector2f pathCellCoords = normaliser.convertCellNumToCoords(cell);
+
+			float tempDistance = std::hypot(pathCellCoords.x - t_formationPosition.x, pathCellCoords.y - t_formationPosition.y);
+
+			if (tempDistance < distance)
+			{
+				distance = tempDistance;
+				closestCell = cell;
+			}
+		}
+
+		if (closestCell != -1)
+		{
+			std::cout << "Closest cell: " << closestCell << "\n";
+		}
+	}
 }
 
 void Squad::breakFormation(sf::Vector2f t_formationPosition, sf::Time t_deltaTime)
