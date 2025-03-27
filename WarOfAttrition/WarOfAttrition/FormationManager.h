@@ -40,7 +40,8 @@ private:
 	float leaderRotation = 0.f;
 	float rotationSpeed = 50.f;
 	bool goalReached = false;
-	bool turning = false;
+	bool turning = true;
+	bool rotateRight = true;
 	
 	sf::CircleShape formationCircleDebugLeader;
 	sf::CircleShape formationCircleDebug1;

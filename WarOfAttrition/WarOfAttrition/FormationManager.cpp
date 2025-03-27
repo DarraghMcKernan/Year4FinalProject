@@ -2,11 +2,7 @@
 
 void Formation::update(sf::Time t_deltaTime)
 {
-	if (formationMovingActive == false)
-	{
-		return;
-	}
-	if (pathToTarget.size() == 0)
+	if (formationMovingActive == false|| pathToTarget.size() == 0)
 	{
 		return;
 	}
@@ -26,12 +22,6 @@ void Formation::update(sf::Time t_deltaTime)
 
 	float distanceToTarget = sqrt((vectorToEnd.x * vectorToEnd.x) + (vectorToEnd.y * vectorToEnd.y));
 
-	//std::cout << "Leader pos: " << leaderPosition.x << " " << leaderPosition.y << "\n";
-	//std::cout << "Target pos: " << targetPosition.x << " " << targetPosition.y << "\n\n";
-	//std::cout << "formation front pos: " << formationFront.x << " " << formationFront.y << "\n";
-
-	//std::cout << distance << "\n"; 
-
 	if (distanceToTarget <= 2.1)
 	{
 		formationFront = targetPosition;
@@ -45,12 +35,40 @@ void Formation::update(sf::Time t_deltaTime)
 
 	if (turning == true)
 	{
-		float desiredAngle = std::atan2(vectorToTarget.y, vectorToTarget.x) * (180.0f / 3.14159f);
+		float desiredAngle = std::atan2(vectorToTarget.y, vectorToTarget.x) * (180.0f / 3.14159f); 
 		desiredAngle -= 90;
-		if (desiredAngle < 0.0f) {
+		if (desiredAngle < 0.0f) 
+		{
 			desiredAngle += 360.0f;
 		}
-		leaderRotation += rotationSpeed * t_deltaTime.asSeconds();
+
+		float angleDifference = desiredAngle - leaderRotation;
+
+		if (rotateRight == true)
+		{
+			leaderRotation += rotationSpeed * t_deltaTime.asSeconds();
+		}
+
+		if (angleDifference > 180.0f)
+		{
+			angleDifference -= 360.0f;
+		}
+		else if (angleDifference < -180.0f)
+		{
+			angleDifference += 360.0f;
+		}
+
+		if (angleDifference < 0)
+		{
+			rotateRight = false;
+		}
+		else rotateRight = true;
+
+		if (rotateRight)
+		{
+			leaderRotation += rotationSpeed * t_deltaTime.asSeconds();
+		}
+		else leaderRotation -= rotationSpeed * t_deltaTime.asSeconds();
 
 		int checkLeaderRotation = static_cast<int>(leaderRotation);
 		int checkDesiredRotation = static_cast<int>(desiredAngle);
@@ -231,6 +249,7 @@ void Formation::updateLeaderCopy(sf::Sprite t_leaderSprite)
 {
 	leaderCopy = t_leaderSprite;
 	leaderRotation = t_leaderSprite.getRotation();
+	turning = true;
 }
 
 void Formation::clearData()
