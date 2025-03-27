@@ -26,11 +26,27 @@ void TileGrid::init()
 		tileSetAsWalls.push_back(105 + index + 20 + TILE_ROWS*5);
 	}
 
-	for (int index = 0; index < tileSetAsWalls.size(); index++)
-	{
-		tiles[tileSetAsWalls.at(index)].setType(1);//1 is a wall type
+	std::ifstream wallsData("walls.txt");
+	std::vector<int> tileSetAsWalls; // Store wall tile indices
+
+	if (wallsData.is_open()) {
+		int tileIndex;
+		while (wallsData >> tileIndex) { // Read each index from the file
+			tileSetAsWalls.push_back(tileIndex);
+		}
+		wallsData.close();
 	}
+	else {
+		std::cerr << "Failed to open walls.txt" << std::endl;
+	}
+
+	// Now set the tile types
+	for (int index : tileSetAsWalls) {
+		tiles[index].setType(1); // 1 is a wall type
+	}
+
 	allInvalidTiles = tileSetAsWalls;
+
 	//getPathToTarget(sf::Vector2f(155, 220), sf::Vector2f(550, 550));
 }
 
@@ -203,15 +219,21 @@ void TileGrid::updateTileType(int t_type)
 {
 	tiles[tileHoveredOverNum()].setType(t_type);
 	
+	std::fstream wallsData("walls.txt");
+	wallsData.clear();
+
 	tileSetAsWalls.clear();
 	for (int index = 0; index < TILE_ROWS * TILE_COLUMNS; index++)
 	{
 		if (tiles[index].getType() == 1)//wall
 		{
+			wallsData << index <<"\n";
 			tileSetAsWalls.push_back(index);
 		}
 	}
 	allInvalidTiles = tileSetAsWalls;
+	wallsData.close();
+
 	updateTileTexture(tileHoveredOverNum(),0);
 }
 

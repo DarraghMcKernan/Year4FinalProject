@@ -2,6 +2,7 @@
 #include "WorldTile.h"
 #include "globals.h"
 #include <queue>
+#include <fstream>
 class TileGrid
 {
 public:
