@@ -142,6 +142,7 @@ void Player::update(sf::Time& t_deltaTime)
 			if (playersSquads[index].movingAllowed() == true && playersSquads[index].targetSet == true)
 			{
 				playersSquads[index].turnEnded = true;
+				playersSquads[index].formationSpeed = formationTemp.maxFormationSpeed;
 				turnEnded = true;
 				formationMovementUnlocked = true;
 			}
@@ -225,6 +226,10 @@ void Player::fixedUpdate()
 			targetNeeded = true;
 		}
 		activeTargetTimer--;
+	}
+	for (int index = 0; index < playerSquadsCount; index++)
+	{
+		playersSquads[index].fixedUpdate();
 	}
 }
 

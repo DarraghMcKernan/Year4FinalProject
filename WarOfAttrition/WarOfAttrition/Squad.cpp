@@ -150,6 +150,24 @@ void Squad::update(sf::Time t_deltaTime)
 	}
 }
 
+void Squad::fixedUpdate()
+{
+	if (reachedTargetCooldown > 0)
+	{
+		reachedTargetCooldown--;
+		if (reachedTargetCooldown == 0)
+		{
+			currentPositionOnLeaderPath++;
+			if (currentPositionOnLeaderPath == pathToTarget.size())
+			{
+				currentMovementState = SquadMovementState::MoveToFormationPoint;
+				std::cout << "Move to Formation Point\n";
+			}
+			cellCenterReached = true;
+		}
+	}
+}
+
 void Squad::render(sf::RenderWindow& t_window)
 {
 	t_window.draw(troopContainer);
@@ -498,36 +516,88 @@ void Squad::steerAroundObstacle(sf::Vector2f t_formationPosition, sf::Time t_del
 
 void Squad::takeLeadersPath(sf::Vector2f t_formationPosition, sf::Time t_deltaTime)
 {
-	if (formationLeader == false)
+	if (formationLeader == false && reachedTargetCooldown ==0)
 	{
-		bool outcome = checkFormationPointValid(t_formationPosition);
-		if (outcome == true)
+		if (currentPositionOnLeaderPath == pathToTarget.size())
 		{
 			currentMovementState = SquadMovementState::MoveToFormationPoint;
 			std::cout << "Move to Formation Point\n";
-			return;
 		}
+		//bool outcome = checkFormationPointValid(t_formationPosition);
+		//if (outcome == true)
+		//{
+		//	currentMovementState = SquadMovementState::MoveToFormationPoint;
+		//	std::cout << "Move to Formation Point\n";
+		//	return;
+		//}
 
 		float distance = 9999999;
 		int closestCell = -1;
 
-		for (int index = 0; index < pathToTarget.size(); index++)
+		if (cellCenterReached == true)
 		{
-			int cell = pathToTarget[index];
-			sf::Vector2f pathCellCoords = normaliser.convertCellNumToCoords(cell);
-
-			float tempDistance = std::hypot(pathCellCoords.x - t_formationPosition.x, pathCellCoords.y - t_formationPosition.y);
-
-			if (tempDistance < distance)
+			for (int index = currentPositionOnLeaderPath; index < pathToTarget.size(); index++)
 			{
-				distance = tempDistance;
-				closestCell = cell;
+				int cell = pathToTarget[index];
+				sf::Vector2f pathCellCoords = normaliser.convertCellNumToCoords(cell);
+
+				float tempDistance = std::hypot(pathCellCoords.x - troopContainer.getPosition().x, pathCellCoords.y - troopContainer.getPosition().y);
+
+				if (tempDistance < distance)
+				{
+					distance = tempDistance;
+					closestCell = cell;
+					currentPositionOnLeaderPath = index;
+				}
 			}
+			cellCenterReached = false;
 		}
 
-		if (closestCell != -1)
+		sf::Vector2f leaderPathClosest = normaliser.convertCellNumToCoords(pathToTarget[currentPositionOnLeaderPath]);
+		sf::Vector2f vectorToTarget = leaderPathClosest - troopContainer.getPosition();
+		distance = sqrt((vectorToTarget.x * vectorToTarget.x) + (vectorToTarget.y * vectorToTarget.y));
+		vectorToTarget = { vectorToTarget.x / distance,vectorToTarget.y / distance };
+		float rotation = (atan2(vectorToTarget.y, vectorToTarget.x) * 180 / 3.14159265) - 90;
+
+		if (distance > 2.1)
 		{
-			std::cout << "Closest cell: " << closestCell << "\n";
+			float speed = (moveSpeed / 2) * t_deltaTime.asSeconds();
+			troopContainer.move(vectorToTarget.x * speed, vectorToTarget.y * speed);
+			UnitSprite.setPosition(troopContainer.getPosition());
+			teamOutlineSprite.setPosition(troopContainer.getPosition());
+			if (extraSpriteNeeded == true)
+			{
+				unitSpriteExtras.setPosition(troopContainer.getPosition());
+				unitSpriteExtras.setRotation(rotation);
+			}
+			if (formationLeader == false)
+			{
+				UnitSprite.setRotation(rotation);
+				teamOutlineSprite.setRotation(rotation);
+			}
+		}
+		if (distance <= 2.1)
+		{
+			troopContainer.setPosition(leaderPathClosest);
+			UnitSprite.setPosition(troopContainer.getPosition());
+			teamOutlineSprite.setPosition(troopContainer.getPosition());
+			if (extraSpriteNeeded == true)
+			{
+				unitSpriteExtras.setPosition(troopContainer.getPosition());
+				unitSpriteExtras.setRotation(rotation);
+			}
+			if (formationLeader == false)
+			{
+				UnitSprite.setRotation(rotation);
+				teamOutlineSprite.setRotation(rotation);
+			}
+			//currentPositionOnLeaderPath++;
+			if (currentPositionOnLeaderPath == pathToTarget.size())
+			{
+				currentMovementState = SquadMovementState::MoveToFormationPoint;
+				std::cout << "Move to Formation Point\n";
+			}
+			reachedTargetCooldown = 10;
 		}
 	}
 }

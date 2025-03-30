@@ -21,7 +21,8 @@ public:
 	int placeOnPath = 0;
 	std::vector<int> pathToTarget;//the path that the formation will follow
 	void clearData();
-	float updatedLeaderRotation();
+	float updatedLeaderRotation(); 
+	float maxFormationSpeed = 5.0f;
 private:
 	void generatePath();
 	sf::Vector2f leaderPosition = { 0,0 };
@@ -33,7 +34,7 @@ private:
 
 	sf::Sprite leaderCopy;
 	float cappedRotationSpeed = 5.0f; 
-	float maxFormationSpeed = 5.0f;
+	
 	float formationXSpread = 1.0f;//used to modify the width and height of the formation to allow it to better navigate obstacles
 	float formationYSpread = 1.0f;
 	float formationMoveSpeed = 20.0f;

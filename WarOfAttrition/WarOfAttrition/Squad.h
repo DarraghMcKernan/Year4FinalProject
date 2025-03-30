@@ -14,6 +14,7 @@ class Squad
 public:
 	void init(sf::Vector2f t_startingPos,int t_teamNum,int t_unitType);
 	void update(sf::Time t_deltaTime);
+	void fixedUpdate();
 	void render(sf::RenderWindow& t_window);
 	void unlockMovement(bool t_allowed);
 	sf::RectangleShape getTroopContainter();
@@ -46,6 +47,7 @@ public:
 	bool formationFrontReachedGoal = false;
 	bool attacker = false;
 	bool needToMove = false;
+	float formationSpeed = 5.0f;
 
 	std::vector<int> pathToTarget;
 	int positionOnPath = 0;
@@ -80,11 +82,15 @@ private:
 	int posInFormation = -1;
 	int mostRecentCell = 0;
 	int currentCell = 0;
+	int currentPositionOnLeaderPath = 0;
+
+	int reachedTargetCooldown = 0;
 
 	sf::Vector2f worldTileOffset = sf::Vector2f(TILE_SIZE/2, TILE_SIZE/2);
 	std::vector<int> allInvalidTiles;
 	bool movementAllowed = false;
 	bool extraSpriteNeeded = false;
+	bool cellCenterReached = false;
 	
 	/*int moveSpeed = 100;
 	int teamNum=0;
