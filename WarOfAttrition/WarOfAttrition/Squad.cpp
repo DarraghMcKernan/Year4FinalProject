@@ -194,9 +194,9 @@ void Squad::render(sf::RenderWindow& t_window)
 	{
 		t_window.draw(invalidTileAvoidance[index]);
 	}
-	t_window.draw(frontCollider);
-	t_window.draw(leftCollider);
-	t_window.draw(rightCollider);
+	//t_window.draw(frontCollider);
+	//t_window.draw(leftCollider);
+	//t_window.draw(rightCollider);
 }
 
 void Squad::unlockMovement(bool t_allowed)
@@ -550,6 +550,14 @@ void Squad::moveToFormation(sf::Vector2f t_formationPosition,sf::Time t_deltaTim
 
 void Squad::steerAroundObstacle(sf::Vector2f t_formationPosition, sf::Time t_deltaTime)
 {
+	bool outcome = checkFormationPointValid(t_formationPosition);
+	if (outcome == false)//formation point no longer valid - return to leaders path
+	{
+		currentMovementState = SquadMovementState::TakeLeadersPath;
+		std::cout << "Take leaders path\n";
+		return;
+	}
+
 	sf::Vector2f currentPosition = troopContainer.getPosition();
 	sf::Vector2f direction = t_formationPosition - currentPosition;
 	float distance = sqrt((direction.x * direction.x) + (direction.y * direction.y));
@@ -581,6 +589,7 @@ void Squad::steerAroundObstacle(sf::Vector2f t_formationPosition, sf::Time t_del
 	frontCollider.setPosition(frontPosition);
 	rightCollider.setPosition(rightPosition);
 	leftCollider.setPosition(leftPosition);
+
 	float rotaion = 0;
 	if (direction.x < 0)
 	{
@@ -593,6 +602,22 @@ void Squad::steerAroundObstacle(sf::Vector2f t_formationPosition, sf::Time t_del
 	frontCollider.setRotation(rotaion);
 	rightCollider.setRotation(rotaion);
 	leftCollider.setRotation(rotaion);
+
+	float speed = moveSpeed * t_deltaTime.asSeconds();
+	troopContainer.move(direction * speed);
+
+	float angle = atan2(direction.y, direction.x) * 180 / 3.14159265f;
+	troopContainer.setRotation(angle);
+
+	UnitSprite.setPosition(troopContainer.getPosition());
+	UnitSprite.setRotation(troopContainer.getRotation());
+	teamOutlineSprite.setPosition(troopContainer.getPosition());
+	teamOutlineSprite.setRotation(troopContainer.getRotation());
+	if (extraSpriteNeeded == true)
+	{
+		unitSpriteExtras.setPosition(troopContainer.getPosition());
+		unitSpriteExtras.setRotation(troopContainer.getRotation());
+	}
 }
 
 void Squad::takeLeadersPath(sf::Vector2f t_formationPosition, sf::Time t_deltaTime)
