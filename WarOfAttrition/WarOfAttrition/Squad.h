@@ -70,6 +70,9 @@ private:
 
 	sf::RectangleShape troopContainer;
 	sf::RectangleShape movableCollider;
+	sf::RectangleShape frontCollider;
+	sf::RectangleShape leftCollider;
+	sf::RectangleShape rightCollider;
 
 	sf::Sprite UnitSprite;
 	sf::Sprite teamOutlineSprite;
@@ -88,6 +91,7 @@ private:
 
 	sf::Vector2f worldTileOffset = sf::Vector2f(TILE_SIZE/2, TILE_SIZE/2);
 	std::vector<int> allInvalidTiles;
+	std::vector<sf::RectangleShape> invalidTileAvoidance;
 	bool movementAllowed = false;
 	bool extraSpriteNeeded = false;
 	bool cellCenterReached = false;

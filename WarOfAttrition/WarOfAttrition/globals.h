@@ -69,5 +69,13 @@ public:
 		return recentCellPos;
 	}
 
+	virtual int convertCoordsToCellNum(const sf::Vector2f& t_coords) const
+	{
+		int column = static_cast<int>(t_coords.x / TILE_SIZE);
+		int row = static_cast<int>(t_coords.y / TILE_SIZE);
+
+		return row * TILE_COLUMNS + column;
+	}
+
     virtual ~PositionNormaliser() = default;
 };

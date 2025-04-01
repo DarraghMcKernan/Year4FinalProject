@@ -44,6 +44,18 @@ void Squad::init(sf::Vector2f t_startingPos, int t_teamNum, int t_unitType)
 	movableCollider.setFillColor(sf::Color::Magenta);
 
 	setunitType();
+
+	frontCollider.setSize(sf::Vector2f(TILE_SIZE / 1, TILE_SIZE / 2));
+	frontCollider.setOrigin(sf::Vector2f(TILE_SIZE / 2, TILE_SIZE / 4));
+	frontCollider.setFillColor(sf::Color(0, 255, 0, 200));
+
+	rightCollider.setSize(sf::Vector2f(TILE_SIZE / 1, TILE_SIZE / 4));
+	rightCollider.setOrigin(sf::Vector2f(TILE_SIZE / 2, TILE_SIZE / 8));
+	rightCollider.setFillColor(sf::Color(255, 0, 0, 200));
+
+	leftCollider.setSize(sf::Vector2f(TILE_SIZE / 1, TILE_SIZE / 4));
+	leftCollider.setOrigin(sf::Vector2f(TILE_SIZE / 2, TILE_SIZE / 8));
+	leftCollider.setFillColor(sf::Color(255, 255, 0, 200));
 }
 
 void Squad::update(sf::Time t_deltaTime)
@@ -178,6 +190,13 @@ void Squad::render(sf::RenderWindow& t_window)
 	{
 		t_window.draw(unitSpriteExtras);
 	}
+	for (int index = 0; index < invalidTileAvoidance.size(); index++)
+	{
+		t_window.draw(invalidTileAvoidance[index]);
+	}
+	t_window.draw(frontCollider);
+	t_window.draw(leftCollider);
+	t_window.draw(rightCollider);
 }
 
 void Squad::unlockMovement(bool t_allowed)
@@ -349,7 +368,19 @@ void Squad::stopMovement()
 
 void Squad::passInvalidTiles(std::vector<int> t_invalidTiles)
 {
+	sf::RectangleShape tempRect;
+	tempRect.setSize(sf::Vector2f(TILE_SIZE, TILE_SIZE));
+	tempRect.setOrigin(sf::Vector2f(TILE_SIZE/2, TILE_SIZE/2));
+	tempRect.setFillColor(sf::Color(0, 255, 255, 5));
+
 	allInvalidTiles = t_invalidTiles;
+	invalidTileAvoidance.clear();
+	for (int index = 0; index < allInvalidTiles.size(); index++)
+	{
+		sf::Vector2f tilePosition = normaliser.convertCellNumToCoords(t_invalidTiles[index]);
+		tempRect.setPosition(tilePosition);
+		invalidTileAvoidance.push_back(tempRect);
+	}
 }
 
 void Squad::setRotation(float t_rotation)
@@ -509,9 +540,59 @@ void Squad::moveToFormation(sf::Vector2f t_formationPosition,sf::Time t_deltaTim
 	}
 }
 
+//bool outcome = checkFormationPointValid(t_formationPosition);
+//if (outcome == false)//formation point no longer valid - return to leaders path
+//{
+//	currentMovementState = SquadMovementState::TakeLeadersPath;
+//	std::cout << "Take leaders path\n";
+//	return;
+//}
+
 void Squad::steerAroundObstacle(sf::Vector2f t_formationPosition, sf::Time t_deltaTime)
 {
+	sf::Vector2f currentPosition = troopContainer.getPosition();
+	sf::Vector2f direction = t_formationPosition - currentPosition;
+	float distance = sqrt((direction.x * direction.x) + (direction.y * direction.y));
 
+	if (std::fabs(direction.x) > std::fabs(direction.y))//normalise to NESW so colliders wont hit both walls when turning
+	{
+		if (direction.x > 0) {
+			direction = { 1.0f, 0.0f };
+		}
+		else {
+			direction = { -1.0f, 0.0f };
+		}
+	}
+	else {
+		if (direction.y > 0) {
+			direction = { 0.0f, 1.0f };
+		}
+		else {
+			direction = { 0.0f, -1.0f };
+		}
+	}
+
+	float colliderOffset = TILE_SIZE / 4.0f;
+
+	sf::Vector2f frontPosition = currentPosition + direction * colliderOffset;
+	sf::Vector2f rightPosition = currentPosition + sf::Vector2f(-direction.y, direction.x) * colliderOffset;
+	sf::Vector2f leftPosition = currentPosition + sf::Vector2f(direction.y, -direction.x) * colliderOffset;
+	
+	frontCollider.setPosition(frontPosition);
+	rightCollider.setPosition(rightPosition);
+	leftCollider.setPosition(leftPosition);
+	float rotaion = 0;
+	if (direction.x < 0)
+	{
+		rotaion = 180;
+	}
+	else if (direction.y < 0 || direction.y > 0)
+	{
+		rotaion = 90;
+	}
+	frontCollider.setRotation(rotaion);
+	rightCollider.setRotation(rotaion);
+	leftCollider.setRotation(rotaion);
 }
 
 void Squad::takeLeadersPath(sf::Vector2f t_formationPosition, sf::Time t_deltaTime)
@@ -578,6 +659,15 @@ void Squad::takeLeadersPath(sf::Vector2f t_formationPosition, sf::Time t_deltaTi
 		}
 		if (distance <= 2.1)
 		{
+			bool outcome = checkFormationPointValid(t_formationPosition);
+			if (outcome == true)
+			{
+				currentMovementState = SquadMovementState::SteerAroundObstacle;
+				std::cout << "Steer around obstacles\n";
+				return;
+			}
+
+
 			troopContainer.setPosition(leaderPathClosest);
 			UnitSprite.setPosition(troopContainer.getPosition());
 			teamOutlineSprite.setPosition(troopContainer.getPosition());
