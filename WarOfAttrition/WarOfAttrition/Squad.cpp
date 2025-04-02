@@ -644,6 +644,15 @@ void Squad::steerAroundObstacle(sf::Vector2f t_formationPosition, sf::Time t_del
 		troopContainer.setRotation(angle - 90);
 	}
 
+	if (rightBlocked == true && (angle < 360 || angle > 180))
+	{
+		troopContainer.setRotation(90);
+	}
+	if (leftBlocked == true && (angle < 360 || angle > 180))
+	{
+		troopContainer.setRotation(90);
+	}
+
 	UnitSprite.setPosition(troopContainer.getPosition());
 	UnitSprite.setRotation(troopContainer.getRotation());
 	teamOutlineSprite.setPosition(troopContainer.getPosition());
