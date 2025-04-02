@@ -47,15 +47,15 @@ void Squad::init(sf::Vector2f t_startingPos, int t_teamNum, int t_unitType)
 
 	frontCollider.setSize(sf::Vector2f(TILE_SIZE / 1, TILE_SIZE / 2));
 	frontCollider.setOrigin(sf::Vector2f(TILE_SIZE / 2, TILE_SIZE / 4));
-	frontCollider.setFillColor(sf::Color(0, 255, 0, 200));
+	frontCollider.setFillColor(sf::Color(0, 255, 0, 50));
 
 	rightCollider.setSize(sf::Vector2f(TILE_SIZE / 1, TILE_SIZE / 4));
 	rightCollider.setOrigin(sf::Vector2f(TILE_SIZE / 2, TILE_SIZE / 8));
-	rightCollider.setFillColor(sf::Color(255, 0, 0, 200));
+	rightCollider.setFillColor(sf::Color(255, 0, 0, 50));
 
 	leftCollider.setSize(sf::Vector2f(TILE_SIZE / 1, TILE_SIZE / 4));
 	leftCollider.setOrigin(sf::Vector2f(TILE_SIZE / 2, TILE_SIZE / 8));
-	leftCollider.setFillColor(sf::Color(255, 255, 0, 200));
+	leftCollider.setFillColor(sf::Color(255, 255, 0, 50));
 }
 
 void Squad::update(sf::Time t_deltaTime)
@@ -540,14 +540,6 @@ void Squad::moveToFormation(sf::Vector2f t_formationPosition,sf::Time t_deltaTim
 	}
 }
 
-//bool outcome = checkFormationPointValid(t_formationPosition);
-//if (outcome == false)//formation point no longer valid - return to leaders path
-//{
-//	currentMovementState = SquadMovementState::TakeLeadersPath;
-//	std::cout << "Take leaders path\n";
-//	return;
-//}
-
 void Squad::steerAroundObstacle(sf::Vector2f t_formationPosition, sf::Time t_deltaTime)
 {
 	bool outcome = checkFormationPointValid(t_formationPosition);
@@ -558,11 +550,15 @@ void Squad::steerAroundObstacle(sf::Vector2f t_formationPosition, sf::Time t_del
 		return;
 	}
 
+	bool frontBlocked = false;//used to check if the colliders have contacted a wall
+	bool rightBlocked = false;
+	bool leftBlocked = false;
+
 	sf::Vector2f currentPosition = troopContainer.getPosition();
 	sf::Vector2f direction = t_formationPosition - currentPosition;
 	float distance = sqrt((direction.x * direction.x) + (direction.y * direction.y));
 
-	if (std::fabs(direction.x) > std::fabs(direction.y))//normalise to NESW so colliders wont hit both walls when turning
+	if (std::fabs(direction.x) > std::fabs(direction.y))//normalise to NESW so colliders wont hit both walls when turning and will always face cardinal directions
 	{
 		if (direction.x > 0) {
 			direction = { 1.0f, 0.0f };
@@ -580,7 +576,7 @@ void Squad::steerAroundObstacle(sf::Vector2f t_formationPosition, sf::Time t_del
 		}
 	}
 
-	float colliderOffset = TILE_SIZE / 4.0f;
+	float colliderOffset = TILE_SIZE / 4.0f;//how far from the unit the colliders need to be
 
 	sf::Vector2f frontPosition = currentPosition + direction * colliderOffset;
 	sf::Vector2f rightPosition = currentPosition + sf::Vector2f(-direction.y, direction.x) * colliderOffset;
@@ -603,11 +599,50 @@ void Squad::steerAroundObstacle(sf::Vector2f t_formationPosition, sf::Time t_del
 	rightCollider.setRotation(rotaion);
 	leftCollider.setRotation(rotaion);
 
+	for (int index = 0; index < invalidTileAvoidance.size(); index++)//check if colliders are contacting any walls
+	{
+		if (frontCollider.getGlobalBounds().intersects(invalidTileAvoidance[index].getGlobalBounds()))
+		{
+			frontBlocked = true;
+		}
+		if (rightCollider.getGlobalBounds().intersects(invalidTileAvoidance[index].getGlobalBounds()))
+		{
+			rightBlocked = true;
+		}
+		if (leftCollider.getGlobalBounds().intersects(invalidTileAvoidance[index].getGlobalBounds()))
+		{
+			leftBlocked = true;
+		}
+	}
+	sf::Vector2f normalisedDirection = direction;//save the NESW direction for locking movement later
+	direction = t_formationPosition - currentPosition;//get direction for movement
+	distance = sqrt((direction.x * direction.x) + (direction.y * direction.y));
+
+	if (distance <= 2.1)//if close enough default to move to formation point
+	{
+		currentMovementState = SquadMovementState::MoveToFormationPoint;
+		return;
+	}
+
+	sf::Vector2f vectorToTarget = direction / distance;
+	//lock movement depending on which collider has made contact and what direction we are moving in
+	if ((leftBlocked == true || rightBlocked == true) && normalisedDirection.y == 0)
+	{
+		vectorToTarget.y = 0;
+	}
+	if ((leftBlocked == true || rightBlocked == true) && normalisedDirection.x == 0)
+	{
+		vectorToTarget.x = 0;
+	}
+
 	float speed = moveSpeed * t_deltaTime.asSeconds();
-	troopContainer.move(direction * speed);
+	troopContainer.move(vectorToTarget * speed);
 
 	float angle = atan2(direction.y, direction.x) * 180 / 3.14159265f;
-	troopContainer.setRotation(angle);
+	if (rightBlocked == false && leftBlocked == false)//if the colliders have not hit a wall allow rotation, should keep units facing forwards
+	{
+		troopContainer.setRotation(angle - 90);
+	}
 
 	UnitSprite.setPosition(troopContainer.getPosition());
 	UnitSprite.setRotation(troopContainer.getRotation());
