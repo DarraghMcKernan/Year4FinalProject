@@ -525,7 +525,7 @@ void GameManager::displayHUD(sf::RenderWindow& t_window,sf::View& t_fixedWindow)
 	t_window.draw(createTowerText);
 	t_window.draw(moneyDisplay);
 	t_window.draw(moneyIcon);
-	t_window.draw(framerateText);
+	//t_window.draw(framerateText);
 
 	if (allowSquadDataDisplay == true)
 	{

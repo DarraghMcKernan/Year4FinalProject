@@ -185,15 +185,15 @@ void Squad::render(sf::RenderWindow& t_window)
 	t_window.draw(troopContainer);
 	t_window.draw(teamOutlineSprite);
 	t_window.draw(UnitSprite);
-	t_window.draw(movableCollider);
+	//t_window.draw(movableCollider);
 	if(extraSpriteNeeded == true)
 	{
 		t_window.draw(unitSpriteExtras);
 	}
-	for (int index = 0; index < invalidTileAvoidance.size(); index++)
-	{
-		t_window.draw(invalidTileAvoidance[index]);
-	}
+	//for (int index = 0; index < invalidTileAvoidance.size(); index++)
+	//{
+	//	t_window.draw(invalidTileAvoidance[index]);
+	//}
 	//t_window.draw(frontCollider);
 	//t_window.draw(leftCollider);
 	//t_window.draw(rightCollider);
