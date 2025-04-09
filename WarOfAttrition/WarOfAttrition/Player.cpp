@@ -145,16 +145,18 @@ void Player::update(sf::Time& t_deltaTime)
 				playersSquads[index].formationSpeed = formationTemp.maxFormationSpeed;
 				turnEnded = true;
 				formationMovementUnlocked = true;
+				formationTemp.formationMovingActive = true;
 			}
 			else if (playersSquads[index].movingAllowed() == true && playersSquads[index].targetSet != true)
 			{
 				playersSquads[index].unlockMovement(false);
 				playersSquads[index].targetReached = false;
 				playersSquads[index].resetColour();
+				formationTemp.formationMovingActive = true;
 			}
 		}
 
-		formationTemp.formationMovingActive = true;
+		//formationTemp.formationMovingActive = true;
 	}
 
 	int counter = 0;
