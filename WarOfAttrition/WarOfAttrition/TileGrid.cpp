@@ -212,20 +212,20 @@ void TileGrid::updateTileType(int t_type)
 {
 	tiles[tileHoveredOverNum()].setType(t_type);
 	
-	std::fstream wallsData("walls.txt");
-	wallsData.clear();
+	//std::fstream wallsData("walls.txt");
+	//wallsData.clear();
 
 	tileSetAsWalls.clear();
 	for (int index = 0; index < TILE_ROWS * TILE_COLUMNS; index++)
 	{
 		if (tiles[index].getType() == 1)//wall
 		{
-			wallsData << index <<"\n";
+			//wallsData << index <<"\n";
 			tileSetAsWalls.push_back(index);
 		}
 	}
 	allInvalidTiles = tileSetAsWalls;
-	wallsData.close();
+	//wallsData.close();
 
 	updateTileTexture(tileHoveredOverNum(),0);
 }

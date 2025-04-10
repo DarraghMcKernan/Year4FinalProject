@@ -599,6 +599,7 @@ void GameManager::menuInteractions()
 		{
 			worldTiles.updateTileType(editingTerrainType);
 			worldTilesModified = true;
+			//clickTimer = 5;
 		}
 		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
 		{
