@@ -59,6 +59,7 @@ public:
 private:
 	SquadData squadData;
 	SquadMovementState currentMovementState = MoveToFormationPoint;
+	SquadMovementState nextState = MoveToFormationPoint;
 	PositionNormaliser normaliser;
 
 	void setunitType();
@@ -88,6 +89,8 @@ private:
 	int currentPositionOnLeaderPath = 0;
 
 	int reachedTargetCooldown = 0;
+	int movementSwapCooldown = 0;
+	sf::Vector2f lastDirection = { 0.0f, -1.0f };
 
 	sf::Vector2f worldTileOffset = sf::Vector2f(TILE_SIZE/2, TILE_SIZE/2);
 	std::vector<int> allInvalidTiles;
@@ -95,7 +98,7 @@ private:
 	bool movementAllowed = false;
 	bool extraSpriteNeeded = false;
 	bool cellCenterReached = false;
-	
+	bool wallSlidingRight = false;
 	/*int moveSpeed = 100;
 	int teamNum=0;
 	int squadStrength = 100;

@@ -178,6 +178,15 @@ void Squad::fixedUpdate()
 			cellCenterReached = true;
 		}
 	}
+
+	if (movementSwapCooldown > 0)
+	{
+		movementSwapCooldown--;
+		if (movementSwapCooldown == 1)
+		{
+			currentMovementState = nextState;
+		}
+	}
 }
 
 void Squad::render(sf::RenderWindow& t_window)
@@ -543,14 +552,14 @@ void Squad::moveToFormation(sf::Vector2f t_formationPosition,sf::Time t_deltaTim
 void Squad::steerAroundObstacle(sf::Vector2f t_formationPosition, sf::Time t_deltaTime)
 {
 	bool outcome = checkFormationPointValid(t_formationPosition);
-	if (outcome == false)//formation point no longer valid - return to leaders path
+	if (outcome == false)
 	{
 		currentMovementState = SquadMovementState::TakeLeadersPath;
 		std::cout << "Take leaders path\n";
 		return;
 	}
 
-	bool frontBlocked = false;//used to check if the colliders have contacted a wall
+	bool frontBlocked = false;
 	bool rightBlocked = false;
 	bool leftBlocked = false;
 
@@ -558,111 +567,132 @@ void Squad::steerAroundObstacle(sf::Vector2f t_formationPosition, sf::Time t_del
 	sf::Vector2f direction = t_formationPosition - currentPosition;
 	float distance = sqrt((direction.x * direction.x) + (direction.y * direction.y));
 
-	if (std::fabs(direction.x) > std::fabs(direction.y))//normalise to NESW so colliders wont hit both walls when turning and will always face cardinal directions
+	//normalize to cardinal directions NESW
+	if (std::fabs(direction.x) > std::fabs(direction.y))
 	{
-		if (direction.x > 0) {
-			direction = { 1.0f, 0.0f };
-		}
-		else {
-			direction = { -1.0f, 0.0f };
-		}
+		direction = direction.x > 0 ? sf::Vector2f(1.0f, 0.0f) : sf::Vector2f(-1.0f, 0.0f);
 	}
-	else {
-		if (direction.y > 0) {
-			direction = { 0.0f, 1.0f };
-		}
-		else {
-			direction = { 0.0f, -1.0f };
-		}
+	else
+	{
+		direction = direction.y > 0 ? sf::Vector2f(0.0f, 1.0f) : sf::Vector2f(0.0f, -1.0f);
 	}
 
-	float colliderOffset = TILE_SIZE / 4.0f;//how far from the unit the colliders need to be
+	float colliderOffset = TILE_SIZE / 4.0f;
 
 	sf::Vector2f frontPosition = currentPosition + direction * colliderOffset;
 	sf::Vector2f rightPosition = currentPosition + sf::Vector2f(-direction.y, direction.x) * colliderOffset;
 	sf::Vector2f leftPosition = currentPosition + sf::Vector2f(direction.y, -direction.x) * colliderOffset;
-	
+
 	frontCollider.setPosition(frontPosition);
 	rightCollider.setPosition(rightPosition);
 	leftCollider.setPosition(leftPosition);
 
-	float rotaion = 0;
+	float rotation = 0;
 	if (direction.x < 0)
-	{
-		rotaion = 180;
-	}
-	else if (direction.y < 0 || direction.y > 0)
-	{
-		rotaion = 90;
-	}
-	frontCollider.setRotation(rotaion);
-	rightCollider.setRotation(rotaion);
-	leftCollider.setRotation(rotaion);
+		rotation = 180;
+	else if (direction.y != 0)
+		rotation = 90;
 
-	for (int index = 0; index < invalidTileAvoidance.size(); index++)//check if colliders are contacting any walls
+	frontCollider.setRotation(rotation);
+	rightCollider.setRotation(rotation);
+	leftCollider.setRotation(rotation);
+
+	//check for wall collisions
+	for (int i = 0; i < invalidTileAvoidance.size(); i++)
 	{
-		if (frontCollider.getGlobalBounds().intersects(invalidTileAvoidance[index].getGlobalBounds()))
+		if (frontCollider.getGlobalBounds().intersects(invalidTileAvoidance[i].getGlobalBounds()))
 		{
 			frontBlocked = true;
+			movementSwapCooldown = 60;
+			currentMovementState = SquadMovementState::TakeLeadersPath;
+			return;
 		}
-		if (rightCollider.getGlobalBounds().intersects(invalidTileAvoidance[index].getGlobalBounds()))
+		if (rightCollider.getGlobalBounds().intersects(invalidTileAvoidance[i].getGlobalBounds()))
 		{
 			rightBlocked = true;
 		}
-		if (leftCollider.getGlobalBounds().intersects(invalidTileAvoidance[index].getGlobalBounds()))
+		if (leftCollider.getGlobalBounds().intersects(invalidTileAvoidance[i].getGlobalBounds()))
 		{
 			leftBlocked = true;
 		}
 	}
-	sf::Vector2f normalisedDirection = direction;//save the NESW direction for locking movement later
-	direction = t_formationPosition - currentPosition;//get direction for movement
+
+	sf::Vector2f normalisedDirection = direction;
+	direction = t_formationPosition - currentPosition;
 	distance = sqrt((direction.x * direction.x) + (direction.y * direction.y));
 
-	if (distance <= 2.1)//if close enough default to move to formation point
+	if (distance <= 2.1)
 	{
 		currentMovementState = SquadMovementState::MoveToFormationPoint;
 		return;
 	}
 
 	sf::Vector2f vectorToTarget = direction / distance;
-	//lock movement depending on which collider has made contact and what direction we are moving in
-	if ((leftBlocked == true || rightBlocked == true) && normalisedDirection.y == 0)
-	{
+
+	//lock movement along axes if sides blocked
+	if ((leftBlocked || rightBlocked) && normalisedDirection.y == 0)
 		vectorToTarget.y = 0;
-	}
-	if ((leftBlocked == true || rightBlocked == true) && normalisedDirection.x == 0)
-	{
+	if ((leftBlocked || rightBlocked) && normalisedDirection.x == 0)
 		vectorToTarget.x = 0;
-	}
 
 	float speed = moveSpeed * t_deltaTime.asSeconds();
-	troopContainer.move(vectorToTarget * speed);
+	troopContainer.move(vectorToTarget * (speed * 0.7f));
 
-	float angle = atan2(direction.y, direction.x) * 180 / 3.14159265f;
-	if (rightBlocked == false && leftBlocked == false)//if the colliders have not hit a wall allow rotation, should keep units facing forwards
+	//only update rotation when direction has significantly changed
+	sf::Vector2f snappedDirection = { 0.0f, 0.0f };
+	float angleToTarget = std::atan2(vectorToTarget.y, vectorToTarget.x); // radians
+
+	float angleDeg = angleToTarget * 180.0f / 3.14159265f;
+
+	//normalize angle to [0, 360)
+	if (angleDeg < 0) angleDeg += 360.0f;
+
+	if (angleDeg >= 45 && angleDeg < 135)
+		snappedDirection.y = 1.0f;  //down
+	else if (angleDeg >= 135 && angleDeg < 225)
+		snappedDirection.x = -1.0f; //left
+	else if (angleDeg >= 225 && angleDeg < 315)
+		snappedDirection.y = -1.0f; //up
+	else
+		snappedDirection.x = 1.0f;  //right
+
+
+
+	//if not blocked, allow smooth rotation
+	if (!leftBlocked && !rightBlocked && !frontBlocked)
 	{
+		float angle = atan2(direction.y, direction.x) * 180 / 3.14159265f;
 		troopContainer.setRotation(angle - 90);
+		lastDirection = snappedDirection;
 	}
+	else
+	{
+		//avoid jitter by comparing with last locked direction
+		if (snappedDirection != sf::Vector2f(0.0f, 0.0f))
+			lastDirection = snappedDirection;
 
-	if (rightBlocked == true && (angle < 360 || angle > 180))
-	{
-		troopContainer.setRotation(90);
-	}
-	if (leftBlocked == true && (angle < 360 || angle > 180))
-	{
-		troopContainer.setRotation(90);
+		if (lastDirection.x > 0)
+			troopContainer.setRotation(270);//right
+		else if (lastDirection.x < 0)
+			troopContainer.setRotation(90);//left
+		else if (lastDirection.y > 0)
+			troopContainer.setRotation(0);//down
+		else if (lastDirection.y < 0)
+			troopContainer.setRotation(180);//up
 	}
 
 	UnitSprite.setPosition(troopContainer.getPosition());
 	UnitSprite.setRotation(troopContainer.getRotation());
 	teamOutlineSprite.setPosition(troopContainer.getPosition());
 	teamOutlineSprite.setRotation(troopContainer.getRotation());
-	if (extraSpriteNeeded == true)
+
+	if (extraSpriteNeeded)
 	{
 		unitSpriteExtras.setPosition(troopContainer.getPosition());
 		unitSpriteExtras.setRotation(troopContainer.getRotation());
 	}
 }
+
 
 void Squad::takeLeadersPath(sf::Vector2f t_formationPosition, sf::Time t_deltaTime)
 {
@@ -684,7 +714,7 @@ void Squad::takeLeadersPath(sf::Vector2f t_formationPosition, sf::Time t_deltaTi
 		float distance = 9999999;
 		int closestCell = -1;
 
-		if (cellCenterReached == true)
+		if (cellCenterReached == true || currentPositionOnLeaderPath == 0)
 		{
 			for (int index = currentPositionOnLeaderPath; index < pathToTarget.size(); index++)
 			{
@@ -763,7 +793,8 @@ void Squad::takeLeadersPath(sf::Vector2f t_formationPosition, sf::Time t_deltaTi
 
 void Squad::breakFormation(sf::Vector2f t_formationPosition, sf::Time t_deltaTime)
 {
-
+	//ignore formation and pick a tile near the target and just move to it
+	 
 }
 // if its invalid move the tile left and right of current heading to see if they are available and use that for steering
 bool Squad::checkFormationPointValid(sf::Vector2f t_formationPosition)
