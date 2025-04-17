@@ -54,6 +54,12 @@ void TileGrid::hightlightTiles(bool t_valid)
 	int column = mousePosViewPort.x / TILE_SIZE;
 	int row = mousePosViewPort.y / TILE_SIZE;
 
+	if (row * TILE_COLUMNS + column > tiles.size())
+	{
+		//std::cout << "Mouse no longer in bounds of map\n";
+		return;
+	}
+
 	lastCellHovered = row * TILE_COLUMNS + column;
 
 	tiles[lastCellHovered].setHighlight(t_valid);
@@ -124,8 +130,13 @@ void TileGrid::deactiveateAllTiles()
 
 void TileGrid::render(sf::RenderWindow& t_window)
 {
-	mousePos = sf::Mouse::getPosition(t_window);
-	mousePosViewPort = t_window.mapPixelToCoords(mousePos);//get coords relative to the viewport
+	sf::Vector2i temp = sf::Mouse::getPosition(t_window);
+	if (temp.x >= 0 && temp.y >= 0 && static_cast<unsigned int>(temp.x) < t_window.getSize().x && static_cast<unsigned int>(temp.y) < t_window.getSize().y)
+	{
+		mousePos = sf::Mouse::getPosition(t_window);
+		mousePosViewPort = t_window.mapPixelToCoords(mousePos);//get coords relative to the viewport
+	}
+	//else std::cout << "(TileGrid) mouse out of bounds\n";
 
 	for (int index = 0; index < TILE_ROWS * TILE_COLUMNS; index++)
 	{
@@ -330,6 +341,15 @@ std::vector<int> TileGrid::getInvalidTiles()
 	return allInvalidTiles;
 }
 
+int TileGrid::preventOutOfBoundsCheck(int index)
+{
+	if (index >= 0 && index < static_cast<int>(tiles.size()))
+	{
+		return tiles[index].getType();
+	}
+	return -999;
+}
+
 
 void TileGrid::setupTextures()
 {
@@ -409,6 +429,11 @@ void TileGrid::setupTextures()
 
 void TileGrid::updateTileTexture(int t_tileNum, int t_depth)
 {
+	if (t_tileNum < 0 || t_tileNum >= tiles.size())
+	{
+		return;
+	}
+
 	if (tiles[t_tileNum].getType() == 0)//ground tile
 	{
 		checkSurroundingTiles(t_tileNum);
@@ -561,17 +586,20 @@ void TileGrid::updateTileTexture(int t_tileNum, int t_depth)
 
 int TileGrid::checkSurroundingTiles(int t_tileNum)
 {
-	int NW = tiles[t_tileNum - TILE_COLUMNS -1].getType();
-	int N = tiles[t_tileNum - TILE_COLUMNS].getType();
-	int NE = tiles[t_tileNum - TILE_COLUMNS +1].getType();
+	int row = t_tileNum / TILE_COLUMNS;
+	int col = t_tileNum % TILE_COLUMNS;
 
-	int W = tiles[t_tileNum - 1].getType();
-	int thisType = tiles[t_tileNum].getType();
-	int E = tiles[t_tileNum + 1].getType();
+	int NW = preventOutOfBoundsCheck((row - 1) * TILE_COLUMNS + (col - 1));
+	int N = preventOutOfBoundsCheck((row - 1) * TILE_COLUMNS + col);
+	int NE = preventOutOfBoundsCheck((row - 1) * TILE_COLUMNS + (col + 1));
 
-	int SW = tiles[t_tileNum + TILE_COLUMNS - 1].getType();
-	int S = tiles[t_tileNum + TILE_COLUMNS].getType();
-	int SE = tiles[t_tileNum + TILE_COLUMNS + 1].getType();
+	int W = preventOutOfBoundsCheck(row * TILE_COLUMNS + (col - 1));
+	int thisType = preventOutOfBoundsCheck(t_tileNum);
+	int E = preventOutOfBoundsCheck(row * TILE_COLUMNS + (col + 1));
+
+	int SW = preventOutOfBoundsCheck((row + 1) * TILE_COLUMNS + (col - 1));
+	int S = preventOutOfBoundsCheck((row + 1) * TILE_COLUMNS + col);
+	int SE = preventOutOfBoundsCheck((row + 1) * TILE_COLUMNS + (col + 1));
 
 	if (N == thisType && W == thisType && E == thisType && S == thisType &&
 		NW == thisType && NE == thisType && SW == thisType && SE == thisType)

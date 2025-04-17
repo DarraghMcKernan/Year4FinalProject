@@ -14,6 +14,7 @@ class Squad
 public:
 	void init(sf::Vector2f t_startingPos,int t_teamNum,int t_unitType);
 	void update(sf::Time t_deltaTime);
+	void spinPropeller(sf::Time t_deltaTime);
 	void fixedUpdate();
 	void render(sf::RenderWindow& t_window);
 	void unlockMovement(bool t_allowed);
@@ -36,6 +37,7 @@ public:
 	int getFormationNum();
 
 	SquadData getSquadData();
+	void setSquadData(SquadData t_squadData);
 	int getUnitType();
 	sf::Sprite getSprite();
 	void checkIfTargetReached();
@@ -78,6 +80,7 @@ private:
 	sf::Sprite UnitSprite;
 	sf::Sprite teamOutlineSprite;
 	sf::Sprite unitSpriteExtras;
+	sf::Sprite unitSpriteExtraOutline;
 
 	sf::Sprite goldmineSprite;
 	int goldmineCost = 750;
@@ -99,6 +102,8 @@ private:
 	bool extraSpriteNeeded = false;
 	bool cellCenterReached = false;
 	bool wallSlidingRight = false;
+	bool propellersActive = false;
+
 	/*int moveSpeed = 100;
 	int teamNum=0;
 	int squadStrength = 100;

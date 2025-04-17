@@ -7,16 +7,30 @@ void Player::init(int t_teamNum, int t_unitType)
 		std::cout << "Error loading BebasNeue.otf from file\n";
 	}
 
+	currentTeam = t_teamNum;
+
+	SquadData tempSquadData;
+
+	tempSquadData.health = 100;
+	tempSquadData.moveDistance = 20;
+	tempSquadData.moveSpeed = 200;
+	tempSquadData.squadStrength = 150;
+	tempSquadData.teamNum = t_teamNum;
+	tempSquadData.unitType = 3;
+
 	Squad newSquad;
-	sf::Text newText;
+	sf::Vector2f startPos;
 	for (int index = 0; index < playerSquadsCount; index++)
 	{
 		playersSquads.push_back(newSquad);
-		sf::Vector2f startPos = { ((150 + index) % TILE_COLUMNS) * TILE_SIZE, ((150 + index + t_teamNum) / TILE_COLUMNS) * TILE_SIZE };
+		startPos = { ((150 + index) % TILE_COLUMNS) * TILE_SIZE, ((150 + index + t_teamNum) / TILE_COLUMNS) * TILE_SIZE };
 		startPos.y += t_teamNum * (TILE_SIZE * 3);
 		playersSquads[index].init(startPos, t_teamNum,0);
-
+		startPos = { ((150 + (index + 1)) % TILE_COLUMNS) * TILE_SIZE, ((150 + (index+1) + t_teamNum) / TILE_COLUMNS) * TILE_SIZE };
+		startPos.y += t_teamNum * (TILE_SIZE * 3);
 	}
+
+	setCustomSquadData(tempSquadData,startPos);
 
 	tileForColliding.setSize(sf::Vector2f(TILE_SIZE +3, TILE_SIZE+3));//used for making sure player cant select a tile that its own squads are on
 	tileForColliding.setOrigin(sf::Vector2f(TILE_SIZE / 2, TILE_SIZE / 2));
@@ -211,6 +225,14 @@ void Player::update(sf::Time& t_deltaTime)
 	}
 }
 
+void Player::updateMovingTexures(sf::Time& t_deltaTime)
+{
+	for (int index = 0; index < playerSquadsCount; index++)
+	{
+		playersSquads[index].spinPropeller(t_deltaTime);
+	}
+}
+
 void Player::fixedUpdate()
 {
 	if (timerForEnd > 0)
@@ -237,7 +259,13 @@ void Player::fixedUpdate()
 
 void Player::render(sf::RenderWindow& t_window)
 {
-	mousePos = t_window.mapPixelToCoords(sf::Mouse::getPosition(t_window));
+	sf::Vector2i temp = sf::Mouse::getPosition(t_window);
+
+	if (temp.x >= 0 && temp.y >= 0 && static_cast<unsigned int>(temp.x) < t_window.getSize().x && static_cast<unsigned int>(temp.y) < t_window.getSize().y)
+	{
+		mousePos = t_window.mapPixelToCoords(sf::Mouse::getPosition(t_window));
+	}
+	//else std::cout << "(Player) mouse out of bounds\n";
 
 	for (int index = 0; index < playerSquadsCount; index++)
 	{
@@ -547,6 +575,20 @@ SquadData Player::getSquadData(int t_squadNum)
 		return playersSquads.at(t_squadNum).getSquadData();
 	}
 	return playersSquads.at(0).getSquadData();
+}
+
+void Player::setCustomSquadData(SquadData t_squadData, sf::Vector2f t_unitSpawnPos)
+{
+	customUnitData = t_squadData;
+	
+	Squad newSquad;
+
+	playersSquads.push_back(newSquad);
+
+	playersSquads[playersSquads.size()-1].setSquadData(customUnitData);
+	playersSquads[playersSquads.size()-1].init(t_unitSpawnPos, currentTeam, 3);//3 = custom unit
+
+	playerSquadsCount++;
 }
 
 int Player::getSquadNumHovered(sf::Vector2f t_pointToCheck)

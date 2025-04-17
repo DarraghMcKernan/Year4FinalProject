@@ -33,6 +33,11 @@ static sf::Texture BTRTexture;
 static sf::Texture BTROutlineTexture;
 static sf::Texture unitSpriteExtrasTexture;
 
+static sf::Texture HelicopterTexture;
+static sf::Texture HelicopterOutlineTexture;
+static sf::Texture HelicopterBladeTexture;
+static sf::Texture HelicopterBladeShadowTexture;
+
 static sf::Texture goldmineTexture;
 
 struct SquadData

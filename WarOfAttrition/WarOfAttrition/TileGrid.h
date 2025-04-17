@@ -34,6 +34,8 @@ public:
 	std::vector<int> getPathToTarget(sf::Vector2f StartPos, sf::Vector2f targetPos);
 	std::vector<int> getInvalidTiles();
 private:
+	int preventOutOfBoundsCheck(int index);
+
 	std::vector<Tile> tiles;
 	std::vector<int> allInvalidTiles;
 	std::vector<sf::Sprite> worldTileTemp;

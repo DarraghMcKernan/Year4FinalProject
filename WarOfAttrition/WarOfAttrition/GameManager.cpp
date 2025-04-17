@@ -308,6 +308,7 @@ void GameManager::updatePlayers(sf::Time& t_deltaTime)
 	}
 	for (int index = 0; index < MAX_PLAYERS; index++)
 	{
+		player[index].updateMovingTexures(t_deltaTime);
 		//player[index].turnFirstCheck();
 		if (player[index].getSquadNumHovered(mousePosFloat) != -1)
 		{
@@ -492,8 +493,14 @@ void GameManager::displayClean(sf::RenderWindow& t_window, sf::View& t_viewport)
 
 void GameManager::display(sf::RenderWindow& t_window)
 {
-	mousePos = sf::Mouse::getPosition(t_window);
-	mousePosFloat = t_window.mapPixelToCoords(mousePos);
+	sf::Vector2i temp = sf::Mouse::getPosition(t_window);
+
+	if (temp.x >= 0 && temp.y >= 0 && static_cast<unsigned int>(temp.x) < t_window.getSize().x && static_cast<unsigned int>(temp.y) < t_window.getSize().y)
+	{
+		mousePos = sf::Mouse::getPosition(t_window);
+		mousePosFloat = t_window.mapPixelToCoords(mousePos);
+	}
+	//else std::cout << "(GameManager) mouse out of bounds\n";
 
 	worldTiles.render(t_window);
 	for (int index = 0; index < MAX_PLAYERS; index++)

@@ -13,6 +13,7 @@ public:
 
 	void init(int t_teamNum, int t_unitType);
 	void update(sf::Time& t_deltaTime);
+	void updateMovingTexures(sf::Time& t_deltaTime);
 	void fixedUpdate();
 	void render(sf::RenderWindow& t_window);
 	void setTargetPosition(int t_cellNum);//assign the cell set in worldTile to the squad currently being assigned
@@ -48,6 +49,7 @@ public:
 	sf::Vector2f getSquadPosition();
 
 	SquadData getSquadData(int t_squadNum);
+	void setCustomSquadData(SquadData t_squadData, sf::Vector2f t_unitSpawnPos);
 	int getSquadNumHovered(sf::Vector2f t_pointToCheck);
 
 	int getMoney();
@@ -74,7 +76,7 @@ private:
 	sf::RectangleShape tileForColliding;//used to check the cell a squad is on regardless of its shape as this will be 1 tile big
 	//sf::Text strengthValueText;
 	sf::Font font;
-
+	SquadData customUnitData;
 
 	int squadBeingControlled = 1;//which squad is allowed to move
 	int playerSquadsCount = 4;//how many squads does player have
@@ -84,6 +86,7 @@ private:
 	int timerForEnd = 0;
 	int money = 975;
 	int sendLeaderDataCooldown = 0;
+	int currentTeam = -1;//which team is this player belongs to
 
 	bool endTurnActive = false;
 	bool squadSet = false;

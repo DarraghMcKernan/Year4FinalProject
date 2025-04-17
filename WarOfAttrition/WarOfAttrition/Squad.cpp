@@ -102,7 +102,14 @@ void Squad::update(sf::Time t_deltaTime)
 				if (extraSpriteNeeded == true)
 				{
 					unitSpriteExtras.setPosition(UnitSprite.getPosition());
-					unitSpriteExtras.setRotation(rotatiion);
+					
+					unitSpriteExtraOutline.setPosition(UnitSprite.getPosition());
+
+					if (propellersActive == false)
+					{
+						unitSpriteExtras.setRotation(rotatiion);
+						unitSpriteExtraOutline.setRotation(rotatiion);
+					}
 				}
 				teamOutlineSprite.setPosition(troopContainer.getPosition());
 				teamOutlineSprite.setRotation(rotatiion);
@@ -153,12 +160,28 @@ void Squad::update(sf::Time t_deltaTime)
 				if (extraSpriteNeeded == true)
 				{
 					unitSpriteExtras.setPosition(UnitSprite.getPosition());
-					unitSpriteExtras.setRotation((atan2(vectorToTarget.y, vectorToTarget.x) * 180 / 3.14159265) - 90);
+					
+					unitSpriteExtraOutline.setPosition(UnitSprite.getPosition());
+					
+					if (propellersActive == false)
+					{
+						unitSpriteExtras.setRotation((atan2(vectorToTarget.y, vectorToTarget.x) * 180 / 3.14159265) - 90);
+						unitSpriteExtraOutline.setRotation((atan2(vectorToTarget.y, vectorToTarget.x) * 180 / 3.14159265) - 90);
+					}
 				}
 				teamOutlineSprite.setPosition(troopContainer.getPosition());
 				teamOutlineSprite.setRotation((atan2(vectorToTarget.y, vectorToTarget.x) * 180 / 3.14159265) - 90);
 			}
 		}
+	}
+}
+
+void Squad::spinPropeller(sf::Time t_deltaTime)
+{
+	if (propellersActive == true)
+	{
+		unitSpriteExtras.rotate(600 * t_deltaTime.asSeconds());
+		unitSpriteExtraOutline.rotate(600 * t_deltaTime.asSeconds());
 	}
 }
 
@@ -193,6 +216,11 @@ void Squad::render(sf::RenderWindow& t_window)
 {
 	t_window.draw(troopContainer);
 	t_window.draw(teamOutlineSprite);
+	if (extraSpriteNeeded == true)
+	{
+		t_window.draw(unitSpriteExtraOutline);
+	}
+
 	t_window.draw(UnitSprite);
 	//t_window.draw(movableCollider);
 	if(extraSpriteNeeded == true)
@@ -235,6 +263,7 @@ void Squad::setPosition(sf::Vector2f t_debugPosition)
 	if (extraSpriteNeeded == true)
 	{
 		unitSpriteExtras.setPosition(troopContainer.getPosition());
+		unitSpriteExtraOutline.setPosition(troopContainer.getPosition());
 	}
 }
 
@@ -273,6 +302,7 @@ void Squad::placeOnRecentCell()
 	if (extraSpriteNeeded == true)
 	{
 		unitSpriteExtras.setPosition(recentCellPos);
+		unitSpriteExtraOutline.setPosition(recentCellPos);
 	}
 }
 
@@ -287,21 +317,25 @@ void Squad::resetColour()
 	{
 		troopContainer.setFillColor(sf::Color(0, 0, 255, 00));
 		teamOutlineSprite.setColor(sf::Color(0, 0, 255, 200));
+		unitSpriteExtraOutline.setColor(sf::Color(0, 0, 255, 200));
 	}
 	if (squadData.teamNum == 1)
 	{
 		troopContainer.setFillColor(sf::Color(255, 0, 0, 00));
 		teamOutlineSprite.setColor(sf::Color(255, 0, 0, 200));
+		unitSpriteExtraOutline.setColor(sf::Color(255, 0, 0, 200));
 	}
 	if (squadData.teamNum == 2)
 	{
 		troopContainer.setFillColor(sf::Color(0, 255, 255, 00));
 		teamOutlineSprite.setColor(sf::Color(0, 255, 255, 200));
+		unitSpriteExtraOutline.setColor(sf::Color(0, 255, 255, 200));
 	}
 	if (squadData.teamNum == 3)
 	{
 		troopContainer.setFillColor(sf::Color(255, 0, 255, 00));
 		teamOutlineSprite.setColor(sf::Color(255, 0, 255, 200));
+		unitSpriteExtraOutline.setColor(sf::Color(255, 0, 255, 200));
 	}
 }
 
@@ -339,6 +373,14 @@ int Squad::getFormationNum()
 SquadData Squad::getSquadData()
 {
 	return squadData;
+}
+
+void Squad::setSquadData(SquadData t_squadData)
+{
+	squadData = t_squadData;
+
+	moveSpeed = squadData.moveSpeed;
+	maxMoveDistance = squadData.moveDistance;
 }
 
 int Squad::getUnitType()
@@ -397,9 +439,10 @@ void Squad::setRotation(float t_rotation)
 	troopContainer.setRotation(t_rotation);
 	UnitSprite.setRotation(troopContainer.getRotation());
 	teamOutlineSprite.setRotation(troopContainer.getRotation());
-	if (extraSpriteNeeded == true)
+	if (extraSpriteNeeded == true && propellersActive == false)
 	{
 		unitSpriteExtras.setRotation(troopContainer.getRotation());
+		unitSpriteExtraOutline.setRotation(troopContainer.getRotation());
 	}
 }
 
@@ -476,6 +519,49 @@ void Squad::setunitType()
 		unitSpriteExtras.setOrigin(64, 64);
 		unitSpriteExtras.setPosition(troopContainer.getPosition());
 	}
+	else
+	{
+		if (!HelicopterTexture.loadFromFile("ASSETS/Helicopter_Base.png"))
+		{
+			std::cout << "error loading helicopter texture";
+		}
+		if (!HelicopterOutlineTexture.loadFromFile("ASSETS/HelicopterTeamOutline.png"))
+		{
+			std::cout << "error loading helicopter outline texture";
+		}
+		if (!HelicopterBladeTexture.loadFromFile("ASSETS/Helicopter_Screw_4x.png"))
+		{
+			std::cout << "error loading helicopter blade";
+		}
+		if (!HelicopterBladeShadowTexture.loadFromFile("ASSETS/HelicopterBladeTeamOutline.png"))
+		{
+			std::cout << "error loading helicopter blade shadow";
+		}
+
+		propellersActive = true;
+		extraSpriteNeeded = true;
+
+		UnitSprite.setTexture(HelicopterTexture);
+		UnitSprite.setScale((UnitSprite.getScale().x / 128) * (TILE_SIZE), (UnitSprite.getScale().y / 128) * (TILE_SIZE));
+		UnitSprite.setOrigin(144, 144);
+		UnitSprite.setPosition(troopContainer.getPosition());
+
+		teamOutlineSprite.setTexture(HelicopterOutlineTexture);
+		teamOutlineSprite.setScale((teamOutlineSprite.getScale().x / 128) * (TILE_SIZE)+0.04, (teamOutlineSprite.getScale().y / 128) * (TILE_SIZE)+0.01);
+		teamOutlineSprite.setOrigin(144, 144);
+		teamOutlineSprite.setPosition(troopContainer.getPosition());
+
+
+		unitSpriteExtras.setTexture(HelicopterBladeTexture);
+		unitSpriteExtras.setScale((unitSpriteExtras.getScale().x / 128)* (TILE_SIZE), (unitSpriteExtras.getScale().y / 128)* (TILE_SIZE));
+		unitSpriteExtras.setOrigin(144, 144);
+		unitSpriteExtras.setPosition(troopContainer.getPosition());
+
+		unitSpriteExtraOutline.setTexture(HelicopterBladeShadowTexture);
+		unitSpriteExtraOutline.setScale((unitSpriteExtraOutline.getScale().x / 128)* (TILE_SIZE)+0.04, (unitSpriteExtraOutline.getScale().y / 128)* (TILE_SIZE)+0.01);
+		unitSpriteExtraOutline.setOrigin(144, 144);
+		unitSpriteExtraOutline.setPosition(troopContainer.getPosition());
+	}
 }
 
 void Squad::moveToFormation(sf::Vector2f t_formationPosition,sf::Time t_deltaTime)
@@ -539,7 +625,14 @@ void Squad::moveToFormation(sf::Vector2f t_formationPosition,sf::Time t_deltaTim
 		if (extraSpriteNeeded == true)
 		{
 			unitSpriteExtras.setPosition(troopContainer.getPosition());
-			unitSpriteExtras.setRotation(rotation);
+			
+			unitSpriteExtraOutline.setPosition(troopContainer.getPosition());
+			
+			if (propellersActive == false)
+			{
+				unitSpriteExtras.setRotation(rotation);
+				unitSpriteExtraOutline.setRotation(rotation);
+			}
 		}
 		if (formationLeader == false)
 		{
@@ -689,7 +782,14 @@ void Squad::steerAroundObstacle(sf::Vector2f t_formationPosition, sf::Time t_del
 	if (extraSpriteNeeded)
 	{
 		unitSpriteExtras.setPosition(troopContainer.getPosition());
-		unitSpriteExtras.setRotation(troopContainer.getRotation());
+		
+		unitSpriteExtraOutline.setPosition(troopContainer.getPosition());
+		
+		if (propellersActive == false)
+		{
+			unitSpriteExtraOutline.setRotation(troopContainer.getRotation());
+			unitSpriteExtras.setRotation(troopContainer.getRotation());
+		}
 	}
 }
 
@@ -748,7 +848,16 @@ void Squad::takeLeadersPath(sf::Vector2f t_formationPosition, sf::Time t_deltaTi
 			if (extraSpriteNeeded == true)
 			{
 				unitSpriteExtras.setPosition(troopContainer.getPosition());
-				unitSpriteExtras.setRotation(rotation);
+				
+
+				unitSpriteExtraOutline.setPosition(troopContainer.getPosition());
+				
+
+				if (propellersActive == false)
+				{
+					unitSpriteExtras.setRotation(rotation);
+					unitSpriteExtraOutline.setRotation(rotation);
+				}
 			}
 			if (formationLeader == false)
 			{
@@ -773,7 +882,16 @@ void Squad::takeLeadersPath(sf::Vector2f t_formationPosition, sf::Time t_deltaTi
 			if (extraSpriteNeeded == true)
 			{
 				unitSpriteExtras.setPosition(troopContainer.getPosition());
-				unitSpriteExtras.setRotation(rotation);
+				
+
+				unitSpriteExtraOutline.setPosition(troopContainer.getPosition());
+				
+
+				if (propellersActive == false)
+				{
+					unitSpriteExtraOutline.setRotation(rotation);
+					unitSpriteExtras.setRotation(rotation);
+				}
 			}
 			if (formationLeader == false)
 			{
