@@ -429,7 +429,7 @@ void TileGrid::setupTextures()
 
 void TileGrid::updateTileTexture(int t_tileNum, int t_depth)
 {
-	if (t_tileNum < 0 || t_tileNum >= tiles.size())
+	if (t_tileNum < 0 || t_tileNum >= tiles.size())//if its out of bounds stop checking
 	{
 		return;
 	}

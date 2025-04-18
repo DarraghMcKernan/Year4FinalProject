@@ -38,6 +38,7 @@ public:
 
 	SquadData getSquadData();
 	void setSquadData(SquadData t_squadData);
+	void upgradeUnit(int t_upgradeValue, int t_upgradeType);
 	int getUnitType();
 	sf::Sprite getSprite();
 	void checkIfTargetReached();

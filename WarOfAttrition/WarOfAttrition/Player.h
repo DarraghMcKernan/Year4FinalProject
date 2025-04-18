@@ -62,6 +62,7 @@ public:
 
 	void turnFirstCheck();
 	void passInvalidTiles(std::vector<int> t_invalidTiles);
+	void upgradeCustomUnit(int t_upgradeValue, int t_upgradeType);
 
 	bool formationCreationAllowed = false;
 	bool formationMovementUnlocked = false;

@@ -3,7 +3,7 @@
 #include "Player.h"
 #include "TileGrid.h"
 #include "Enemy.h"
-
+#include "UI.h"
 
 
 class GameManager
@@ -31,49 +31,18 @@ private:
 	Player player[MAX_PLAYERS];//create as many instances of player as is needed
 	TileGrid worldTiles;//create an instance of the world tiles
 	SquadData squadData;//stores the data of the most recent squad that was hovered over
+	UI gameUI;
 
 	sf::Time timePerFrame;
 	sf::Time timeSinceLastUpdate;
 	sf::Time timeSinceLastFixedUpdate;
 	sf::Clock clock;
 
-	sf::RectangleShape hudBacking;//a temporary square to hold basic UI
-	sf::RectangleShape endTurnButton;//button to allow player to end their turn
-	sf::RectangleShape openUnitMenuButton;//button that brings up the menu to create units
-	sf::RectangleShape openTowerMenuButton;
-	sf::RectangleShape resetTurnButton;//button to reset all unit moves the player made during this turn
-	sf::RectangleShape unitMenuBacking;//just a background ui for the buttons to create units
-	sf::RectangleShape createTankUnit;//button to create a tank unit
-	sf::RectangleShape createPistolUnit;//button to create a pistol unit
-	sf::RectangleShape createHeavyTankUnit;//button to create a pistol unit
-	sf::RectangleShape createGoldMineTower;
-	sf::RectangleShape menuBackground;
-	sf::RectangleShape menuStartButton;
-	sf::RectangleShape unitDataDisplayBacking;
-
 	sf::CircleShape unitPlacementHighlight;//a circular highlight to show where your placed unit will go
 
 	sf::Vector2i mousePos;
 	sf::Vector2f mousePosFloat;
-	sf::Font font;//default font
-	sf::Text playerTurnDisplay;//text to shows whos turn it is
-	sf::Text endTurnText;
-	sf::Text createUnitText;
-	sf::Text createTowerText;
-	sf::Text menuStartButtonText;
-	sf::Text framerateText;
-	sf::Text winScreenMessage;
-	sf::Text moneyDisplay;
-	//squad data display
-	sf::Text squadStrengthDisplay;
-	sf::Text squadTypeDisplay;
-	sf::Text squadSpeedDisplay;
-	sf::Text squadTeamDisplay;
-	sf::Text squadHealthDisplay;
-	sf::Text squadDistanceDisplay;
-
-	sf::Sprite moneyIcon;
-	sf::Texture moneyIconTexture;
+	
 
 	int whosTurn = 1;//used to keep track of which player currently gets to play
 	int currentTileSelected = 0;

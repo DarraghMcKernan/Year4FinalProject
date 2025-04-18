@@ -700,3 +700,25 @@ void Player::passInvalidTiles(std::vector<int> t_invalidTiles)
 		playersSquads[index].passInvalidTiles(t_invalidTiles);
 	}
 }
+
+void Player::upgradeCustomUnit(int t_upgradeValue, int t_upgradeType)
+{
+	SquadData customUnitData = playersSquads[playersSquads.size() - 1].getSquadData();
+
+	if (t_upgradeType == 0)
+	{
+		customUnitData.health += t_upgradeValue;
+	}
+	else if (t_upgradeType == 1)
+	{
+		customUnitData.moveDistance += t_upgradeValue;
+	}
+	else if (t_upgradeType == 2)
+	{
+		customUnitData.moveSpeed += t_upgradeValue;
+	}
+	else if (t_upgradeType == 3)
+	{
+		customUnitData.squadStrength += t_upgradeValue;
+	}
+}

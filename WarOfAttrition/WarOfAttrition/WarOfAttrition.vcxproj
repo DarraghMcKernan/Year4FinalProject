@@ -140,6 +140,7 @@
     <ClCompile Include="Squad.cpp" />
     <ClCompile Include="TileGrid.cpp" />
     <ClCompile Include="Tower.cpp" />
+    <ClCompile Include="UI.cpp" />
     <ClCompile Include="WorldTile.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -152,6 +153,7 @@
     <ClInclude Include="Squad.h" />
     <ClInclude Include="TileGrid.h" />
     <ClInclude Include="Tower.h" />
+    <ClInclude Include="UI.h" />
     <ClInclude Include="WorldEditor.h" />
     <ClInclude Include="WorldTile.h" />
   </ItemGroup>

@@ -383,6 +383,18 @@ void Squad::setSquadData(SquadData t_squadData)
 	maxMoveDistance = squadData.moveDistance;
 }
 
+void Squad::upgradeUnit(int t_upgradeValue, int t_upgradeType)
+{
+	/*
+		int teamNum = 0;
+		int moveSpeed = 100;
+		int squadStrength = 100;
+		int unitType = 0;
+		int health = 100;
+		int moveDistance = 10;
+	*/
+}
+
 int Squad::getUnitType()
 {
 	return squadData.unitType;
