@@ -375,6 +375,11 @@ void GameManager::menuInteractions()
 		gameUI.handleMenuInteractions();
 		gameUI.handleButtonInteractions();
 
+		if(gameUI.upgradeMenuOpen == true)
+		{
+			player[whosTurn - 1].upgradeCustomUnit(gameUI.customSquadData);
+		}
+
 		if (gameUI.attemptTurnEnd == true)
 		{
 			gameUI.attemptTurnEnd = false;
