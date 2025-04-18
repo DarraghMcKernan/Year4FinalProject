@@ -26,7 +26,7 @@ public:
 	bool createNewUnit = false;
 	bool increaseUpgrade = false;
 	int unitTypeToCreate = 0;
-	int upgradeType = 0;//0 = health, 1 = strength, 2 = speed, 3 = distance
+	int upgradeType = 0;
 
 	SquadData customSquadData;
 

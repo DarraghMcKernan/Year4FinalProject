@@ -61,4 +61,5 @@ private:
 	bool allowSquadDataDisplay = false;
 	bool worldTilesModified = true;
 	bool worldTilesDataUpdated = false;
+	bool upgradeUnitMenuOpen = false;
 };

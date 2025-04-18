@@ -316,7 +316,7 @@ void GameManager::displayHUD(sf::RenderWindow& t_window,sf::View& t_fixedWindow)
 {
 	t_window.setView(t_fixedWindow);
 
-	gameUI.render(t_window, allowSquadDataDisplay, openCreateUnitMenu, openCreateTowerMenu, true);
+	gameUI.render(t_window, allowSquadDataDisplay, openCreateUnitMenu, openCreateTowerMenu, gameUI.upgradeMenuOpen);
 
 	if (menuOpen == true)
 	{
@@ -373,6 +373,7 @@ void GameManager::menuInteractions()
 	}
 	else {
 		gameUI.handleMenuInteractions();
+		gameUI.handleButtonInteractions();
 
 		if (gameUI.attemptTurnEnd == true)
 		{

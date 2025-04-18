@@ -450,7 +450,11 @@ void UI::handleMouseInteractions()
 
 void UI::handleButtonInteractions()
 {
-
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::O) && clickTimer == 0)
+	{
+		upgradeMenuOpen = !upgradeMenuOpen;
+		clickTimer = 30;
+	}
 }
 
 void UI::handleMenuInteractions()
