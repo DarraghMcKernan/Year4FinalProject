@@ -7,7 +7,7 @@ public:
 	void init();
 	void update(sf::Time t_deltaTime);
 	void fixedUpdate();
-	void render(sf::RenderWindow& t_window,bool t_squadData, bool t_createUnit, bool t_createTower);
+	void render(sf::RenderWindow& t_window,bool t_squadData, bool t_createUnit, bool t_createTower,bool t_upgradeUnit);
 	void renderMainMenu(sf::RenderWindow& t_window);
 	void renderGameOver(sf::RenderWindow& t_window);
 	void handleMouseInteractions();
@@ -16,6 +16,7 @@ public:
 	void setMousePos(sf::Vector2i t_mousePos);
 	void updateUnitDataDisplay(SquadData t_squadData);
 
+	bool upgradeMenuOpen = false;
 	bool attemptTurnEnd = false;
 	bool openCreateUnitMenu = false;
 	bool openCreateTowerMenu = false;
@@ -23,7 +24,11 @@ public:
 	bool resetPlayerForThisTurn = false;
 	bool createGoldTower = false;
 	bool createNewUnit = false;
+	bool increaseUpgrade = false;
 	int unitTypeToCreate = 0;
+	int upgradeType = 0;//0 = health, 1 = strength, 2 = speed, 3 = distance
+
+	SquadData customSquadData;
 
 	sf::RectangleShape menuStartButton;
 	sf::Text framerateText;
@@ -43,6 +48,8 @@ private:
 	sf::RectangleShape createGoldMineTower;
 	sf::RectangleShape menuBackground;
 	sf::RectangleShape unitDataDisplayBacking;
+
+	sf::RectangleShape upgradeUnitMenuBacking;//background for the upgrade menu
 	sf::RectangleShape upgradeUnitHealth;
 	sf::RectangleShape downgradeUnitHealth;
 	sf::RectangleShape upgradeUnitStrength;
@@ -58,6 +65,15 @@ private:
 	sf::Text createUnitText;
 	sf::Text createTowerText;
 	sf::Text menuStartButtonText;
+	sf::Text customUnitText;
+	sf::Text upgradeHealthText;
+	sf::Text customHealthText;
+	sf::Text customStrengthText;
+	sf::Text upgradeStrengthText;
+	sf::Text upgradeSpeedText;
+	sf::Text customSpeedText;
+	sf::Text upgradeDistanceText;
+	sf::Text customDistanceText;
 	
 	//squad data display
 	sf::Text squadStrengthDisplay;

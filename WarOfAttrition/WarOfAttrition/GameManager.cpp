@@ -316,7 +316,7 @@ void GameManager::displayHUD(sf::RenderWindow& t_window,sf::View& t_fixedWindow)
 {
 	t_window.setView(t_fixedWindow);
 
-	gameUI.render(t_window, allowSquadDataDisplay, openCreateUnitMenu, openCreateTowerMenu);
+	gameUI.render(t_window, allowSquadDataDisplay, openCreateUnitMenu, openCreateTowerMenu, true);
 
 	if (menuOpen == true)
 	{

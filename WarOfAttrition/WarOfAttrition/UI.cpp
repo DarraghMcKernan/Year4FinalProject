@@ -208,6 +208,152 @@ void UI::init()
 	moneyIcon.setScale(3, 3);
 
 	framerateText.setFont(font);
+
+	upgradeUnitMenuBacking.setSize({ SCREEN_WIDTH/3,SCREEN_HEIGHT / 2 });//the HUD element that shows player turn
+	upgradeUnitMenuBacking.setOrigin({ upgradeUnitMenuBacking.getSize().x / 2,upgradeUnitMenuBacking.getSize().y / 2 });
+	upgradeUnitMenuBacking.setPosition({ SCREEN_WIDTH / 2,SCREEN_HEIGHT / 2 });
+	upgradeUnitMenuBacking.setFillColor(sf::Color(200, 200, 200));
+	upgradeUnitMenuBacking.setOutlineColor(sf::Color::Black);
+	upgradeUnitMenuBacking.setOutlineThickness(5);
+
+	float upgradeMenuX = upgradeUnitMenuBacking.getGlobalBounds().getSize().x;
+	float upgradeMenuY = upgradeUnitMenuBacking.getGlobalBounds().getSize().y;
+
+	upgradeUnitHealth.setSize({ SCREEN_WIDTH / 20, SCREEN_HEIGHT / 16 });
+	upgradeUnitHealth.setOrigin({ upgradeUnitHealth.getSize().x / 2,upgradeUnitHealth.getSize().y / 2 });
+	upgradeUnitHealth.setPosition({(SCREEN_WIDTH / 2) + (upgradeMenuX / 3),(SCREEN_HEIGHT / 2) - (upgradeMenuY/3.5f)});
+	upgradeUnitHealth.setFillColor(sf::Color(0, 200, 0));
+	upgradeUnitHealth.setOutlineColor(sf::Color::Black);
+	upgradeUnitHealth.setOutlineThickness(3);
+
+	downgradeUnitHealth.setSize({ SCREEN_WIDTH / 20, SCREEN_HEIGHT / 16 });
+	downgradeUnitHealth.setOrigin({ downgradeUnitHealth.getSize().x / 2,downgradeUnitHealth.getSize().y / 2 });
+	downgradeUnitHealth.setPosition({ (SCREEN_WIDTH / 2) - (upgradeMenuX / 3),(SCREEN_HEIGHT / 2) - (upgradeMenuY / 3.5f) });
+	downgradeUnitHealth.setFillColor(sf::Color(200, 0, 0));
+	downgradeUnitHealth.setOutlineColor(sf::Color::Black);
+	downgradeUnitHealth.setOutlineThickness(3);
+
+	upgradeUnitStrength.setSize({ SCREEN_WIDTH / 20, SCREEN_HEIGHT / 16 });
+	upgradeUnitStrength.setOrigin({ upgradeUnitStrength.getSize().x / 2,upgradeUnitStrength.getSize().y / 2 });
+	upgradeUnitStrength.setPosition({ (SCREEN_WIDTH / 2) + (upgradeMenuX / 3),(SCREEN_HEIGHT / 2) - (upgradeMenuY / 13.0f) });
+	upgradeUnitStrength.setFillColor(sf::Color(0, 200, 0));
+	upgradeUnitStrength.setOutlineColor(sf::Color::Black);
+	upgradeUnitStrength.setOutlineThickness(3);
+
+	downgradeUnitStrength.setSize({ SCREEN_WIDTH / 20, SCREEN_HEIGHT / 16 });
+	downgradeUnitStrength.setOrigin({ downgradeUnitStrength.getSize().x / 2,downgradeUnitStrength.getSize().y / 2 });
+	downgradeUnitStrength.setPosition({ (SCREEN_WIDTH / 2) - (upgradeMenuX / 3),(SCREEN_HEIGHT / 2) - (upgradeMenuY / 13.0f) });
+	downgradeUnitStrength.setFillColor(sf::Color(200, 0, 0));
+	downgradeUnitStrength.setOutlineColor(sf::Color::Black);
+	downgradeUnitStrength.setOutlineThickness(3);
+
+	upgradeUnitSpeed.setSize({ SCREEN_WIDTH / 20, SCREEN_HEIGHT / 16 });
+	upgradeUnitSpeed.setOrigin({ upgradeUnitSpeed.getSize().x / 2,upgradeUnitSpeed.getSize().y / 2 });
+	upgradeUnitSpeed.setPosition({ (SCREEN_WIDTH / 2) + (upgradeMenuX / 3),(SCREEN_HEIGHT / 2) + (upgradeMenuY / 7.0f) });
+	upgradeUnitSpeed.setFillColor(sf::Color(0, 200, 0));
+	upgradeUnitSpeed.setOutlineColor(sf::Color::Black);
+	upgradeUnitSpeed.setOutlineThickness(3);
+
+	downgradeUnitSpeed.setSize({ SCREEN_WIDTH / 20, SCREEN_HEIGHT / 16 });
+	downgradeUnitSpeed.setOrigin({ downgradeUnitSpeed.getSize().x / 2,downgradeUnitSpeed.getSize().y / 2 });
+	downgradeUnitSpeed.setPosition({ (SCREEN_WIDTH / 2) - (upgradeMenuX / 3),(SCREEN_HEIGHT / 2) + (upgradeMenuY / 7.0f) });
+	downgradeUnitSpeed.setFillColor(sf::Color(200, 0, 0));
+	downgradeUnitSpeed.setOutlineColor(sf::Color::Black);
+	downgradeUnitSpeed.setOutlineThickness(3);
+
+	upgradeUnitDistance.setSize({ SCREEN_WIDTH / 20, SCREEN_HEIGHT / 16 });
+	upgradeUnitDistance.setOrigin({ upgradeUnitDistance.getSize().x / 2,upgradeUnitDistance.getSize().y / 2 });
+	upgradeUnitDistance.setPosition({ (SCREEN_WIDTH / 2) + (upgradeMenuX / 3),(SCREEN_HEIGHT / 2) + (upgradeMenuY / 2.8f) });
+	upgradeUnitDistance.setFillColor(sf::Color(0, 200, 0));
+	upgradeUnitDistance.setOutlineColor(sf::Color::Black);
+	upgradeUnitDistance.setOutlineThickness(3);
+
+	downgradeUnitDistance.setSize({ SCREEN_WIDTH / 20, SCREEN_HEIGHT / 16 });
+	downgradeUnitDistance.setOrigin({ downgradeUnitDistance.getSize().x / 2,downgradeUnitDistance.getSize().y / 2 });
+	downgradeUnitDistance.setPosition({ (SCREEN_WIDTH / 2) - (upgradeMenuX / 3),(SCREEN_HEIGHT / 2) + (upgradeMenuY / 2.8f) });
+	downgradeUnitDistance.setFillColor(sf::Color(200, 0, 0));
+	downgradeUnitDistance.setOutlineColor(sf::Color::Black);
+	downgradeUnitDistance.setOutlineThickness(3);
+
+	customUnitText.setFont(font);
+	customUnitText.setString("Upgrade Custom Unit");
+	customUnitText.setCharacterSize(50);//increase size and then downscale to prevent blurred text
+	customUnitText.setFillColor(sf::Color(0, 0, 0));
+	customUnitText.setScale(0.75, 0.75);
+	customUnitText.setOrigin({ (customUnitText.getGlobalBounds().getSize().x / 2) + 40,(customUnitText.getGlobalBounds().getSize().y / 2) });
+	customUnitText.setPosition({ (SCREEN_WIDTH / 2),(SCREEN_HEIGHT / 2) - (upgradeMenuY / 2.15f) });
+	customUnitText.setStyle(customUnitText.Underlined);
+
+	upgradeHealthText.setFont(font);
+	upgradeHealthText.setString("Upgrade Health");
+	upgradeHealthText.setCharacterSize(35);//increase size and then downscale to prevent blurred text
+	upgradeHealthText.setFillColor(sf::Color(0, 0, 0));
+	upgradeHealthText.setScale(0.75, 0.75);
+	upgradeHealthText.setOrigin({ (upgradeHealthText.getGlobalBounds().getSize().x / 2) + 25,(upgradeHealthText.getGlobalBounds().getSize().y/2)});
+	upgradeHealthText.setPosition({(SCREEN_WIDTH / 2),(SCREEN_HEIGHT / 2) - (upgradeMenuY / 2.85f)});
+
+	upgradeStrengthText.setFont(font);
+	upgradeStrengthText.setString("Upgrade Damage");
+	upgradeStrengthText.setCharacterSize(35);//increase size and then downscale to prevent blurred text
+	upgradeStrengthText.setFillColor(sf::Color(0, 0, 0));
+	upgradeStrengthText.setScale(0.75, 0.75);
+	upgradeStrengthText.setOrigin({ (upgradeStrengthText.getGlobalBounds().getSize().x / 2) + 25,(upgradeStrengthText.getGlobalBounds().getSize().y / 2) });
+	upgradeStrengthText.setPosition({ (SCREEN_WIDTH / 2),(SCREEN_HEIGHT / 2) - (upgradeMenuY / 7.f) });
+
+	upgradeSpeedText.setFont(font);
+	upgradeSpeedText.setString("Upgrade Damage");
+	upgradeSpeedText.setCharacterSize(35);//increase size and then downscale to prevent blurred text
+	upgradeSpeedText.setFillColor(sf::Color(0, 0, 0));
+	upgradeSpeedText.setScale(0.75, 0.75);
+	upgradeSpeedText.setOrigin({ (upgradeSpeedText.getGlobalBounds().getSize().x / 2) + 22,(upgradeSpeedText.getGlobalBounds().getSize().y / 2) });
+	upgradeSpeedText.setPosition({ (SCREEN_WIDTH / 2),(SCREEN_HEIGHT / 2) + (upgradeMenuY / 12.f) });
+
+	upgradeDistanceText.setFont(font);
+	upgradeDistanceText.setString("Upgrade Distance");
+	upgradeDistanceText.setCharacterSize(35);//increase size and then downscale to prevent blurred text
+	upgradeDistanceText.setFillColor(sf::Color(0, 0, 0));
+	upgradeDistanceText.setScale(0.75, 0.75);
+	upgradeDistanceText.setOrigin({ (upgradeSpeedText.getGlobalBounds().getSize().x / 2) + 28,(upgradeSpeedText.getGlobalBounds().getSize().y / 2) });
+	upgradeDistanceText.setPosition({ (SCREEN_WIDTH / 2),(SCREEN_HEIGHT / 2) + (upgradeMenuY / 3.4f) });
+
+	customSquadData.health = 100;
+	customSquadData.moveDistance = 5;
+	customSquadData.moveSpeed = 100;
+	customSquadData.squadStrength = 100;
+	customSquadData.teamNum = 0;
+	customSquadData.unitType = 3;
+
+	customHealthText.setFont(font);
+	customHealthText.setCharacterSize(40);//increase size and then downscale to prevent blurred text
+	customHealthText.setFillColor(sf::Color::Black);
+	customHealthText.setScale(0.75, 0.75);
+	customHealthText.setString(std::to_string(customSquadData.health));
+	customHealthText.setOrigin({ (customHealthText.getGlobalBounds().getSize().x / 2) + 10,(customHealthText.getGlobalBounds().getSize().y / 2) });
+	customHealthText.setPosition({ (SCREEN_WIDTH / 2),(SCREEN_HEIGHT / 2) - (upgradeMenuY / 3.5f)});
+
+	customStrengthText.setFont(font);
+	customStrengthText.setCharacterSize(40);//increase size and then downscale to prevent blurred text
+	customStrengthText.setFillColor(sf::Color::Black);
+	customStrengthText.setScale(0.75, 0.75);
+	customStrengthText.setString(std::to_string(customSquadData.squadStrength));
+	customStrengthText.setOrigin({ (customStrengthText.getGlobalBounds().getSize().x / 2) + 10,(customStrengthText.getGlobalBounds().getSize().y / 2) });
+	customStrengthText.setPosition({ (SCREEN_WIDTH / 2),(SCREEN_HEIGHT / 2) - (upgradeMenuY / 13.f) });
+
+	customSpeedText.setFont(font);
+	customSpeedText.setCharacterSize(40);//increase size and then downscale to prevent blurred text
+	customSpeedText.setFillColor(sf::Color::Black);
+	customSpeedText.setScale(0.75, 0.75);
+	customSpeedText.setString(std::to_string(customSquadData.moveSpeed));
+	customSpeedText.setOrigin({ (customSpeedText.getGlobalBounds().getSize().x / 2) + 10,(customSpeedText.getGlobalBounds().getSize().y / 2) });
+	customSpeedText.setPosition({ (SCREEN_WIDTH / 2),(SCREEN_HEIGHT / 2) + (upgradeMenuY / 6.8f) });
+
+	customDistanceText.setFont(font);
+	customDistanceText.setCharacterSize(40);//increase size and then downscale to prevent blurred text
+	customDistanceText.setFillColor(sf::Color::Black);
+	customDistanceText.setScale(0.75, 0.75);
+	customDistanceText.setString(std::to_string(customSquadData.moveDistance));
+	customDistanceText.setOrigin({ (customDistanceText.getGlobalBounds().getSize().x / 2) + 7.5f,(customDistanceText.getGlobalBounds().getSize().y / 2) });
+	customDistanceText.setPosition({ (SCREEN_WIDTH / 2),(SCREEN_HEIGHT / 2) + (upgradeMenuY / 2.8f) });
 }
 
 void UI::update(sf::Time t_deltaTime)
@@ -220,7 +366,7 @@ void UI::fixedUpdate()
 
 }
 
-void UI::render(sf::RenderWindow& t_window, bool t_squadData, bool t_createUnit, bool t_createTower)
+void UI::render(sf::RenderWindow& t_window, bool t_squadData, bool t_createUnit, bool t_createTower,bool t_upgradeUnit)
 {
 	t_window.draw(hudBacking);
 	t_window.draw(endTurnButton);
@@ -233,9 +379,9 @@ void UI::render(sf::RenderWindow& t_window, bool t_squadData, bool t_createUnit,
 	t_window.draw(createTowerText);
 	t_window.draw(moneyDisplay);
 	t_window.draw(moneyIcon);
-	//t_window.draw(framerateText);
+	t_window.draw(framerateText);
 
-	if (t_squadData == true)
+	if (t_squadData == true && upgradeMenuOpen == false)
 	{
 		t_window.draw(unitDataDisplayBacking);
 		t_window.draw(squadSpeedDisplay);
@@ -258,6 +404,30 @@ void UI::render(sf::RenderWindow& t_window, bool t_squadData, bool t_createUnit,
 		t_window.draw(unitMenuBacking);
 		t_window.draw(createGoldMineTower);
 	}
+	if (t_upgradeUnit == true)
+	{
+		t_window.draw(upgradeUnitMenuBacking);
+		t_window.draw(upgradeUnitHealth);
+		t_window.draw(downgradeUnitHealth);
+		t_window.draw(upgradeUnitStrength);
+		t_window.draw(downgradeUnitStrength);
+		t_window.draw(upgradeUnitSpeed);
+		t_window.draw(downgradeUnitSpeed);
+		t_window.draw(upgradeUnitDistance);
+		t_window.draw(downgradeUnitDistance);
+
+		t_window.draw(customHealthText);
+		t_window.draw(customStrengthText);
+		t_window.draw(customSpeedText);
+		t_window.draw(customDistanceText);
+
+		t_window.draw(customUnitText);
+		t_window.draw(upgradeHealthText);
+		t_window.draw(upgradeStrengthText);
+		t_window.draw(upgradeDistanceText);
+		t_window.draw(upgradeSpeedText);
+	}
+	upgradeMenuOpen = t_upgradeUnit;
 }
 
 void UI::renderMainMenu(sf::RenderWindow& t_window)
@@ -354,6 +524,76 @@ void UI::handleMenuInteractions()
 	else if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && createUnitActive == true && clickTimer == 0)
 	{
 		createNewUnit = true;
+	}
+	else if ((sf::Mouse::isButtonPressed(sf::Mouse::Left) && upgradeUnitHealth.getGlobalBounds().contains({ static_cast<float>(mousePos.x),static_cast<float>(mousePos.y) })) && upgradeMenuOpen == true && clickTimer == 0)
+	{
+		customSquadData.health += 25;
+		customHealthText.setString(std::to_string(customSquadData.health));
+		clickTimer = 30;
+	}
+	else if ((sf::Mouse::isButtonPressed(sf::Mouse::Left) && downgradeUnitHealth.getGlobalBounds().contains({ static_cast<float>(mousePos.x),static_cast<float>(mousePos.y) })) && upgradeMenuOpen == true && clickTimer == 0)
+	{
+		customSquadData.health -= 25;
+		if (customSquadData.health <= 25)
+		{
+			customSquadData.health = 25;
+		}
+		customHealthText.setString(std::to_string(customSquadData.health));
+		clickTimer = 30;
+	}
+
+
+	else if ((sf::Mouse::isButtonPressed(sf::Mouse::Left) && upgradeUnitStrength.getGlobalBounds().contains({ static_cast<float>(mousePos.x),static_cast<float>(mousePos.y) })) && upgradeMenuOpen == true && clickTimer == 0)
+	{
+		customSquadData.squadStrength += 25;
+		customStrengthText.setString(std::to_string(customSquadData.squadStrength));
+		clickTimer = 30;
+	}
+	else if ((sf::Mouse::isButtonPressed(sf::Mouse::Left) && downgradeUnitStrength.getGlobalBounds().contains({ static_cast<float>(mousePos.x),static_cast<float>(mousePos.y) })) && upgradeMenuOpen == true && clickTimer == 0)
+	{
+		customSquadData.squadStrength -= 25;
+		if (customSquadData.squadStrength <= 25)
+		{
+			customSquadData.squadStrength = 25;
+		}
+		customStrengthText.setString(std::to_string(customSquadData.squadStrength));
+		clickTimer = 30;
+	}
+
+
+	else if ((sf::Mouse::isButtonPressed(sf::Mouse::Left) && upgradeUnitSpeed.getGlobalBounds().contains({ static_cast<float>(mousePos.x),static_cast<float>(mousePos.y) })) && upgradeMenuOpen == true && clickTimer == 0)
+	{
+		customSquadData.moveSpeed += 25;
+		customSpeedText.setString(std::to_string(customSquadData.moveSpeed));
+		clickTimer = 30;
+	}
+	else if ((sf::Mouse::isButtonPressed(sf::Mouse::Left) && downgradeUnitSpeed.getGlobalBounds().contains({ static_cast<float>(mousePos.x),static_cast<float>(mousePos.y) })) && upgradeMenuOpen == true && clickTimer == 0)
+	{
+		customSquadData.moveSpeed -= 25;
+		if (customSquadData.moveSpeed <= 25)
+		{
+			customSquadData.moveSpeed = 25;
+		}
+		customSpeedText.setString(std::to_string(customSquadData.moveSpeed));
+		clickTimer = 30;
+	}
+
+
+	else if ((sf::Mouse::isButtonPressed(sf::Mouse::Left) && upgradeUnitDistance.getGlobalBounds().contains({ static_cast<float>(mousePos.x),static_cast<float>(mousePos.y) })) && upgradeMenuOpen == true && clickTimer == 0)
+	{
+		customSquadData.moveDistance += 1;
+		customDistanceText.setString(std::to_string(customSquadData.moveDistance));
+		clickTimer = 30;
+		}
+	else if ((sf::Mouse::isButtonPressed(sf::Mouse::Left) && downgradeUnitDistance.getGlobalBounds().contains({ static_cast<float>(mousePos.x),static_cast<float>(mousePos.y) })) && upgradeMenuOpen == true && clickTimer == 0)
+	{
+		customSquadData.moveDistance -= 1;
+		if (customSquadData.moveDistance <= 4)
+		{
+			customSquadData.moveDistance = 4;
+		}
+		customDistanceText.setString(std::to_string(customSquadData.moveDistance));
+		clickTimer = 30;
 	}
 
 	clickTimer--;
