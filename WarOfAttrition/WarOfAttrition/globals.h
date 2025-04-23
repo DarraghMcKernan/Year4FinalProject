@@ -39,6 +39,7 @@ static sf::Texture HelicopterBladeTexture;
 static sf::Texture HelicopterBladeShadowTexture;
 
 static sf::Texture goldmineTexture;
+static sf::Texture researchBuildingTexture;
 
 struct SquadData
 {

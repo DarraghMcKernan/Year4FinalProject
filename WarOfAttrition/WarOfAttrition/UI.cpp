@@ -72,6 +72,13 @@ void UI::init()
 	createGoldMineTower.setOutlineColor(sf::Color::Black);
 	createGoldMineTower.setOutlineThickness(3);
 
+	createUpgradeTower.setSize({ SCREEN_WIDTH / 15, SCREEN_HEIGHT / 12 });
+	createUpgradeTower.setOrigin({ createUpgradeTower.getSize().x / 2 ,createUpgradeTower.getSize().y / 2 });
+	createUpgradeTower.setPosition({ unitMenuBacking.getPosition().x - unitMenuBacking.getSize().x / 4,unitMenuBacking.getPosition().y - unitMenuBacking.getSize().y / 3 });
+	createUpgradeTower.setFillColor(sf::Color(200, 100, 200));
+	createUpgradeTower.setOutlineColor(sf::Color::Black);
+	createUpgradeTower.setOutlineThickness(3);
+
 	menuBackground.setFillColor(sf::Color::Black);
 	menuBackground.setSize({ SCREEN_WIDTH - 10,SCREEN_HEIGHT - 10 });
 	menuBackground.setOrigin({ menuBackground.getSize().x / 2,menuBackground.getSize().y / 2 });
@@ -403,6 +410,7 @@ void UI::render(sf::RenderWindow& t_window, bool t_squadData, bool t_createUnit,
 	{
 		t_window.draw(unitMenuBacking);
 		t_window.draw(createGoldMineTower);
+		t_window.draw(createUpgradeTower);
 	}
 	if (t_upgradeUnit == true)
 	{
@@ -504,6 +512,7 @@ void UI::handleMenuInteractions()
 		createTankUnit.setFillColor(sf::Color(150, 150, 100));
 		createUnitActive = true;
 		unitTypeToCreate = 0;
+		cost = 250;
 	}
 	else if ((sf::Mouse::isButtonPressed(sf::Mouse::Left) && createPistolUnit.getGlobalBounds().contains({ static_cast<float>(mousePos.x),static_cast<float>(mousePos.y) })) && openCreateUnitMenu == true && clickTimer == 0)
 	{
@@ -511,6 +520,7 @@ void UI::handleMenuInteractions()
 		createPistolUnit.setFillColor(sf::Color(150, 150, 100));
 		createUnitActive = true;
 		unitTypeToCreate = 1;
+		cost = 100;
 	}
 	else if ((sf::Mouse::isButtonPressed(sf::Mouse::Left) && createHeavyTankUnit.getGlobalBounds().contains({ static_cast<float>(mousePos.x),static_cast<float>(mousePos.y) })) && openCreateUnitMenu == true && clickTimer == 0)
 	{
@@ -518,12 +528,23 @@ void UI::handleMenuInteractions()
 		createHeavyTankUnit.setFillColor(sf::Color(150, 150, 100));
 		createUnitActive = true;
 		unitTypeToCreate = 2;
+		cost = 600;
 	}
 	else if ((sf::Mouse::isButtonPressed(sf::Mouse::Left) && createGoldMineTower.getGlobalBounds().contains({ static_cast<float>(mousePos.x),static_cast<float>(mousePos.y) })) && openCreateTowerMenu == true && clickTimer == 0)
 	{
 		createGoldTower = true;
 		clickTimer = 30;
 		createGoldMineTower.setFillColor(sf::Color(150, 150, 100));
+		cost = 750;
+		towerTypeToCreate = 0;
+	}
+	else if ((sf::Mouse::isButtonPressed(sf::Mouse::Left) && createUpgradeTower.getGlobalBounds().contains({ static_cast<float>(mousePos.x),static_cast<float>(mousePos.y) })) && openCreateTowerMenu == true && clickTimer == 0)
+	{
+		createGoldTower = true;
+		clickTimer = 30;
+		cost = 1000;
+		createUpgradeTower.setFillColor(sf::Color(150, 100, 150));
+		towerTypeToCreate = 1;
 	}
 	else if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && createUnitActive == true && clickTimer == 0)
 	{
@@ -618,6 +639,7 @@ void UI::handleMenuInteractions()
 		createTankUnit.setFillColor(sf::Color(200, 200, 100));
 		createHeavyTankUnit.setFillColor(sf::Color(200, 100, 200));
 		createGoldMineTower.setFillColor(sf::Color(200, 200, 100));
+		createUpgradeTower.setFillColor(sf::Color(200, 100, 200));
 	}
 }
 

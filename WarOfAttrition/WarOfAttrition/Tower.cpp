@@ -11,6 +11,15 @@ Tower::Tower(int t_type, int t_teamNum,sf::Vector2f t_position) : position(t_pos
 		towerSprite.setTexture(goldmineTexture);
 		towerSprite.setScale(0.25f, 0.25f);
 	}
+	if (type == 1)
+	{
+		if (!researchBuildingTexture.loadFromFile("ASSETS/researchBuilding.png"))
+		{
+			std::cout << "error with research building texture file";
+		}
+		towerSprite.setTexture(researchBuildingTexture);
+		towerSprite.setScale(1.0f, 1.0f);
+	}
 	towerSprite.setOrigin(towerSprite.getTextureRect().width / 2, towerSprite.getTextureRect().height / 2);
 
 	towerSprite.setPosition(position);

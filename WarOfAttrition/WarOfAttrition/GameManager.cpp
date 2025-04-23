@@ -402,11 +402,11 @@ void GameManager::menuInteractions()
 		if (gameUI.createNewTower == true)
 		{
 			gameUI.createNewTower = false;
-			if (player[whosTurn - 1].getMoney() > 750 && player[whosTurn - 1].playerEliminated == false)
+			if (player[whosTurn - 1].getMoney() >= gameUI.cost && player[whosTurn - 1].playerEliminated == false)
 			{
-				player[whosTurn - 1].spendMoney(750);
+				player[whosTurn - 1].spendMoney(gameUI.cost);
 				gameUI.moneyDisplay.setString(std::to_string(player[whosTurn - 1].getMoney()));
-				player[whosTurn - 1].generateNewTower(0, whosTurn - 1, unitPlacementHighlight.getPosition());
+				player[whosTurn - 1].generateNewTower(gameUI.towerTypeToCreate, whosTurn - 1, unitPlacementHighlight.getPosition());
 				createTowerActive = false;
 			}
 		}
@@ -414,9 +414,9 @@ void GameManager::menuInteractions()
 		if (gameUI.createNewUnit == true)
 		{
 			gameUI.createNewUnit = false;
-			if (player[whosTurn - 1].getMoney() > 100 && player[whosTurn - 1].playerEliminated == false)
+			if (player[whosTurn - 1].getMoney() >= gameUI.cost && player[whosTurn - 1].playerEliminated == false)
 			{
-				player[whosTurn - 1].spendMoney(100);
+				player[whosTurn - 1].spendMoney(gameUI.cost);
 				gameUI.moneyDisplay.setString(std::to_string(player[whosTurn - 1].getMoney()));
 				player[whosTurn - 1].generateNewUnit(whosTurn - 1, unitTypeToCreate, unitPlacementHighlight.getPosition());
 				addUnit(whosTurn - 1);//add the new unit to the counter in globals

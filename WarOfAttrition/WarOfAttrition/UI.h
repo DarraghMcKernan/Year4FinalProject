@@ -27,6 +27,8 @@ public:
 	bool createNewTower = false;
 	bool increaseUpgrade = false;
 	int unitTypeToCreate = 0;
+	int towerTypeToCreate = 0;
+	int cost = 0;
 	int upgradeType = 0;
 
 	SquadData customSquadData;
@@ -47,6 +49,7 @@ private:
 	sf::RectangleShape createPistolUnit;//button to create a pistol unit
 	sf::RectangleShape createHeavyTankUnit;//button to create a pistol unit
 	sf::RectangleShape createGoldMineTower;
+	sf::RectangleShape createUpgradeTower;
 	sf::RectangleShape menuBackground;
 	sf::RectangleShape unitDataDisplayBacking;
 
