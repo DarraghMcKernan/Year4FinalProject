@@ -604,6 +604,19 @@ int Player::getSquadNumHovered(sf::Vector2f t_pointToCheck)
 	return -1;
 }
 
+int Player::getTowerNumHovered(sf::Vector2f t_pointToCheck)
+{
+	for (int index = 0; index < playersTowers.size(); index++)
+	{
+		tileForColliding.setPosition(t_pointToCheck);
+		if (playersTowers[index].getTower().getGlobalBounds().contains(t_pointToCheck))
+		{
+			return index;
+		}
+	}
+	return -1;
+}
+
 int Player::getMoney()
 {
 	return money;

@@ -257,16 +257,16 @@ void GameManager::userControls(sf::View& t_viewport,sf::Time& t_deltaTime)
 	{
 		t_viewport.zoom(1.001);
 	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1) && clickTimer == 0)//debug
-	{
-		clickTimer = 30;
-		player[0].eliminateUnit(0);
-	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2) && clickTimer == 0)//debug
-	{
-		clickTimer = 30;
-		player[1].eliminateUnit(0);
-	}
+	//else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1) && clickTimer == 0)//debug
+	//{
+	//	clickTimer = 30;
+	//	player[0].eliminateUnit(0);
+	//}
+	//else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2) && clickTimer == 0)//debug
+	//{
+	//	clickTimer = 30;
+	//	player[1].eliminateUnit(0);
+	//}
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::C) && clickTimer == 0)
 	{
@@ -337,7 +337,10 @@ void GameManager::displayHUD(sf::RenderWindow& t_window,sf::View& t_fixedWindow)
 
 void GameManager::handleCollisions()
 {
-
+	if (player[whosTurn-1].getTowerNumHovered(worldTiles.tileHoveredOverPos()) != -1 && sf::Mouse::isButtonPressed(sf::Mouse::Left) && gameUI.upgradeMenuOpen == false && gameUI.clickTimer == 0)
+	{
+		gameUI.upgradeMenuOpen = true;
+	}
 }
 
 void GameManager::menuInteractions()
@@ -402,6 +405,7 @@ void GameManager::menuInteractions()
 		if (gameUI.createNewTower == true)
 		{
 			gameUI.createNewTower = false;
+			gameUI.createGoldTower = false;
 			if (player[whosTurn - 1].getMoney() >= gameUI.cost && player[whosTurn - 1].playerEliminated == false)
 			{
 				player[whosTurn - 1].spendMoney(gameUI.cost);

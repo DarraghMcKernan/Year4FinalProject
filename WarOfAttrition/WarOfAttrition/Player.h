@@ -51,6 +51,7 @@ public:
 	SquadData getSquadData(int t_squadNum);
 	void setCustomSquadData(SquadData t_squadData, sf::Vector2f t_unitSpawnPos);
 	int getSquadNumHovered(sf::Vector2f t_pointToCheck);
+	int getTowerNumHovered(sf::Vector2f t_pointToCheck);
 
 	int getMoney();
 	void spendMoney(int t_money);
@@ -85,7 +86,7 @@ private:
 	int health = 100;
 	int activeTargetTimer = 0;//a cooldown to prevent the player from trying to select the tile its on
 	int timerForEnd = 0;
-	int money = 975;
+	int money = startingMoney - 25;
 	int sendLeaderDataCooldown = 0;
 	int currentTeam = -1;//which team is this player belongs to
 

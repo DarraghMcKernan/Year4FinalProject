@@ -10,11 +10,13 @@ public:
     int getType();
     int getTeamNum();
     int getIncome();
+    sf::Sprite getTower();
 
 private:
     int type = 0;
     int teamNum = 0;
     sf::Sprite towerSprite;
+    sf::Sprite towerShadow;
     sf::Vector2f position;
     int moneyGeneratedPerRound = 100;
 };

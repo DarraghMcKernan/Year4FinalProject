@@ -30,6 +30,7 @@ public:
 	int towerTypeToCreate = 0;
 	int cost = 0;
 	int upgradeType = 0;
+	int clickTimer = 0;
 
 	SquadData customSquadData;
 
@@ -62,6 +63,7 @@ private:
 	sf::RectangleShape downgradeUnitSpeed;
 	sf::RectangleShape upgradeUnitDistance;
 	sf::RectangleShape downgradeUnitDistance;
+	sf::RectangleShape closeUpgradeMenu;
 
 	sf::Font font;//default font
 	
@@ -78,6 +80,7 @@ private:
 	sf::Text customSpeedText;
 	sf::Text upgradeDistanceText;
 	sf::Text customDistanceText;
+	sf::Text closeMenuX;
 	
 	//squad data display
 	sf::Text squadStrengthDisplay;
@@ -88,7 +91,6 @@ private:
 	sf::Text squadDistanceDisplay;
 
 	sf::Vector2f mousePos;
-	int clickTimer = 0;
 
 	sf::Sprite moneyIcon;
 	sf::Texture moneyIconTexture;
