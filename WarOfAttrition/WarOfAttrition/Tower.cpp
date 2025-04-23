@@ -9,8 +9,9 @@ Tower::Tower(int t_type, int t_teamNum,sf::Vector2f t_position) : position(t_pos
 			std::cout << "error with goldmine texture file";
 		}
 		towerSprite.setTexture(goldmineTexture);
+		towerSprite.setScale(0.25f, 0.25f);
 	}
-	towerSprite.setOrigin(towerSprite.getGlobalBounds().width / 2, towerSprite.getGlobalBounds().height / 2);
+	towerSprite.setOrigin(towerSprite.getTextureRect().width / 2, towerSprite.getTextureRect().height / 2);
 
 	towerSprite.setPosition(position);
 }

@@ -274,7 +274,7 @@ void GameManager::userControls(sf::View& t_viewport,sf::Time& t_deltaTime)
 		std::cout << "Mouse pos X: " << mousePosFloat.x << " Y: " << mousePosFloat.y << "\n";
 	}
 
-	if (createUnitActive == true)
+	if (createUnitActive == true || createTowerActive == true)
 	{
 		unitPlacementHighlight.setPosition(worldTiles.tileHoveredOverPos());
 	}
@@ -306,7 +306,7 @@ void GameManager::display(sf::RenderWindow& t_window)
 		}
 	}
 
-	if (createUnitActive == true)
+	if (createUnitActive == true || createTowerActive == true)
 	{
 		t_window.draw(unitPlacementHighlight);
 	}
@@ -389,6 +389,7 @@ void GameManager::menuInteractions()
 		openCreateTowerMenu = gameUI.openCreateTowerMenu;
 		openCreateUnitMenu = gameUI.openCreateUnitMenu;
 		createUnitActive = gameUI.createUnitActive;
+		createTowerActive = gameUI.createGoldTower;
 
 		if (gameUI.resetPlayerForThisTurn == true)
 		{
@@ -398,12 +399,16 @@ void GameManager::menuInteractions()
 
 		unitTypeToCreate = gameUI.unitTypeToCreate;
 
-		if (gameUI.createGoldTower == true)
+		if (gameUI.createNewTower == true)
 		{
-			gameUI.createGoldTower = false;
-			player[whosTurn - 1].spendMoney(750);
-			gameUI.moneyDisplay.setString(std::to_string(player[whosTurn - 1].getMoney()));
-			player[whosTurn - 1].generateNewTower(0, whosTurn - 1, sf::Vector2f(200, 200));
+			gameUI.createNewTower = false;
+			if (player[whosTurn - 1].getMoney() > 750 && player[whosTurn - 1].playerEliminated == false)
+			{
+				player[whosTurn - 1].spendMoney(750);
+				gameUI.moneyDisplay.setString(std::to_string(player[whosTurn - 1].getMoney()));
+				player[whosTurn - 1].generateNewTower(0, whosTurn - 1, unitPlacementHighlight.getPosition());
+				createTowerActive = false;
+			}
 		}
 
 		if (gameUI.createNewUnit == true)

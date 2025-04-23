@@ -17,7 +17,7 @@ void Player::init(int t_teamNum, int t_unitType)
 	tempSquadData.squadStrength = 150;
 	tempSquadData.teamNum = t_teamNum;
 	tempSquadData.unitType = 3;
-
+	
 	Squad newSquad;
 	sf::Vector2f startPos;
 	for (int index = 0; index < playerSquadsCount; index++)

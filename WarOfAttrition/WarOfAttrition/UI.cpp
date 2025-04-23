@@ -529,6 +529,10 @@ void UI::handleMenuInteractions()
 	{
 		createNewUnit = true;
 	}
+	else if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && createGoldTower == true && clickTimer == 0)
+	{
+		createNewTower = true;
+	}
 	else if ((sf::Mouse::isButtonPressed(sf::Mouse::Left) && upgradeUnitHealth.getGlobalBounds().contains({ static_cast<float>(mousePos.x),static_cast<float>(mousePos.y) })) && upgradeMenuOpen == true && clickTimer == 0)
 	{
 		customSquadData.health += 25;

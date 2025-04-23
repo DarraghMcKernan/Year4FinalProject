@@ -24,6 +24,7 @@ public:
 	bool resetPlayerForThisTurn = false;
 	bool createGoldTower = false;
 	bool createNewUnit = false;
+	bool createNewTower = false;
 	bool increaseUpgrade = false;
 	int unitTypeToCreate = 0;
 	int upgradeType = 0;
