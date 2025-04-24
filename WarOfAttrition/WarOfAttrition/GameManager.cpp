@@ -10,6 +10,7 @@ void GameManager::startGame()//setup variables needed before the game starts
 	gameUI.init();
 	for (int index = 0; index < MAX_PLAYERS; index++)
 	{
+		player[index].upgradeCustomUnit(gameUI.customSquadData);
 		player[index].init(index, 0);
 	}
 
@@ -378,7 +379,7 @@ void GameManager::menuInteractions()
 		gameUI.handleMenuInteractions();
 		gameUI.handleButtonInteractions();
 
-		if(gameUI.upgradeMenuOpen == true)
+		if (gameUI.upgradeMenuOpen == true)
 		{
 			player[whosTurn - 1].upgradeCustomUnit(gameUI.customSquadData);
 		}
@@ -393,6 +394,12 @@ void GameManager::menuInteractions()
 		openCreateUnitMenu = gameUI.openCreateUnitMenu;
 		createUnitActive = gameUI.createUnitActive;
 		createTowerActive = gameUI.createGoldTower;
+
+		if (openCreateTowerMenu == true || openCreateUnitMenu == true || gameUI.upgradeMenuOpen)
+		{
+			player[whosTurn - 1].menuOpen = true;
+		}
+		else player[whosTurn - 1].menuOpen = false;
 
 		if (gameUI.resetPlayerForThisTurn == true)
 		{

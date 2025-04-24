@@ -30,7 +30,7 @@ void Player::init(int t_teamNum, int t_unitType)
 		startPos.y += t_teamNum * (TILE_SIZE * 3);
 	}
 
-	setCustomSquadData(tempSquadData,startPos);
+	//setCustomSquadData(tempSquadData,startPos);
 
 	tileForColliding.setSize(sf::Vector2f(TILE_SIZE +3, TILE_SIZE+3));//used for making sure player cant select a tile that its own squads are on
 	tileForColliding.setOrigin(sf::Vector2f(TILE_SIZE / 2, TILE_SIZE / 2));
@@ -41,7 +41,8 @@ void Player::update(sf::Time& t_deltaTime)
 {
 	//std::cout << currentFormationLeader << " leader\n";
 
-	if (currentFormationLeader != -1 && formationTemp.formationMovingActive == false && targetPosition != sf::Vector2f(0,0) && formationTemp.leaderTargetReached == false && formationTemp.leaderInfoSet == false && formationCreated == true)
+	if (currentFormationLeader != -1 && formationTemp.formationMovingActive == false && targetPosition != sf::Vector2f(0,0)
+		&& formationTemp.leaderTargetReached == false && formationTemp.leaderInfoSet == false && formationCreated == true)
 	{
 		formationTemp.setLeaderInfo(playersSquads[currentFormationLeader].getSprite(), playersSquads[currentFormationLeader].getSquadData().moveSpeed);
 		formationTemp.setLeaderPosAndTarget(playersSquads[currentFormationLeader].getSprite().getPosition(), targetPosition);
@@ -69,7 +70,7 @@ void Player::update(sf::Time& t_deltaTime)
 			}
 		}
 
-		if (formationCreationAllowed == true)
+		if (formationCreationAllowed == true && menuOpen == false)
 		{
 			if (playersSquads[index].formationLeader == false && playersSquads[index].formationActive == false)
 			{
@@ -114,7 +115,7 @@ void Player::update(sf::Time& t_deltaTime)
 
 			if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && playersSquads[index].getTroopContainter().getGlobalBounds().contains(mousePos)
 				&& activeTargetTimer == 0 && turnEnded == false && unitsMoved < MAX_MOVES_PER_TURN && playersSquads[index].movingAllowed() == false
-				&& playersSquads[index].formationActive == false)
+				&& playersSquads[index].formationActive == false && menuOpen == false)
 			{
 				if (squadSet == false)//allows for selected squad to be changed without wasting moves
 				{
@@ -383,6 +384,20 @@ bool Player::squadDistanceValid(sf::Vector2f t_hoveredTile)
 
 void Player::generateNewUnit(int t_teamNum, int t_unitType, sf::Vector2f t_unitSpawnPos)
 {
+	if (t_unitType == 4)
+	{
+		Squad newSquad;
+
+		playersSquads.push_back(newSquad);
+		sf::Vector2f positionWithOffset = { t_unitSpawnPos.x + TILE_SIZE / 2,t_unitSpawnPos.y + TILE_SIZE / 2 };
+		playersSquads[playersSquads.size() - 1].setSquadData(customUnitData);
+		playersSquads[playersSquads.size() - 1].init(positionWithOffset, currentTeam, 4);//4 = custom unit
+
+		playerSquadsCount++;
+
+		return;
+	}
+
 	Squad newSquad;
 
 	sf::Vector2f positionWithOffset = {t_unitSpawnPos.x + TILE_SIZE/2,t_unitSpawnPos.y + TILE_SIZE/2};
@@ -581,14 +596,14 @@ void Player::setCustomSquadData(SquadData t_squadData, sf::Vector2f t_unitSpawnP
 {
 	customUnitData = t_squadData;
 	
-	Squad newSquad;
+	//Squad newSquad;
 
-	playersSquads.push_back(newSquad);
+	//playersSquads.push_back(newSquad);
 
-	playersSquads[playersSquads.size()-1].setSquadData(customUnitData);
-	playersSquads[playersSquads.size()-1].init(t_unitSpawnPos, currentTeam, 3);//3 = custom unit
+	//playersSquads[playersSquads.size()-1].setSquadData(customUnitData);
+	//playersSquads[playersSquads.size()-1].init(t_unitSpawnPos, currentTeam, 3);//3 = custom unit
 
-	playerSquadsCount++;
+	//playerSquadsCount++;
 }
 
 int Player::getSquadNumHovered(sf::Vector2f t_pointToCheck)
@@ -716,7 +731,8 @@ void Player::passInvalidTiles(std::vector<int> t_invalidTiles)
 
 void Player::upgradeCustomUnit(SquadData t_squadData)
 {
-	playersSquads[playersSquads.size() - 1].setSquadData(t_squadData);
+	customUnitData = t_squadData;
+	//playersSquads[playersSquads.size() - 1].setSquadData(t_squadData);
 
 	//SquadData customUnitData = playersSquads[playersSquads.size() - 1].getSquadData();
 

@@ -48,7 +48,9 @@ private:
 	sf::RectangleShape unitMenuBacking;//just a background ui for the buttons to create units
 	sf::RectangleShape createTankUnit;//button to create a tank unit
 	sf::RectangleShape createPistolUnit;//button to create a pistol unit
-	sf::RectangleShape createHeavyTankUnit;//button to create a pistol unit
+	sf::RectangleShape createHeavyTankUnit;
+	sf::RectangleShape createHelicopterUnit;
+	sf::RectangleShape createCustomUnit;
 	sf::RectangleShape createGoldMineTower;
 	sf::RectangleShape createUpgradeTower;
 	sf::RectangleShape menuBackground;

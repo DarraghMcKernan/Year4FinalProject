@@ -7,18 +7,28 @@ void Squad::init(sf::Vector2f t_startingPos, int t_teamNum, int t_unitType)
 		squadData.health = 250;
 		squadData.squadStrength = 200;
 		moveSpeed = 80;
+		maxMoveDistance = 10;
 	}
 	if (t_unitType == 1)
 	{
 		squadData.health = 50;
 		squadData.squadStrength = 50;
 		moveSpeed = 100;
+		maxMoveDistance = 8;
 	}
 	if (t_unitType == 2)
 	{
 		squadData.health = 300;
 		squadData.squadStrength = 300;
 		moveSpeed = 65;
+		maxMoveDistance = 6;
+	}
+	if (t_unitType == 3)
+	{
+		squadData.health = 100;
+		squadData.squadStrength = 300;
+		moveSpeed = 200;
+		maxMoveDistance = 15;
 	}
 	squadData.moveSpeed = moveSpeed;
 	squadData.teamNum = t_teamNum;
@@ -26,7 +36,7 @@ void Squad::init(sf::Vector2f t_startingPos, int t_teamNum, int t_unitType)
 	squadData.moveDistance = maxMoveDistance;
 
 	resetColour();
-
+	
 	troopContainer.setSize(sf::Vector2f(TILE_SIZE - 5, TILE_SIZE - 5));
 	//troopContainer.setRotation(45);//can be used to have collision checks in all 9 surrounding squares or the 4 immediate squares
 

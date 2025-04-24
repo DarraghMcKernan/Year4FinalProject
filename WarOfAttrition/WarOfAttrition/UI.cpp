@@ -65,6 +65,20 @@ void UI::init()
 	createHeavyTankUnit.setOutlineColor(sf::Color::Black);
 	createHeavyTankUnit.setOutlineThickness(3);
 
+	createHelicopterUnit.setSize({ SCREEN_WIDTH / 15, SCREEN_HEIGHT / 12 });
+	createHelicopterUnit.setOrigin({ createHelicopterUnit.getSize().x / 2 ,createHelicopterUnit.getSize().y / 2 });
+	createHelicopterUnit.setPosition({ unitMenuBacking.getPosition().x + unitMenuBacking.getSize().x / 4,unitMenuBacking.getPosition().y });
+	createHelicopterUnit.setFillColor(sf::Color(200, 100, 100));
+	createHelicopterUnit.setOutlineColor(sf::Color::Black);
+	createHelicopterUnit.setOutlineThickness(3);
+
+	createCustomUnit.setSize({ SCREEN_WIDTH / 15, SCREEN_HEIGHT / 12 });
+	createCustomUnit.setOrigin({ createCustomUnit.getSize().x / 2 ,createCustomUnit.getSize().y / 2 });
+	createCustomUnit.setPosition({ unitMenuBacking.getPosition().x - unitMenuBacking.getSize().x / 4,unitMenuBacking.getPosition().y + unitMenuBacking.getSize().y / 3 });
+	createCustomUnit.setFillColor(sf::Color(100, 100, 200));
+	createCustomUnit.setOutlineColor(sf::Color::Black);
+	createCustomUnit.setOutlineThickness(3);
+
 	createGoldMineTower.setSize({ SCREEN_WIDTH / 15, SCREEN_HEIGHT / 12 });
 	createGoldMineTower.setOrigin({ createGoldMineTower.getSize().x / 2 ,createGoldMineTower.getSize().y / 2 });
 	createGoldMineTower.setPosition({ unitMenuBacking.getPosition().x + unitMenuBacking.getSize().x / 4,unitMenuBacking.getPosition().y - unitMenuBacking.getSize().y / 3 });
@@ -330,13 +344,6 @@ void UI::init()
 	upgradeDistanceText.setOrigin({ (upgradeSpeedText.getGlobalBounds().getSize().x / 2) + 28,(upgradeSpeedText.getGlobalBounds().getSize().y / 2) });
 	upgradeDistanceText.setPosition({ (SCREEN_WIDTH / 2),(SCREEN_HEIGHT / 2) + (upgradeMenuY / 3.4f) });
 
-	customSquadData.health = 100;
-	customSquadData.moveDistance = 5;
-	customSquadData.moveSpeed = 100;
-	customSquadData.squadStrength = 100;
-	customSquadData.teamNum = 0;
-	customSquadData.unitType = 3;
-
 	customHealthText.setFont(font);
 	customHealthText.setCharacterSize(40);//increase size and then downscale to prevent blurred text
 	customHealthText.setFillColor(sf::Color::Black);
@@ -376,6 +383,13 @@ void UI::init()
 	closeMenuX.setString("X");
 	closeMenuX.setOrigin({ (closeMenuX.getGlobalBounds().getSize().x / 2) - 2.0f,(closeMenuX.getGlobalBounds().getSize().y / 2) + 15.0f });
 	closeMenuX.setPosition({ (SCREEN_WIDTH / 2) - (upgradeMenuX / 2.3f),(SCREEN_HEIGHT / 2) - (upgradeMenuY / 2.25f) });
+
+	customSquadData.health = 100;
+	customSquadData.moveDistance = 5;
+	customSquadData.moveSpeed = 100;
+	customSquadData.squadStrength = 100;
+	customSquadData.teamNum = 0;
+	customSquadData.unitType = 3;
 }
 
 void UI::update(sf::Time t_deltaTime)
@@ -420,6 +434,8 @@ void UI::render(sf::RenderWindow& t_window, bool t_squadData, bool t_createUnit,
 		t_window.draw(createTankUnit);
 		t_window.draw(createPistolUnit);
 		t_window.draw(createHeavyTankUnit);
+		t_window.draw(createHelicopterUnit);
+		t_window.draw(createCustomUnit);
 	}
 	if (t_createTower == true)
 	{
@@ -475,11 +491,11 @@ void UI::handleMouseInteractions()
 
 void UI::handleButtonInteractions()
 {
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::O) && clickTimer == 0)
-	{
-		upgradeMenuOpen = !upgradeMenuOpen;
-		clickTimer = 30;
-	}
+	//if (sf::Keyboard::isKeyPressed(sf::Keyboard::O) && clickTimer == 0)
+	//{
+	//	upgradeMenuOpen = !upgradeMenuOpen;
+	//	clickTimer = 30;
+	//}
 }
 
 void UI::handleMenuInteractions()
@@ -489,13 +505,18 @@ void UI::handleMenuInteractions()
 		attemptTurnEnd = true;
 		endTurnButton.setFillColor(sf::Color(100, 150, 100));
 		clickTimer = 30;
+		openCreateTowerMenu = false;
+		openCreateUnitMenu = false;
 	}
 	else if ((sf::Mouse::isButtonPressed(sf::Mouse::Left) && openUnitMenuButton.getGlobalBounds().contains({ static_cast<float>(mousePos.x),static_cast<float>(mousePos.y) })) && openCreateUnitMenu == false && clickTimer == 0)
 	{
 		openUnitMenuButton.setFillColor(sf::Color(100, 150, 100));
 		clickTimer = 30;
-		openCreateUnitMenu = true;
-		openCreateTowerMenu = false;
+		if (openCreateTowerMenu == false)
+		{
+			openCreateUnitMenu = true;
+			openCreateTowerMenu = false;
+		}
 	}
 	else if ((sf::Mouse::isButtonPressed(sf::Mouse::Left) && openUnitMenuButton.getGlobalBounds().contains({ static_cast<float>(mousePos.x),static_cast<float>(mousePos.y) })) && openCreateUnitMenu == true && clickTimer == 0)
 	{
@@ -508,8 +529,12 @@ void UI::handleMenuInteractions()
 	{
 		openTowerMenuButton.setFillColor(sf::Color(100, 100, 150));
 		clickTimer = 30;
-		openCreateTowerMenu = true;
-		openCreateUnitMenu = false;
+		if (openCreateUnitMenu == false)
+		{
+			openCreateTowerMenu = true;
+			openCreateUnitMenu = false;
+		}
+		
 	}
 	else if ((sf::Mouse::isButtonPressed(sf::Mouse::Left) && openTowerMenuButton.getGlobalBounds().contains({ static_cast<float>(mousePos.x),static_cast<float>(mousePos.y) })) && openCreateTowerMenu == true && clickTimer == 0)
 	{
@@ -534,7 +559,7 @@ void UI::handleMenuInteractions()
 	else if ((sf::Mouse::isButtonPressed(sf::Mouse::Left) && createPistolUnit.getGlobalBounds().contains({ static_cast<float>(mousePos.x),static_cast<float>(mousePos.y) })) && openCreateUnitMenu == true && clickTimer == 0)
 	{
 		clickTimer = 30;
-		createPistolUnit.setFillColor(sf::Color(150, 150, 100));
+		createPistolUnit.setFillColor(sf::Color(100, 150, 150));
 		createUnitActive = true;
 		unitTypeToCreate = 1;
 		cost = 100;
@@ -542,10 +567,26 @@ void UI::handleMenuInteractions()
 	else if ((sf::Mouse::isButtonPressed(sf::Mouse::Left) && createHeavyTankUnit.getGlobalBounds().contains({ static_cast<float>(mousePos.x),static_cast<float>(mousePos.y) })) && openCreateUnitMenu == true && clickTimer == 0)
 	{
 		clickTimer = 30;
-		createHeavyTankUnit.setFillColor(sf::Color(150, 150, 100));
+		createHeavyTankUnit.setFillColor(sf::Color(150, 100, 150));
 		createUnitActive = true;
 		unitTypeToCreate = 2;
 		cost = 600;
+	}
+	else if ((sf::Mouse::isButtonPressed(sf::Mouse::Left) && createHelicopterUnit.getGlobalBounds().contains({ static_cast<float>(mousePos.x),static_cast<float>(mousePos.y) })) && openCreateUnitMenu == true && clickTimer == 0)
+	{
+		clickTimer = 30;
+		createHelicopterUnit.setFillColor(sf::Color(150, 100, 100));
+		createUnitActive = true;
+		unitTypeToCreate = 3;
+		cost = 800;
+	}
+	else if ((sf::Mouse::isButtonPressed(sf::Mouse::Left) && createCustomUnit.getGlobalBounds().contains({ static_cast<float>(mousePos.x),static_cast<float>(mousePos.y) })) && openCreateUnitMenu == true && clickTimer == 0)
+	{
+		clickTimer = 30;
+		createCustomUnit.setFillColor(sf::Color(100, 100, 150));
+		createUnitActive = true;
+		unitTypeToCreate = 4;
+		cost = 500;
 	}
 	else if ((sf::Mouse::isButtonPressed(sf::Mouse::Left) && createGoldMineTower.getGlobalBounds().contains({ static_cast<float>(mousePos.x),static_cast<float>(mousePos.y) })) && openCreateTowerMenu == true && clickTimer == 0)
 	{
@@ -652,6 +693,9 @@ void UI::handleMenuInteractions()
 		resetTurnButton.setFillColor(sf::Color(200, 100, 100));
 		createTankUnit.setFillColor(sf::Color(200, 200, 100));
 		createHeavyTankUnit.setFillColor(sf::Color(200, 100, 200));
+		createPistolUnit.setFillColor(sf::Color(100, 200, 200));
+		createHelicopterUnit.setFillColor(sf::Color(200, 100, 100));
+		createCustomUnit.setFillColor(sf::Color(100, 100, 200));
 		createGoldMineTower.setFillColor(sf::Color(200, 200, 100));
 		createUpgradeTower.setFillColor(sf::Color(200, 100, 200));
 	}

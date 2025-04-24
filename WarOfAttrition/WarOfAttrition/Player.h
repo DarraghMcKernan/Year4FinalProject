@@ -43,7 +43,7 @@ public:
 	int squadTargetSet[MAX_MOVES_PER_TURN];
 	int unitsMoved = 0;
 	bool searchForPath = false;
-
+	bool menuOpen = false;
 	bool playerEliminated = false;
 
 	sf::Vector2f getSquadPosition();

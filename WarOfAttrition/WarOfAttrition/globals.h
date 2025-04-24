@@ -22,7 +22,7 @@ static int playerThreeUnits = 4;
 static int playerFourUnits = 4;
 
 static int globalMoneyPerTurn = 25;
-static int startingMoney = 1000;
+static int startingMoney = 5000;
 
 static sf::Texture tankTexture;
 static sf::Texture tankOutlineTexture;
