@@ -62,4 +62,5 @@ private:
 	bool worldTilesModified = true;
 	bool worldTilesDataUpdated = false;
 	bool upgradeUnitMenuOpen = false;
+	bool customUnitModified = false;
 };

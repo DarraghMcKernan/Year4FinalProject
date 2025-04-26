@@ -10,7 +10,7 @@ void GameManager::startGame()//setup variables needed before the game starts
 	gameUI.init();
 	for (int index = 0; index < MAX_PLAYERS; index++)
 	{
-		player[index].upgradeCustomUnit(gameUI.customSquadData);
+		player[index].upgradeCustomUnit(gameUI.customSquadData,0);
 		player[index].init(index, 0);
 	}
 
@@ -379,9 +379,14 @@ void GameManager::menuInteractions()
 		gameUI.handleMenuInteractions();
 		gameUI.handleButtonInteractions();
 
-		if (gameUI.upgradeMenuOpen == true)
+		if (gameUI.upgradeMenuOpen == true && customUnitModified == false)
 		{
-			player[whosTurn - 1].upgradeCustomUnit(gameUI.customSquadData);
+			customUnitModified = true;
+		}
+		if (customUnitModified == true && gameUI.upgradeMenuOpen == false)
+		{
+			customUnitModified = false;
+			player[whosTurn - 1].upgradeCustomUnit(gameUI.customSquadData, gameUI.customUnitSprite);
 		}
 
 		if (gameUI.attemptTurnEnd == true)

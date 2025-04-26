@@ -541,7 +541,7 @@ void Squad::setunitType()
 		//unitSpriteExtras.setOrigin(64, 64);
 		//unitSpriteExtras.setPosition(troopContainer.getPosition());
 	}
-	else
+	else if (squadData.unitType == 3)
 	{
 		if (!HelicopterTexture.loadFromFile("ASSETS/Helicopter_Base.png"))
 		{
@@ -583,6 +583,70 @@ void Squad::setunitType()
 		unitSpriteExtraOutline.setScale((unitSpriteExtraOutline.getScale().x / 128)* (TILE_SIZE)+0.04, (unitSpriteExtraOutline.getScale().y / 128)* (TILE_SIZE)+0.01);
 		unitSpriteExtraOutline.setOrigin(144, 144);
 		unitSpriteExtraOutline.setPosition(troopContainer.getPosition());
+	}
+	else if (squadData.unitType == 4)//custom unit
+	{
+		if (customUnitSprite == 0)
+		{
+			if (!customTankTexture.loadFromFile("ASSETS/CustomACS.png"))
+			{
+				std::cout << "error loading custom tank texture";
+			}
+			if (!tankOutlineTexture.loadFromFile("ASSETS/TankTeamOutline.png"))
+			{
+				std::cout << "error loading squad outline texture";
+			}
+			UnitSprite.setTexture(customTankTexture);
+			UnitSprite.setScale((UnitSprite.getScale().x / 128) * (TILE_SIZE), (UnitSprite.getScale().y / 128) * (TILE_SIZE));
+			UnitSprite.setOrigin(96, 96);
+			UnitSprite.setPosition(troopContainer.getPosition());
+
+			teamOutlineSprite.setTexture(tankOutlineTexture);
+			teamOutlineSprite.setScale((teamOutlineSprite.getScale().x / 128) * (TILE_SIZE)+0.03, (teamOutlineSprite.getScale().y / 128) * (TILE_SIZE)+0.03);
+			teamOutlineSprite.setOrigin(96, 96);
+			teamOutlineSprite.setPosition(troopContainer.getPosition());
+		}
+		else if (customUnitSprite == 1)
+		{
+			if (!customCarTexture.loadFromFile("ASSETS/CustomHumvee.png"))
+			{
+				std::cout << "error loading custom car texture";
+			}
+			if (!CarOutlineTexture.loadFromFile("ASSETS/HumveeTeamOutline.png"))
+			{
+				std::cout << "error loading squad outline texture";
+			}
+			UnitSprite.setTexture(customCarTexture);
+			UnitSprite.setScale((UnitSprite.getScale().x / 128) * (TILE_SIZE), (UnitSprite.getScale().y / 128) * (TILE_SIZE));
+			UnitSprite.setOrigin(64, 64);
+			UnitSprite.setPosition(troopContainer.getPosition());
+
+			teamOutlineSprite.setTexture(CarOutlineTexture);
+			teamOutlineSprite.setScale((teamOutlineSprite.getScale().x / 128) * (TILE_SIZE)+0.03, (teamOutlineSprite.getScale().y / 128) * (TILE_SIZE)+0.03);
+			teamOutlineSprite.setOrigin(64, 64);
+			teamOutlineSprite.setPosition(troopContainer.getPosition());
+		}
+		else if (customUnitSprite == 2)
+		{
+			if (!customHeavyTankTexture.loadFromFile("ASSETS/CustomBTRModified.png"))
+			{
+				std::cout << "error loading custom heavy tank texture";
+			}
+			if (!BTROutlineTexture.loadFromFile("ASSETS/BTRTeamOutline.png"))
+			{
+				std::cout << "error loading squad outline texture";
+			}
+
+			UnitSprite.setTexture(customHeavyTankTexture);
+			UnitSprite.setScale((UnitSprite.getScale().x / 128) * (TILE_SIZE), (UnitSprite.getScale().y / 128) * (TILE_SIZE));
+			UnitSprite.setOrigin(64, 64);
+			UnitSprite.setPosition(troopContainer.getPosition());
+
+			teamOutlineSprite.setTexture(BTROutlineTexture);
+			teamOutlineSprite.setScale((teamOutlineSprite.getScale().x / 128) * (TILE_SIZE)+0.04, (teamOutlineSprite.getScale().y / 128) * (TILE_SIZE)+0.04);
+			teamOutlineSprite.setOrigin(64, 64);
+			teamOutlineSprite.setPosition(troopContainer.getPosition());
+		}
 	}
 }
 

@@ -63,11 +63,12 @@ public:
 
 	void turnFirstCheck();
 	void passInvalidTiles(std::vector<int> t_invalidTiles);
-	void upgradeCustomUnit(SquadData t_squadData);
+	void upgradeCustomUnit(SquadData t_squadData,int t_selectedSprite);
 
 	bool formationCreationAllowed = false;
 	bool formationMovementUnlocked = false;
 	int currentFormationLeader = -1;
+	int customUnitSprite = 0;
 private:
 	std::vector<Squad> playersSquads;//vector to hold the players squads
 	std::vector<Tower> playersTowers;

@@ -44,6 +44,12 @@ static sf::Texture goldmineTexture;
 static sf::Texture researchBuildingTexture;
 static sf::Texture researchBuildingOutlineTexture;
 
+static sf::Texture customTankTexture;
+static sf::Texture customPistolTexture;
+static sf::Texture customHeavyTankTexture;
+static sf::Texture customCarTexture;
+static sf::Texture CarOutlineTexture;
+
 struct SquadData
 {
 	int teamNum = 0;

@@ -26,6 +26,7 @@ public:
 	bool createNewUnit = false;
 	bool createNewTower = false;
 	bool increaseUpgrade = false;
+	bool spriteChanged = false;
 	int unitTypeToCreate = 0;
 	int towerTypeToCreate = 0;
 	int cost = 0;
@@ -57,6 +58,11 @@ private:
 	sf::RectangleShape menuBackground;
 	sf::RectangleShape unitDataDisplayBacking;
 
+	sf::RectangleShape customUnitSpriteBacking;
+	sf::RectangleShape customUnitNextSprite;
+	sf::RectangleShape customUnitPreviousSprite;
+	sf::RectangleShape customUnitSelectedSprite;
+
 	sf::RectangleShape upgradeUnitMenuBacking;//background for the upgrade menu
 	sf::RectangleShape upgradeUnitHealth;
 	sf::RectangleShape downgradeUnitHealth;
@@ -75,6 +81,9 @@ private:
 	sf::Sprite customUnitButtonIcon;
 	sf::Sprite goldmineButtonIcon;
 	sf::Sprite researchStationButtonIcon;
+	sf::Sprite nextSpriteIcon;
+	sf::Sprite previousSpriteIcon;
+	sf::Sprite currentSpriteIcon;
 
 	sf::Font font;//default font
 	
@@ -92,6 +101,8 @@ private:
 	sf::Text upgradeDistanceText;
 	sf::Text customDistanceText;
 	sf::Text closeMenuX;
+	sf::Text chooseUnitSpriteText;
+	sf::Text arrowIconText;
 	
 	//squad data display
 	sf::Text squadStrengthDisplay;

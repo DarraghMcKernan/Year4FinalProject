@@ -391,6 +391,7 @@ void Player::generateNewUnit(int t_teamNum, int t_unitType, sf::Vector2f t_unitS
 		playersSquads.push_back(newSquad);
 		sf::Vector2f positionWithOffset = { t_unitSpawnPos.x + TILE_SIZE / 2,t_unitSpawnPos.y + TILE_SIZE / 2 };
 		playersSquads[playersSquads.size() - 1].setSquadData(customUnitData);
+		playersSquads[playersSquads.size() - 1].customUnitSprite = customUnitSprite;
 		playersSquads[playersSquads.size() - 1].init(positionWithOffset, currentTeam, 4);//4 = custom unit
 
 		playerSquadsCount++;
@@ -729,9 +730,10 @@ void Player::passInvalidTiles(std::vector<int> t_invalidTiles)
 	}
 }
 
-void Player::upgradeCustomUnit(SquadData t_squadData)
+void Player::upgradeCustomUnit(SquadData t_squadData,int t_selectedSprite)
 {
 	customUnitData = t_squadData;
+	customUnitSprite = t_selectedSprite;
 	//playersSquads[playersSquads.size() - 1].setSquadData(t_squadData);
 
 	//SquadData customUnitData = playersSquads[playersSquads.size() - 1].getSquadData();
