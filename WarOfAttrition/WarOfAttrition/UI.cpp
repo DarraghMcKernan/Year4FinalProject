@@ -384,6 +384,43 @@ void UI::init()
 	closeMenuX.setOrigin({ (closeMenuX.getGlobalBounds().getSize().x / 2) - 2.0f,(closeMenuX.getGlobalBounds().getSize().y / 2) + 15.0f });
 	closeMenuX.setPosition({ (SCREEN_WIDTH / 2) - (upgradeMenuX / 2.3f),(SCREEN_HEIGHT / 2) - (upgradeMenuY / 2.25f) });
 
+	if (!tankTexture.loadFromFile("ASSETS/ACS_Preview.png"))
+	{
+		std::cout << "error loading squad texture";
+	}
+	tankUnitButtonIcon.setTexture(tankTexture);
+	tankUnitButtonIcon.setOrigin(tankUnitButtonIcon.getGlobalBounds().getSize().x / 2, tankUnitButtonIcon.getGlobalBounds().getSize().y / 2);
+	tankUnitButtonIcon.setPosition(createTankUnit.getPosition());
+	tankUnitButtonIcon.setScale(0.5f, 0.5f);
+	
+	if (!infantryTexture.loadFromFile("ASSETS/Hero_Pistol.png"))
+	{
+		std::cout << "error loading Pistol Unit texture";
+	}
+	pistolUnitButtonIcon.setTexture(infantryTexture);
+	pistolUnitButtonIcon.setOrigin(pistolUnitButtonIcon.getGlobalBounds().getSize().x / 2, (pistolUnitButtonIcon.getGlobalBounds().getSize().y / 2) + 4);
+	pistolUnitButtonIcon.setPosition(createPistolUnit.getPosition());
+	pistolUnitButtonIcon.setScale(1.5f, 1.5f);
+
+	if (!BTRTexture.loadFromFile("ASSETS/BTR_Fixed.png"))
+	{
+		std::cout << "error loading heavy tank texture";
+	}
+	heavyUnitButtonIcon.setTexture(BTRTexture);
+	heavyUnitButtonIcon.setOrigin(heavyUnitButtonIcon.getGlobalBounds().getSize().x / 2, (heavyUnitButtonIcon.getGlobalBounds().getSize().y / 2) + 4);
+	heavyUnitButtonIcon.setPosition(createHeavyTankUnit.getPosition());
+	heavyUnitButtonIcon.setScale(0.6f, 0.6f);
+
+	if (!HelicopterPreviewTexture.loadFromFile("ASSETS/Helicopter_Preview.png"))
+	{
+		std::cout << "error loading helicopter preview texture";
+	}
+	helicopterUnitButtonIcon.setTexture(HelicopterPreviewTexture);
+	helicopterUnitButtonIcon.setOrigin(helicopterUnitButtonIcon.getGlobalBounds().getSize().x / 2, (helicopterUnitButtonIcon.getGlobalBounds().getSize().y / 2) + 4);
+	helicopterUnitButtonIcon.setPosition(createHelicopterUnit.getPosition());
+	helicopterUnitButtonIcon.setScale(0.3f, 0.3f);
+	helicopterUnitButtonIcon.setRotation(45);
+
 	customSquadData.health = 100;
 	customSquadData.moveDistance = 5;
 	customSquadData.moveSpeed = 100;
@@ -432,9 +469,13 @@ void UI::render(sf::RenderWindow& t_window, bool t_squadData, bool t_createUnit,
 	{
 		t_window.draw(unitMenuBacking);
 		t_window.draw(createTankUnit);
+		t_window.draw(tankUnitButtonIcon);
 		t_window.draw(createPistolUnit);
+		t_window.draw(pistolUnitButtonIcon);
 		t_window.draw(createHeavyTankUnit);
+		t_window.draw(heavyUnitButtonIcon);
 		t_window.draw(createHelicopterUnit);
+		t_window.draw(helicopterUnitButtonIcon);
 		t_window.draw(createCustomUnit);
 	}
 	if (t_createTower == true)

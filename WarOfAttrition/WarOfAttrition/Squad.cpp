@@ -512,7 +512,7 @@ void Squad::setunitType()
 	}
 	else if (squadData.unitType == 2)
 	{
-		if (!BTRTexture.loadFromFile("ASSETS/BTR_Base.png"))
+		if (!BTRTexture.loadFromFile("ASSETS/BTR_Fixed.png"))
 		{
 			std::cout << "error loading squad texture";
 		}
@@ -520,11 +520,11 @@ void Squad::setunitType()
 		{
 			std::cout << "error loading squad outline texture";
 		}
-		if (!unitSpriteExtrasTexture.loadFromFile("ASSETS/BTR_Tower.png"))
+		/*if (!unitSpriteExtrasTexture.loadFromFile("ASSETS/BTR_Tower.png"))
 		{
 			std::cout << "error loading squad extra texture";
-		}
-		extraSpriteNeeded = true;
+		}*/
+		//extraSpriteNeeded = true;
 
 		UnitSprite.setTexture(BTRTexture);
 		UnitSprite.setScale((UnitSprite.getScale().x / 128) * (TILE_SIZE), (UnitSprite.getScale().y / 128) * (TILE_SIZE));
@@ -536,10 +536,10 @@ void Squad::setunitType()
 		teamOutlineSprite.setOrigin(64, 64);
 		teamOutlineSprite.setPosition(troopContainer.getPosition());
 
-		unitSpriteExtras.setTexture(unitSpriteExtrasTexture);
-		unitSpriteExtras.setScale((unitSpriteExtras.getScale().x / 128) * (TILE_SIZE), (unitSpriteExtras.getScale().y / 128) * (TILE_SIZE));
-		unitSpriteExtras.setOrigin(64, 64);
-		unitSpriteExtras.setPosition(troopContainer.getPosition());
+		//unitSpriteExtras.setTexture(unitSpriteExtrasTexture);
+		//unitSpriteExtras.setScale((unitSpriteExtras.getScale().x / 128) * (TILE_SIZE), (unitSpriteExtras.getScale().y / 128) * (TILE_SIZE));
+		//unitSpriteExtras.setOrigin(64, 64);
+		//unitSpriteExtras.setPosition(troopContainer.getPosition());
 	}
 	else
 	{

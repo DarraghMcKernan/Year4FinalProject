@@ -31,6 +31,7 @@ public:
 	int cost = 0;
 	int upgradeType = 0;
 	int clickTimer = 0;
+	int customUnitSprite = 0;
 
 	SquadData customSquadData;
 
@@ -66,6 +67,12 @@ private:
 	sf::RectangleShape upgradeUnitDistance;
 	sf::RectangleShape downgradeUnitDistance;
 	sf::RectangleShape closeUpgradeMenu;
+	
+	sf::Sprite tankUnitButtonIcon;
+	sf::Sprite pistolUnitButtonIcon;
+	sf::Sprite heavyUnitButtonIcon;
+	sf::Sprite helicopterUnitButtonIcon;
+	sf::Sprite customUnitButtonIcon;
 
 	sf::Font font;//default font
 	

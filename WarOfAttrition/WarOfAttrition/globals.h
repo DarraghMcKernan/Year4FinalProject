@@ -38,6 +38,7 @@ static sf::Texture HelicopterTexture;
 static sf::Texture HelicopterOutlineTexture;
 static sf::Texture HelicopterBladeTexture;
 static sf::Texture HelicopterBladeShadowTexture;
+static sf::Texture HelicopterPreviewTexture;
 
 static sf::Texture goldmineTexture;
 static sf::Texture researchBuildingTexture;
