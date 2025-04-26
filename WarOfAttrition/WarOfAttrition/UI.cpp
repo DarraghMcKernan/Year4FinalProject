@@ -421,6 +421,24 @@ void UI::init()
 	helicopterUnitButtonIcon.setScale(0.3f, 0.3f);
 	helicopterUnitButtonIcon.setRotation(45);
 
+	if (!researchBuildingTexture.loadFromFile("ASSETS/researchBuilding.png"))
+	{
+		std::cout << "error loading researchBuilding texture";
+	}
+	researchStationButtonIcon.setTexture(researchBuildingTexture);
+	researchStationButtonIcon.setOrigin(researchStationButtonIcon.getGlobalBounds().getSize().x / 2, (researchStationButtonIcon.getGlobalBounds().getSize().y / 2));
+	researchStationButtonIcon.setPosition(createUpgradeTower.getPosition());
+	researchStationButtonIcon.setScale(1.2f, 1.2f);
+
+	if (!goldmineTexture.loadFromFile("ASSETS/GoldMine.png"))
+	{
+		std::cout << "error loading gold mine texture";
+	}
+	goldmineButtonIcon.setTexture(goldmineTexture);
+	goldmineButtonIcon.setOrigin(goldmineButtonIcon.getGlobalBounds().getSize().x / 2, (goldmineButtonIcon.getGlobalBounds().getSize().y / 2));
+	goldmineButtonIcon.setPosition(createGoldMineTower.getPosition());
+	goldmineButtonIcon.setScale(0.3f, 0.3f);
+
 	customSquadData.health = 100;
 	customSquadData.moveDistance = 5;
 	customSquadData.moveSpeed = 100;
@@ -482,7 +500,9 @@ void UI::render(sf::RenderWindow& t_window, bool t_squadData, bool t_createUnit,
 	{
 		t_window.draw(unitMenuBacking);
 		t_window.draw(createGoldMineTower);
+		t_window.draw(goldmineButtonIcon);
 		t_window.draw(createUpgradeTower);
+		t_window.draw(researchStationButtonIcon);
 	}
 	if (t_upgradeUnit == true)
 	{

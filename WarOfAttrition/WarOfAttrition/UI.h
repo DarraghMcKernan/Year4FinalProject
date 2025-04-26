@@ -73,6 +73,8 @@ private:
 	sf::Sprite heavyUnitButtonIcon;
 	sf::Sprite helicopterUnitButtonIcon;
 	sf::Sprite customUnitButtonIcon;
+	sf::Sprite goldmineButtonIcon;
+	sf::Sprite researchStationButtonIcon;
 
 	sf::Font font;//default font
 	
