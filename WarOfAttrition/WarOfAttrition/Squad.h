@@ -52,6 +52,10 @@ public:
 	bool needToMove = false;
 	float formationSpeed = 5.0f;
 
+	bool requestPath = false;
+	sf::Vector2f currentPos;
+	sf::Vector2f targetPos;
+
 	std::vector<int> pathToTarget;
 	int positionOnPath = 0;
 	sf::Vector2f nextPlaceOnPath;

@@ -36,7 +36,7 @@ void GameManager::updateLoop()
 
 	srand(time(0));
 
-	while (window.isOpen())
+	while (window.isOpen()) 
 	{
 		sf::Time deltaTime = clock.restart();
 		timeSinceLastUpdate += deltaTime;
@@ -123,6 +123,17 @@ void GameManager::updatePlayers(sf::Time& t_deltaTime)
 
 		if ((whosTurn - 1) == index && openCreateUnitMenu == false)
 		{
+			if (player[index].unitThatRequestedPath != -1)
+			{
+				int squad = player[index].unitThatRequestedPath;
+				std::vector<int> newPath = worldTiles.getPathToTarget(player[index].playersSquads[squad].currentPos, player[index].playersSquads[squad].targetPos);
+				player[index].givePathToSquad(newPath);
+				/*player[index].playersSquads[squad].pathToTarget = newPath;
+				player[index].unitThatRequestedPath = -1;
+				player[index].playersSquads[squad].currentPos = { 0,0 };
+				player[index].playersSquads[squad].targetPos = { 0,0 };
+				player[index].playersSquads[squad].requestPath = false;*/
+			}
 			gameUI.moneyDisplay.setString(std::to_string(player[index].getMoney()));			
 			if (player[whosTurn - 1].playerEliminated == true)
 			{

@@ -52,7 +52,7 @@ void Tile::setType(int t_type)
 	}
 	else if (t_type == 3)
 	{
-		tileShape.setFillColor(sf::Color::Blue);
+		tileShape.setFillColor(sf::Color(0,0,255,50));
 	}
 }
 

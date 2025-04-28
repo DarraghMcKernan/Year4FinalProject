@@ -61,6 +61,12 @@ void Player::update(sf::Time& t_deltaTime)
 	int checkIfAllMoved = 0;
 	for (int index = 0; index < playerSquadsCount; index++)
 	{
+		if (playersSquads[index].requestPath == true && unitThatRequestedPath == -1)
+		{
+			unitThatRequestedPath = index;
+			requestedUnitTarget = playersSquads[unitThatRequestedPath].targetPos;
+			requestedUnitPos = playersSquads[unitThatRequestedPath].currentPos;
+		}
 		if (playersSquads[index].formationLeader == true && playersSquads[index].formationLeaderReachedGoal == true)
 		{
 			for (int i = 0; i < playerSquadsCount; i++)
@@ -754,4 +760,12 @@ void Player::upgradeCustomUnit(SquadData t_squadData,int t_selectedSprite)
 	//{
 	//	customUnitData.squadStrength += t_upgradeValue;
 	//}
+}
+
+void Player::givePathToSquad(std::vector<int> t_path)
+{
+	std::cout << "path generated and passed\n";
+	playersSquads[unitThatRequestedPath].pathToTarget = t_path;
+	playersSquads[unitThatRequestedPath].requestPath = false;
+	unitThatRequestedPath = -1;
 }

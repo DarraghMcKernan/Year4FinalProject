@@ -69,8 +69,13 @@ public:
 	bool formationMovementUnlocked = false;
 	int currentFormationLeader = -1;
 	int customUnitSprite = 0;
-private:
+	int unitThatRequestedPath = -1;
+	sf::Vector2f requestedUnitPos = {0,0};
+	sf::Vector2f requestedUnitTarget = {0,0};
+	void givePathToSquad(std::vector<int> t_path);
 	std::vector<Squad> playersSquads;//vector to hold the players squads
+
+private:
 	std::vector<Tower> playersTowers;
 	std::vector<sf::Text> playersSquadsStrenghts;//used for debugging to display strengths on squads
 	std::vector<int> squadsThatMoved;

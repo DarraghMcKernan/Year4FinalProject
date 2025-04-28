@@ -652,8 +652,13 @@ void Squad::setunitType()
 
 void Squad::moveToFormation(sf::Vector2f t_formationPosition,sf::Time t_deltaTime)
 {
-	if (t_formationPosition != sf::Vector2f(0, 0))		
+	if (t_formationPosition != sf::Vector2f(0, 0))
 	{
+		/*if (formationLeaderReachedGoal == true)
+		{
+			std::cout << "leader reached point, stand still\n";
+			return;
+		}*/
 		if (formationLeader == false)
 		{
 			bool outcome = checkFormationPointValid(t_formationPosition);
@@ -738,6 +743,14 @@ void Squad::steerAroundObstacle(sf::Vector2f t_formationPosition, sf::Time t_del
 		return;
 	}
 
+	if (formationLeaderReachedGoal == true)
+	{
+		pathToTarget.clear();
+		currentMovementState = SquadMovementState::BreakFormation;
+		std::cout << "leader reached point, stand still\n";
+		return;
+	}
+
 	bool frontBlocked = false;
 	bool rightBlocked = false;
 	bool leftBlocked = false;
@@ -819,7 +832,7 @@ void Squad::steerAroundObstacle(sf::Vector2f t_formationPosition, sf::Time t_del
 
 	//only update rotation when direction has significantly changed
 	sf::Vector2f snappedDirection = { 0.0f, 0.0f };
-	float angleToTarget = std::atan2(vectorToTarget.y, vectorToTarget.x); // radians
+	float angleToTarget = std::atan2(vectorToTarget.y, vectorToTarget.x); //radians
 
 	float angleDeg = angleToTarget * 180.0f / 3.14159265f;
 
@@ -827,17 +840,15 @@ void Squad::steerAroundObstacle(sf::Vector2f t_formationPosition, sf::Time t_del
 	if (angleDeg < 0) angleDeg += 360.0f;
 
 	if (angleDeg >= 45 && angleDeg < 135)
-		snappedDirection.y = 1.0f;  //down
+		snappedDirection.y = 1.0f;//down
 	else if (angleDeg >= 135 && angleDeg < 225)
-		snappedDirection.x = -1.0f; //left
+		snappedDirection.x = -1.0f;//left
 	else if (angleDeg >= 225 && angleDeg < 315)
-		snappedDirection.y = -1.0f; //up
+		snappedDirection.y = -1.0f;//up
 	else
-		snappedDirection.x = 1.0f;  //right
+		snappedDirection.x = 1.0f;//right
 
-
-
-	//if not blocked, allow smooth rotation
+	//if not blocked allow smooth rotation
 	if (!leftBlocked && !rightBlocked && !frontBlocked)
 	{
 		float angle = atan2(direction.y, direction.x) * 180 / 3.14159265f;
@@ -848,16 +859,26 @@ void Squad::steerAroundObstacle(sf::Vector2f t_formationPosition, sf::Time t_del
 	{
 		//avoid jitter by comparing with last locked direction
 		if (snappedDirection != sf::Vector2f(0.0f, 0.0f))
+		{
 			lastDirection = snappedDirection;
+		}
 
 		if (lastDirection.x > 0)
+		{
 			troopContainer.setRotation(270);//right
+		}
 		else if (lastDirection.x < 0)
+		{
 			troopContainer.setRotation(90);//left
+		}
 		else if (lastDirection.y > 0)
+		{
 			troopContainer.setRotation(0);//down
+		}
 		else if (lastDirection.y < 0)
+		{
 			troopContainer.setRotation(180);//up
+		}
 	}
 
 	UnitSprite.setPosition(troopContainer.getPosition());
@@ -889,13 +910,6 @@ void Squad::takeLeadersPath(sf::Vector2f t_formationPosition, sf::Time t_deltaTi
 			currentMovementState = SquadMovementState::MoveToFormationPoint;
 			std::cout << "Move to Formation Point\n";
 		}
-		//bool outcome = checkFormationPointValid(t_formationPosition);
-		//if (outcome == true)
-		//{
-		//	currentMovementState = SquadMovementState::MoveToFormationPoint;
-		//	std::cout << "Move to Formation Point\n";
-		//	return;
-		//}
 
 		float distance = 9999999;
 		int closestCell = -1;
@@ -998,8 +1012,86 @@ void Squad::takeLeadersPath(sf::Vector2f t_formationPosition, sf::Time t_deltaTi
 void Squad::breakFormation(sf::Vector2f t_formationPosition, sf::Time t_deltaTime)
 {
 	//ignore formation and pick a tile near the target and just move to it
-	 
+	if (requestPath == false && pathToTarget.size() == 0)
+	{
+		requestPath = true;
+		currentPos = UnitSprite.getPosition();
+		currentPos = normaliser.normalizeToTileCenter(currentPos);
+		sf::Vector2f chosenCell = currentPos;
+
+		int randomX = (rand() % 3) - 1;
+		int randomY = (rand() % 3) - 1;
+
+		chosenCell = { chosenCell.x + TILE_SIZE * randomX, chosenCell.y + TILE_SIZE * randomY };
+		targetPos = normaliser.normalizeToTileCenter(chosenCell);
+
+		if (targetPos == currentPos)
+		{
+			requestPath = false;
+			return;
+		}
+		positionOnPath = 0;
+	}
+	else if (pathToTarget.size() != 0)
+	{
+		if (positionOnPath == 0)
+		{
+			positionOnPath = 1;
+			nextPlaceOnPath = normaliser.convertCellNumToCoords(pathToTarget[positionOnPath]);
+		}
+
+		sf::Vector2f vectorToTarget = nextPlaceOnPath - troopContainer.getPosition();
+		float distance = sqrt(vectorToTarget.x * vectorToTarget.x + vectorToTarget.y * vectorToTarget.y);
+
+		if (distance <= 2.1f)
+		{
+			positionOnPath++;
+			if (positionOnPath < pathToTarget.size())
+			{
+				nextPlaceOnPath = normaliser.convertCellNumToCoords(pathToTarget[positionOnPath]);
+			}
+			else {
+				troopContainer.setPosition(targetPos);
+				UnitSprite.setPosition(troopContainer.getPosition());
+				teamOutlineSprite.setPosition(troopContainer.getPosition());
+				if (extraSpriteNeeded)
+				{
+					unitSpriteExtras.setPosition(troopContainer.getPosition());
+					unitSpriteExtraOutline.setPosition(troopContainer.getPosition());
+				}
+
+
+				formationActive = false;
+				targetReached = true;
+				std::cout << "unit reached nearby cell\n";
+			}
+			return;
+		}
+
+		vectorToTarget /= distance;
+		float speed = moveSpeed * t_deltaTime.asSeconds();
+		troopContainer.move(vectorToTarget * speed);
+
+		UnitSprite.setPosition(troopContainer.getPosition());
+		teamOutlineSprite.setPosition(troopContainer.getPosition());
+		if (extraSpriteNeeded)
+		{
+			unitSpriteExtras.setPosition(troopContainer.getPosition());
+			unitSpriteExtraOutline.setPosition(troopContainer.getPosition());
+		}
+
+		float rotation = atan2(vectorToTarget.y, vectorToTarget.x) * 180 / 3.14159265f - 90;
+		UnitSprite.setRotation(rotation);
+		teamOutlineSprite.setRotation(rotation);
+		if (extraSpriteNeeded && !propellersActive)
+		{
+			unitSpriteExtras.setRotation(rotation);
+			unitSpriteExtraOutline.setRotation(rotation);
+		}
+	}
+	else std::cout << "path was not given\n";
 }
+
 // if its invalid move the tile left and right of current heading to see if they are available and use that for steering
 bool Squad::checkFormationPointValid(sf::Vector2f t_formationPosition)
 {
