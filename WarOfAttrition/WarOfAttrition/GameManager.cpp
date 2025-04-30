@@ -335,7 +335,10 @@ void GameManager::userControls(sf::View& t_viewport,sf::Time& t_deltaTime)
 
 	if (createUnitActive == true || createTowerActive == true)
 	{
-		unitPlacementHighlight.setPosition(worldTiles.tileHoveredOverPos());
+		//if (worldTiles.tileHoveredOverPos() != sf::Vector2f(0, 0))
+		{
+			unitPlacementHighlight.setPosition(worldTiles.tileHoveredOverPos());
+		}
 	}
 }
 
@@ -476,25 +479,47 @@ void GameManager::menuInteractions()
 		{
 			gameUI.createNewTower = false;
 			gameUI.createGoldTower = false;
-			if (player[whosTurn - 1].getMoney() >= gameUI.cost && player[whosTurn - 1].playerEliminated == false)
+			if (player[whosTurn - 1].getMoney() >= gameUI.cost && player[whosTurn - 1].playerEliminated == false && unitPlacementHighlight.getPosition() != sf::Vector2f(0,0))
 			{
 				player[whosTurn - 1].spendMoney(gameUI.cost);
 				gameUI.moneyDisplay.setString(std::to_string(player[whosTurn - 1].getMoney()));
 				player[whosTurn - 1].generateNewTower(gameUI.towerTypeToCreate, whosTurn - 1, unitPlacementHighlight.getPosition());
 				createTowerActive = false;
+
+				std::vector<int> unitTiles;
+				for (int i = 0; i < MAX_PLAYERS; i++)
+				{
+					std::vector<int> temp = player[i].returnAllSquadPositions();
+					if (temp.empty() == false)
+					{
+						unitTiles.insert(unitTiles.end(), temp.begin(), temp.end());
+					}
+					worldTiles.getPlayerTakenTiles(unitTiles);
+				}
 			}
 		}
 
 		if (gameUI.createNewUnit == true)
 		{
 			gameUI.createNewUnit = false;
-			if (player[whosTurn - 1].getMoney() >= gameUI.cost && player[whosTurn - 1].playerEliminated == false)
+			if (player[whosTurn - 1].getMoney() >= gameUI.cost && player[whosTurn - 1].playerEliminated == false && unitPlacementHighlight.getPosition() != sf::Vector2f(0,0))
 			{
 				player[whosTurn - 1].spendMoney(gameUI.cost);
 				gameUI.moneyDisplay.setString(std::to_string(player[whosTurn - 1].getMoney()));
 				player[whosTurn - 1].generateNewUnit(whosTurn - 1, unitTypeToCreate, unitPlacementHighlight.getPosition());
 				addUnit(whosTurn - 1);//add the new unit to the counter in globals
 				createUnitActive = false;
+
+				std::vector<int> unitTiles;
+				for (int i = 0; i < MAX_PLAYERS; i++)
+				{
+					std::vector<int> temp = player[i].returnAllSquadPositions();
+					if (temp.empty() == false)
+					{
+						unitTiles.insert(unitTiles.end(), temp.begin(), temp.end());
+					}
+					worldTiles.getPlayerTakenTiles(unitTiles);
+				}
 			}
 		}
 

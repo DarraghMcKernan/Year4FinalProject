@@ -165,7 +165,10 @@ sf::Vector2f TileGrid::tileHoveredOverPos()
 	{
 		if (tiles[index].getTileShape().getGlobalBounds().contains(temp))
 		{
-			return tiles[index].getTileShape().getPosition();
+			if (tiles[index].getType() == 0 && std::find(playerTakenTiles.begin(), playerTakenTiles.end(), index) == playerTakenTiles.end())
+			{
+				return tiles[index].getTileShape().getPosition();
+			}
 		}
 	}
 	return sf::Vector2f(0,0);

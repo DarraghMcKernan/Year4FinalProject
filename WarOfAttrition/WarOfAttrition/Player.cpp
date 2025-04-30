@@ -779,5 +779,13 @@ std::vector<int> Player::returnAllSquadPositions()
 		squadPositions.push_back(nomaliser.convertCoordsToCellNum(playersSquads[index].getTroopContainter().getPosition()));
 	}
 
+	if (playersTowers.empty() == false)
+	{
+		for (int index = 0; index < playersTowers.size(); index++)
+		{
+			squadPositions.push_back(nomaliser.convertCoordsToCellNum(playersTowers[index].getTower().getPosition()));
+		}
+	}
+
 	return squadPositions;
 }

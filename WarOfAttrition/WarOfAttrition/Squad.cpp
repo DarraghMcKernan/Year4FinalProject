@@ -7,28 +7,28 @@ void Squad::init(sf::Vector2f t_startingPos, int t_teamNum, int t_unitType)
 		squadData.health = 250;
 		squadData.squadStrength = 200;
 		moveSpeed = 80;
-		maxMoveDistance = 10;
+		maxMoveDistance = 8;
 	}
 	if (t_unitType == 1)
 	{
 		squadData.health = 50;
 		squadData.squadStrength = 50;
 		moveSpeed = 100;
-		maxMoveDistance = 8;
+		maxMoveDistance = 5;
 	}
 	if (t_unitType == 2)
 	{
 		squadData.health = 300;
 		squadData.squadStrength = 300;
 		moveSpeed = 65;
-		maxMoveDistance = 6;
+		maxMoveDistance = 5;
 	}
 	if (t_unitType == 3)
 	{
 		squadData.health = 100;
 		squadData.squadStrength = 300;
 		moveSpeed = 200;
-		maxMoveDistance = 15;
+		maxMoveDistance = 12;
 	}
 	squadData.moveSpeed = moveSpeed;
 	squadData.teamNum = t_teamNum;
