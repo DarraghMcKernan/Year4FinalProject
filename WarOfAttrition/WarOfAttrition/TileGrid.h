@@ -33,6 +33,7 @@ public:
 	//std::vector<int> allInvalidTiles;
 	std::vector<int> getPathToTarget(sf::Vector2f StartPos, sf::Vector2f targetPos);
 	std::vector<int> getInvalidTiles();
+	void getPlayerTakenTiles(std::vector<int> t_playerTakeTiles);
 private:
 	int preventOutOfBoundsCheck(int index);
 
@@ -41,6 +42,7 @@ private:
 	std::vector<sf::Sprite> worldTileTemp;
 	std::vector<int> tileSetAsWalls;
 	std::vector<int> tilesToBeChecked;
+	std::vector<int> playerTakenTiles;
 
 	sf::Vector2i mousePos;
 	sf::Vector2f mousePosViewPort;

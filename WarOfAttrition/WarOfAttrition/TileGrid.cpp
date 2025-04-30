@@ -282,7 +282,7 @@ std::vector<int> TileGrid::getPathToTarget(sf::Vector2f t_startPos, sf::Vector2f
 				continue;
 			}
 
-			if (checkIfWall(neighbour) == true)
+			if (checkIfWall(neighbour) == true || std::find(playerTakenTiles.begin(), playerTakenTiles.end(), neighbour) != playerTakenTiles.end())
 			{
 				continue;
 			}
@@ -326,6 +326,11 @@ std::vector<int> TileGrid::getPathToTarget(sf::Vector2f t_startPos, sf::Vector2f
 std::vector<int> TileGrid::getInvalidTiles()
 {
 	return allInvalidTiles;
+}
+
+void TileGrid::getPlayerTakenTiles(std::vector<int> t_playerTakenTiles)
+{
+	playerTakenTiles = t_playerTakenTiles;
 }
 
 int TileGrid::preventOutOfBoundsCheck(int index)

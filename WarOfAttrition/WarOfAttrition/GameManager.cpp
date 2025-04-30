@@ -20,6 +20,17 @@ void GameManager::startGame()//setup variables needed before the game starts
 	unitPlacementHighlight.setOrigin(unitPlacementHighlight.getRadius(), unitPlacementHighlight.getRadius());
 	unitPlacementHighlight.setFillColor(sf::Color::Transparent);
 	
+	std::vector<int> unitTiles;
+	for (int i = 0; i < MAX_PLAYERS; i++)
+	{
+		std::vector<int> temp = player[i].returnAllSquadPositions();
+		if (temp.empty() == false)
+		{
+			unitTiles.insert(unitTiles.end(), temp.begin(), temp.end());
+		}
+		worldTiles.getPlayerTakenTiles(unitTiles);
+	}
+
 	updateLoop();
 }
 
@@ -76,7 +87,32 @@ void GameManager::updateLoop()
 				if (worldTilesModified == true)
 				{
 					worldTilesDataUpdated = true;
-					player[index].passInvalidTiles(worldTiles.getInvalidTiles());
+
+					std::vector<int> unitTiles;
+
+					for (int i = 0; i < MAX_PLAYERS; i++)
+					{
+						if (i != whosTurn - 1)
+						{
+							std::vector<int> temp = player[i].returnAllSquadPositions();
+							if (temp.empty() == false)
+							{
+								unitTiles.insert(unitTiles.end(), temp.begin(), temp.end());
+							}
+						}
+					}
+
+					if (unitTiles.empty() == true)
+					{
+						std::cout << "unitTiles was empty\n";
+						player[index].passInvalidTiles(worldTiles.getInvalidTiles());
+					}
+					else {
+						std::vector<int> temp = worldTiles.getInvalidTiles();
+
+						unitTiles.insert(unitTiles.end(), temp.begin(), temp.end());
+						player[index].passInvalidTiles(unitTiles);
+					}
 				}
 				if (player[whosTurn - 1].playerEliminated == false)
 				{
@@ -206,6 +242,17 @@ void GameManager::updatePlayers(sf::Time& t_deltaTime)
 					if (player[whosTurn - 1].playerEliminated == false)
 					{
 						playerValid = true;
+					}
+
+					std::vector<int> unitTiles;
+					for (int i = 0; i < MAX_PLAYERS; i++)
+					{
+						std::vector<int> temp = player[i].returnAllSquadPositions();
+						if (temp.empty() == false)
+						{
+							unitTiles.insert(unitTiles.end(), temp.begin(), temp.end());
+						}
+						worldTiles.getPlayerTakenTiles(unitTiles);
 					}
 				}
 				

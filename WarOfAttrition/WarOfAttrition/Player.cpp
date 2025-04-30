@@ -769,3 +769,15 @@ void Player::givePathToSquad(std::vector<int> t_path)
 	playersSquads[unitThatRequestedPath].requestPath = false;
 	unitThatRequestedPath = -1;
 }
+
+std::vector<int> Player::returnAllSquadPositions()
+{
+	std::vector<int> squadPositions;
+
+	for (int index = 0; index < playersSquads.size(); index++)
+	{
+		squadPositions.push_back(nomaliser.convertCoordsToCellNum(playersSquads[index].getTroopContainter().getPosition()));
+	}
+
+	return squadPositions;
+}

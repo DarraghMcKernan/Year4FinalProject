@@ -7,6 +7,7 @@
 class Player
 {
 	Formation formationTemp;
+	PositionNormaliser nomaliser;
 
 public:
 	//std::vector<Formation> formations;
@@ -74,6 +75,7 @@ public:
 	sf::Vector2f requestedUnitTarget = {0,0};
 	void givePathToSquad(std::vector<int> t_path);
 	std::vector<Squad> playersSquads;//vector to hold the players squads
+	std::vector<int> returnAllSquadPositions();
 
 private:
 	std::vector<Tower> playersTowers;
