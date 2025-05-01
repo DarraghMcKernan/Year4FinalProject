@@ -63,6 +63,9 @@ public:
 	void passInvalidTiles(std::vector<int> t_invalidTiles);
 	int customUnitSprite = 0;
 	void setRotation(float t_rotation);
+
+	sf::RectangleShape getHorizontalHitbox();
+	sf::RectangleShape getVerticalHitbox();
 private:
 	SquadData squadData;
 	SquadMovementState currentMovementState = MoveToFormationPoint;
@@ -77,6 +80,8 @@ private:
 	bool checkFormationPointValid(sf::Vector2f t_formationPosition);
 
 	sf::RectangleShape troopContainer;
+	sf::RectangleShape verticalHitbox;
+	sf::RectangleShape horizontalHitbox;
 	sf::RectangleShape movableCollider;
 	sf::RectangleShape frontCollider;
 	sf::RectangleShape leftCollider;
@@ -86,8 +91,8 @@ private:
 	sf::Sprite teamOutlineSprite;
 	sf::Sprite unitSpriteExtras;
 	sf::Sprite unitSpriteExtraOutline;
-
 	sf::Sprite goldmineSprite;
+
 	int goldmineCost = 750;
 	int goldmineIncome = 100;
 	int moveSpeed = 100;

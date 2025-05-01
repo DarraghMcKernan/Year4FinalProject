@@ -174,6 +174,19 @@ sf::Vector2f TileGrid::tileHoveredOverPos()
 	return sf::Vector2f(0,0);
 }
 
+sf::Vector2f TileGrid::tileOnMouse()
+{
+	sf::Vector2f temp = mousePosViewport();
+	for (int index = 0; index < (TILE_ROWS * TILE_COLUMNS); index++)
+	{
+		if (tiles[index].getTileShape().getGlobalBounds().contains(temp))
+		{
+			return tiles[index].getTileShape().getPosition();
+		}
+	}
+	return sf::Vector2f(0, 0);
+}
+
 sf::Vector2f TileGrid::normaliseToTilePosition(sf::Vector2f t_position)
 {
 	for (int index = 0; index < (TILE_ROWS * TILE_COLUMNS); index++)

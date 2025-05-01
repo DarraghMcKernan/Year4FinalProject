@@ -144,15 +144,15 @@ void GameManager::updatePlayers(sf::Time& t_deltaTime)
 		//player[index].turnFirstCheck();
 		if (player[index].getSquadNumHovered(mousePosFloat) != -1)
 		{
-			squadData = player[index].getSquadData(player[index].getSquadNumHovered(worldTiles.tileHoveredOverPos()));
+			squadData = player[index].getSquadData(player[index].getSquadNumHovered(worldTiles.tileOnMouse()));
 			allowSquadDataDisplay = true;
 
 			updateUnitDataDisplay();
 
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Delete))
 			{
-				std::cout << "eliminate unit " << std::to_string(player[index].getSquadNumHovered(worldTiles.tileHoveredOverPos()));
-				player[index].eliminateUnit(player[index].getSquadNumHovered(worldTiles.tileHoveredOverPos()));
+				std::cout << "eliminate unit " << std::to_string(player[index].getSquadNumHovered(worldTiles.tileOnMouse()));
+				player[index].eliminateUnit(player[index].getSquadNumHovered(worldTiles.tileOnMouse()));
 				continue;
 			}
 		}
@@ -211,13 +211,25 @@ void GameManager::updatePlayers(sf::Time& t_deltaTime)
 
 			if (player[index].arrivedAtTarget == true)//if the players turn is over as all units have moved
 			{
-				for (int playersIndex = 0; playersIndex < MAX_PLAYERS; playersIndex++)
+				std::vector<sf::RectangleShape> playerHitboxes = player[whosTurn - 1].returnSquadHorizontalHitboxes();
+
+				for (int playerHIndex = 0; playerHIndex < playerHitboxes.size(); playerHIndex++)
 				{
-					if (playersIndex != whosTurn - 1 && player[playersIndex].playerEliminated == false)
+					for (int loopPlayerIndex = 0; loopPlayerIndex < MAX_PLAYERS; loopPlayerIndex++)
 					{
-						std::vector<int> damageTaken = player[playersIndex].collisionCheckerDamage(player[whosTurn - 1].returnMovedSquads(), player[whosTurn -1].returnMovedSquadsData());
-						
-						player[whosTurn-1].dealDamage(damageTaken);//this player needs to also take damage
+						if (loopPlayerIndex != whosTurn - 1 && player[loopPlayerIndex].playerEliminated == false)
+						{
+							std::vector<sf::RectangleShape> enemyHitboxes = player[loopPlayerIndex].returnSquadHorizontalHitboxes();
+							for (int enemyHIndex = 0; enemyHIndex < enemyHitboxes.size(); enemyHIndex++)
+							{
+								if (playerHitboxes[playerHIndex].getGlobalBounds().intersects(enemyHitboxes[enemyHIndex].getGlobalBounds()) == true)
+								{
+									player[whosTurn - 1].dealDamageToUnit(playerHIndex, player[loopPlayerIndex].getUnitStrength(enemyHIndex));
+
+									player[loopPlayerIndex].dealDamageToUnit(enemyHIndex, player[whosTurn - 1].getUnitStrength(playerHIndex));
+								}
+							}
+						}
 					}
 				}
 
@@ -399,7 +411,7 @@ void GameManager::displayHUD(sf::RenderWindow& t_window,sf::View& t_fixedWindow)
 
 void GameManager::handleCollisions()
 {
-	if (player[whosTurn-1].getTowerNumHovered(worldTiles.tileHoveredOverPos()) != -1 && sf::Mouse::isButtonPressed(sf::Mouse::Left) && gameUI.upgradeMenuOpen == false && gameUI.clickTimer == 0)
+	if (player[whosTurn-1].getTowerNumHovered(worldTiles.tileOnMouse()) != -1 && sf::Mouse::isButtonPressed(sf::Mouse::Left) && gameUI.upgradeMenuOpen == false && gameUI.clickTimer == 0)
 	{
 		gameUI.upgradeMenuOpen = true;
 	}

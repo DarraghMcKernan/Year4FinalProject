@@ -37,17 +37,29 @@ void Squad::init(sf::Vector2f t_startingPos, int t_teamNum, int t_unitType)
 
 	resetColour();
 	
-	troopContainer.setSize(sf::Vector2f(TILE_SIZE - 5, TILE_SIZE - 5));
+	//troopContainer.setRadius(TILE_SIZE/1.8f);
+	troopContainer.setSize(sf::Vector2f(TILE_SIZE * 0.9f, TILE_SIZE * 0.9f));
 	//troopContainer.setRotation(45);//can be used to have collision checks in all 9 surrounding squares or the 4 immediate squares
 
 	//troopContainer.setSize(sf::Vector2f(TILE_SIZE + 15, TILE_SIZE + 15));// used to expand the squad to allow for collision checks of surrounding cells
 	//troopContainer.setRotation(45);//can be used to have collision checks in all 9 surrounding squares or the 4 immediate squares
 
-	//troopContainer.setOutlineColor(sf::Color::Black);
-	//troopContainer.setOutlineThickness(1.5);
-	troopContainer.setOrigin(troopContainer.getSize().x / 2, troopContainer.getSize().y / 2);
+	troopContainer.setOutlineColor(sf::Color::Black);
+	troopContainer.setOutlineThickness(1.5);
+	troopContainer.setOrigin(troopContainer.getSize().x/2, troopContainer.getSize().y/2);
 	troopContainer.setPosition(t_startingPos.x - (TILE_SIZE / 2), t_startingPos.y - (TILE_SIZE / 2));//spawn player in the center of the map
 	targetPosition = troopContainer.getPosition();
+
+	horizontalHitbox.setSize(sf::Vector2f(TILE_SIZE * 0.75f, TILE_SIZE / 2));
+	horizontalHitbox.setOutlineColor(sf::Color::Black);
+	horizontalHitbox.setOutlineThickness(1.5);
+	horizontalHitbox.setOrigin(horizontalHitbox.getSize().x / 2, horizontalHitbox.getSize().y / 2);
+	horizontalHitbox.setPosition(t_startingPos.x - (TILE_SIZE / 2), t_startingPos.y - (TILE_SIZE / 2));
+
+	verticalHitbox = horizontalHitbox;
+	verticalHitbox.setSize(sf::Vector2f(TILE_SIZE / 2, TILE_SIZE * 1.5f));
+	verticalHitbox.setOrigin(verticalHitbox.getSize().x / 2, verticalHitbox.getSize().y * 0.25f);
+	verticalHitbox.setPosition(t_startingPos.x - (TILE_SIZE / 2), t_startingPos.y - (TILE_SIZE / 2));
 
 	movableCollider.setSize(sf::Vector2f(TILE_SIZE, TILE_SIZE));
 	movableCollider.setOrigin(sf::Vector2f(TILE_SIZE / 2, TILE_SIZE / 2));
@@ -106,6 +118,8 @@ void Squad::update(sf::Time t_deltaTime)
 				}
 
 				troopContainer.setPosition(targetPosition);
+				horizontalHitbox.setPosition(targetPosition);
+				verticalHitbox.setPosition(targetPosition);
 				UnitSprite.setPosition(troopContainer.getPosition());
 				float rotatiion = (atan2(vectorToTarget.y, vectorToTarget.x) * 180 / 3.14159265) - 90;
 				UnitSprite.setRotation(rotatiion);
@@ -164,6 +178,8 @@ void Squad::update(sf::Time t_deltaTime)
 
 				troopContainer.move((vectorToTarget.x * t_deltaTime.asSeconds()) * (moveSpeed * SPEED_MULTIPLIER), (vectorToTarget.y * t_deltaTime.asSeconds()) * (moveSpeed * SPEED_MULTIPLIER));
 				UnitSprite.setPosition(troopContainer.getPosition());
+				horizontalHitbox.setPosition(troopContainer.getPosition());
+				verticalHitbox.setPosition(troopContainer.getPosition());
 
 				UnitSprite.setRotation((atan2(vectorToTarget.y, vectorToTarget.x) * 180 / 3.14159265) - 90);
 
@@ -224,7 +240,9 @@ void Squad::fixedUpdate()
 
 void Squad::render(sf::RenderWindow& t_window)
 {
-	t_window.draw(troopContainer);
+	//t_window.draw(troopContainer);
+	//t_window.draw(horizontalHitbox);
+	//t_window.draw(verticalHitbox);
 	t_window.draw(teamOutlineSprite);
 	if (extraSpriteNeeded == true)
 	{
@@ -232,7 +250,6 @@ void Squad::render(sf::RenderWindow& t_window)
 	}
 
 	t_window.draw(UnitSprite);
-	//t_window.draw(movableCollider);
 	if(extraSpriteNeeded == true)
 	{
 		t_window.draw(unitSpriteExtras);
@@ -251,7 +268,9 @@ void Squad::unlockMovement(bool t_allowed)
 	targetReached = false;
 	attacker = true;
 	movementAllowed = t_allowed;
-	troopContainer.setFillColor(sf::Color(0, 255, 0, 150));
+	troopContainer.setFillColor(sf::Color(0, 255, 0, 75));
+	horizontalHitbox.setFillColor(sf::Color(0, 255, 0, 75));
+	verticalHitbox.setFillColor(sf::Color(0, 255, 0, 75));
 }
 
 sf::RectangleShape Squad::getTroopContainter()
@@ -268,6 +287,8 @@ void Squad::setTargetPosition(sf::Vector2f t_targetPos)
 void Squad::setPosition(sf::Vector2f t_debugPosition)
 {
 	troopContainer.setPosition(t_debugPosition);
+	UnitSprite.setPosition(horizontalHitbox.getPosition());
+	UnitSprite.setPosition(verticalHitbox.getPosition());
 	UnitSprite.setPosition(troopContainer.getPosition());
 	teamOutlineSprite.setPosition(troopContainer.getPosition());
 	if (extraSpriteNeeded == true)
@@ -307,6 +328,8 @@ void Squad::placeOnRecentCell()
 	recentCellPos.y = row * TILE_SIZE + TILE_SIZE / 2.0f;
 
 	troopContainer.setPosition(recentCellPos);
+	horizontalHitbox.setPosition(recentCellPos);
+	verticalHitbox.setPosition(recentCellPos);
 	UnitSprite.setPosition(recentCellPos);
 	teamOutlineSprite.setPosition(recentCellPos);
 	if (extraSpriteNeeded == true)
@@ -325,24 +348,32 @@ void Squad::resetColour()
 {
 	if (squadData.teamNum == 0)
 	{
+		horizontalHitbox.setFillColor(sf::Color(0, 0, 255, 00));
+		verticalHitbox.setFillColor(sf::Color(0, 0, 255, 00));
 		troopContainer.setFillColor(sf::Color(0, 0, 255, 00));
 		teamOutlineSprite.setColor(sf::Color(0, 0, 255, 200));
 		unitSpriteExtraOutline.setColor(sf::Color(0, 0, 255, 200));
 	}
 	if (squadData.teamNum == 1)
 	{
+		horizontalHitbox.setFillColor(sf::Color(255, 0, 0, 00));
+		verticalHitbox.setFillColor(sf::Color(255, 0, 0, 00));
 		troopContainer.setFillColor(sf::Color(255, 0, 0, 00));
 		teamOutlineSprite.setColor(sf::Color(255, 0, 0, 200));
 		unitSpriteExtraOutline.setColor(sf::Color(255, 0, 0, 200));
 	}
 	if (squadData.teamNum == 2)
 	{
+		horizontalHitbox.setFillColor(sf::Color(0, 255, 255, 00));
+		verticalHitbox.setFillColor(sf::Color(0, 255, 255, 00));
 		troopContainer.setFillColor(sf::Color(0, 255, 255, 00));
 		teamOutlineSprite.setColor(sf::Color(0, 255, 255, 200));
 		unitSpriteExtraOutline.setColor(sf::Color(0, 255, 255, 200));
 	}
 	if (squadData.teamNum == 3)
 	{
+		horizontalHitbox.setFillColor(sf::Color(255, 0, 255, 00));
+		verticalHitbox.setFillColor(sf::Color(255, 0, 255, 00));
 		troopContainer.setFillColor(sf::Color(255, 0, 255, 00));
 		teamOutlineSprite.setColor(sf::Color(255, 0, 255, 200));
 		unitSpriteExtraOutline.setColor(sf::Color(255, 0, 255, 200));
@@ -459,6 +490,8 @@ void Squad::passInvalidTiles(std::vector<int> t_invalidTiles)
 void Squad::setRotation(float t_rotation)
 {
 	troopContainer.setRotation(t_rotation);
+	horizontalHitbox.setRotation(t_rotation);
+	verticalHitbox.setRotation(t_rotation);
 	UnitSprite.setRotation(troopContainer.getRotation());
 	teamOutlineSprite.setRotation(troopContainer.getRotation());
 	if (extraSpriteNeeded == true && propellersActive == false)
@@ -466,6 +499,17 @@ void Squad::setRotation(float t_rotation)
 		unitSpriteExtras.setRotation(troopContainer.getRotation());
 		unitSpriteExtraOutline.setRotation(troopContainer.getRotation());
 	}
+	//troopContainer.setRotation(t_rotation + 45);
+}
+
+sf::RectangleShape Squad::getHorizontalHitbox()
+{
+	return horizontalHitbox;
+}
+
+sf::RectangleShape Squad::getVerticalHitbox()
+{
+	return verticalHitbox;
 }
 
 void Squad::setunitType()
@@ -712,6 +756,8 @@ void Squad::moveToFormation(sf::Vector2f t_formationPosition,sf::Time t_deltaTim
 		currentCell = (row * TILE_COLUMNS) + column;
 
 		UnitSprite.setPosition(troopContainer.getPosition());
+		horizontalHitbox.setPosition(troopContainer.getPosition());
+		verticalHitbox.setPosition(troopContainer.getPosition());
 		teamOutlineSprite.setPosition(troopContainer.getPosition());
 		if (extraSpriteNeeded == true)
 		{
@@ -883,6 +929,10 @@ void Squad::steerAroundObstacle(sf::Vector2f t_formationPosition, sf::Time t_del
 
 	UnitSprite.setPosition(troopContainer.getPosition());
 	UnitSprite.setRotation(troopContainer.getRotation());
+	horizontalHitbox.setPosition(troopContainer.getPosition());
+	horizontalHitbox.setRotation(troopContainer.getRotation());
+	verticalHitbox.setPosition(troopContainer.getPosition());
+	verticalHitbox.setRotation(troopContainer.getRotation());
 	teamOutlineSprite.setPosition(troopContainer.getPosition());
 	teamOutlineSprite.setRotation(troopContainer.getRotation());
 
@@ -898,6 +948,8 @@ void Squad::steerAroundObstacle(sf::Vector2f t_formationPosition, sf::Time t_del
 			unitSpriteExtras.setRotation(troopContainer.getRotation());
 		}
 	}
+
+	//troopContainer.setRotation(troopContainer.getRotation() + 45);
 }
 
 
@@ -977,6 +1029,8 @@ void Squad::takeLeadersPath(sf::Vector2f t_formationPosition, sf::Time t_deltaTi
 
 
 			troopContainer.setPosition(leaderPathClosest);
+			horizontalHitbox.setPosition(leaderPathClosest);
+			verticalHitbox.setPosition(leaderPathClosest);
 			UnitSprite.setPosition(troopContainer.getPosition());
 			teamOutlineSprite.setPosition(troopContainer.getPosition());
 			if (extraSpriteNeeded == true)
@@ -1072,6 +1126,8 @@ void Squad::breakFormation(sf::Vector2f t_formationPosition, sf::Time t_deltaTim
 		float speed = moveSpeed * t_deltaTime.asSeconds();
 		troopContainer.move(vectorToTarget * speed);
 
+		horizontalHitbox.setPosition(troopContainer.getPosition());
+		verticalHitbox.setPosition(troopContainer.getPosition());
 		UnitSprite.setPosition(troopContainer.getPosition());
 		teamOutlineSprite.setPosition(troopContainer.getPosition());
 		if (extraSpriteNeeded)

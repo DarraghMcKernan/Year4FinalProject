@@ -27,7 +27,10 @@ public:
 	void eliminateUnit(int t_num);
 	void turnActive();
 	void dealDamage(std::vector<int> t_damage);
-	std::vector<sf::RectangleShape> returnMovedSquads();
+	void dealDamageToUnit(int t_unit, int t_damage);
+	int getUnitStrength(int t_unit);
+	std::vector<sf::RectangleShape> returnSquadVerticalHitboxes();
+	std::vector<sf::RectangleShape> returnSquadHorizontalHitboxes();
 	std::vector<SquadData> returnMovedSquadsData();
 	sf::Vector2f getFormationTarget();
 	sf::Vector2f getFormationStart();

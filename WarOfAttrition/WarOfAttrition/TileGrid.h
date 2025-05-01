@@ -16,6 +16,7 @@ public:
 	int currentPlayerTarget(int t_turnNum);
 	sf::Vector2f mousePosViewport();
 	sf::Vector2f tileHoveredOverPos();
+	sf::Vector2f tileOnMouse();
 	sf::Vector2f normaliseToTilePosition(sf::Vector2f t_position);
 	int tileHoveredOverNum();
 	void resetTiles();

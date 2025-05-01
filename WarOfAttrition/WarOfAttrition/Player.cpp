@@ -329,7 +329,7 @@ std::vector<int> Player::collisionCheckerDamage(std::vector<sf::RectangleShape> 
 		{
 			if (playersSquads[index].getTroopContainter().getGlobalBounds().intersects(targetToCheck[enemySquadsIndex].getGlobalBounds()))
 			{
-				int damage = t_strength[currentStrength].squadStrength;
+				int damage = t_strength[enemySquadsIndex].squadStrength;
 
 				int randomChance = rand() % 100;
 				if (randomChance < 30)
@@ -478,13 +478,54 @@ void Player::dealDamage(std::vector<int> t_damage)
 	}
 }
 
-std::vector<sf::RectangleShape> Player::returnMovedSquads()
+void Player::dealDamageToUnit(int t_unit, int t_damage)
+{
+	int randomChance = rand() % 100;
+	if (randomChance < 30)
+	{
+		t_damage = t_damage * 0.9f;
+		std::cout << "Damage reduced\n";
+	}
+	else if (randomChance > 70)
+	{
+		t_damage = t_damage * 1.1f;
+		std::cout << "Damage increased\n";
+	}
+
+	int outcome = playersSquads[t_unit].getSquadData().health - t_damage;
+	playersSquads[t_unit].setHealth(outcome);
+}
+
+int Player::getUnitStrength(int t_unit)
+{
+	if (t_unit < playersSquads.size())
+	{
+		return playersSquads[t_unit].getStrength();
+	}
+	return -1;
+}
+
+std::vector<sf::RectangleShape> Player::returnSquadVerticalHitboxes()
 {
 	std::vector<sf::RectangleShape> allMovedSquads;
 
-	for(int index = 0;index < squadsThatMoved.size();index++)
+	for (int index = 0; index < playersSquads.size(); index++)
 	{
-		allMovedSquads.push_back(playersSquads[squadsThatMoved[index]].getTroopContainter());
+		allMovedSquads.push_back(playersSquads[index].getHorizontalHitbox());
+		//allMovedSquads.push_back(playersSquads[index].getVerticalHitbox());
+	}
+
+	return allMovedSquads;
+}
+
+std::vector<sf::RectangleShape> Player::returnSquadHorizontalHitboxes()
+{
+	std::vector<sf::RectangleShape> allMovedSquads;
+
+	for(int index = 0;index < playersSquads.size(); index++)
+	{
+		//allMovedSquads.push_back(playersSquads[index].getHorizontalHitbox());
+		allMovedSquads.push_back(playersSquads[index].getVerticalHitbox());
 	}
 
 	return allMovedSquads;
@@ -532,7 +573,7 @@ void Player::givePathToFormation(std::vector<int> t_path)
 
 void Player::resetMovedUnitsAfterFight(int t_unit)//should be the last function to run this turn
 {
-	playersSquads[t_unit].placeOnRecentCell();
+	//playersSquads[t_unit].placeOnRecentCell();
 
 	targetPosition = sf::Vector2f(0, 0);
 	currentFormationLeader = -1;
