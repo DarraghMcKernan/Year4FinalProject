@@ -199,6 +199,7 @@ void Player::update(sf::Time& t_deltaTime)
 			playersSquads[index].turnEnded = false;
 			playersSquads[index].formationLeaderReachedGoal = false;
 			playersSquads[index].stopMovement();
+			playersSquads[index].resetColour();
 		}
 		squadBeingControlled = 1;
 		formationCreationAllowed = false;
@@ -219,6 +220,7 @@ void Player::update(sf::Time& t_deltaTime)
 		{
 			playersSquads[index].targetReached = false;
 			playersSquads[index].stopMovement();
+			playersSquads[index].resetColour();
 		}
 		squadBeingControlled = 1;
 		formationCreationAllowed = false;

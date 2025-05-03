@@ -44,8 +44,8 @@ void Squad::init(sf::Vector2f t_startingPos, int t_teamNum, int t_unitType)
 	//troopContainer.setSize(sf::Vector2f(TILE_SIZE + 15, TILE_SIZE + 15));// used to expand the squad to allow for collision checks of surrounding cells
 	//troopContainer.setRotation(45);//can be used to have collision checks in all 9 surrounding squares or the 4 immediate squares
 
-	troopContainer.setOutlineColor(sf::Color::Black);
-	troopContainer.setOutlineThickness(1.5);
+	//troopContainer.setOutlineColor(sf::Color::Black);
+	//troopContainer.setOutlineThickness(1.5);
 	troopContainer.setOrigin(troopContainer.getSize().x/2, troopContainer.getSize().y/2);
 	troopContainer.setPosition(t_startingPos.x - (TILE_SIZE / 2), t_startingPos.y - (TILE_SIZE / 2));//spawn player in the center of the map
 	targetPosition = troopContainer.getPosition();
@@ -240,7 +240,7 @@ void Squad::fixedUpdate()
 
 void Squad::render(sf::RenderWindow& t_window)
 {
-	//t_window.draw(troopContainer);
+	t_window.draw(troopContainer);
 	//t_window.draw(horizontalHitbox);
 	//t_window.draw(verticalHitbox);
 	t_window.draw(teamOutlineSprite);
@@ -269,6 +269,10 @@ void Squad::unlockMovement(bool t_allowed)
 	attacker = true;
 	movementAllowed = t_allowed;
 	troopContainer.setFillColor(sf::Color(0, 255, 0, 75));
+	if (formationActive == true)
+	{
+		troopContainer.setFillColor(sf::Color(255, 255, 0, 75));
+	}
 	horizontalHitbox.setFillColor(sf::Color(0, 255, 0, 75));
 	verticalHitbox.setFillColor(sf::Color(0, 255, 0, 75));
 }
@@ -404,6 +408,11 @@ void Squad::setHealth(int t_health)
 void Squad::setFormationNum(int t_formationPosition)
 {
 	posInFormation = t_formationPosition;
+
+	if (formationActive == true)
+	{
+		troopContainer.setFillColor(sf::Color(255, 255, 0, 75));
+	}
 }
 
 int Squad::getFormationNum()
@@ -742,7 +751,6 @@ void Squad::moveToFormation(sf::Vector2f t_formationPosition,sf::Time t_deltaTim
 				targetReached = true;
 				std::cout << "formation position reached" << std::endl;
 			}
-
 			//rotation = 0;
 		}
 
