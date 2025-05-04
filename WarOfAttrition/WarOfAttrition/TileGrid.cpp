@@ -8,6 +8,15 @@ void TileGrid::init()
 
 	sf::Sprite tempSprite;
 	tempSprite.setTexture(defaultTileTexture);
+
+	tempSprite.setTexture(customWaterSpritesheet);
+	int tilesPerRow = 10;
+	int tileWidth = 64;
+	int tileHeight = 64;
+	int x = (38 % tilesPerRow) * tileWidth;
+	int y = (38 / tilesPerRow) * tileHeight;
+	tempSprite.setTextureRect(sf::IntRect(x, y, tileWidth, tileHeight));
+
 	tempSprite.setOrigin(tempSprite.getGlobalBounds().getSize().x / 2, tempSprite.getGlobalBounds().getSize().y / 2);
 	tempSprite.setScale((tempSprite.getScale().x / 64) * 50, (tempSprite.getScale().y / 64) * 50);
 
@@ -361,10 +370,10 @@ int TileGrid::preventOutOfBoundsCheck(int index)
 
 void TileGrid::setupTextures()
 {
-	if (!defaultTileTexture.loadFromFile("ASSETS/Tiles/Grass/tile_0029_grass6.png"))
-		std::cout << "ERROR loading DEFAULT tile\n";
+	//if (!defaultTileTexture.loadFromFile("ASSETS/Tiles/Grass/tile_0029_grass6.png"))
+		//std::cout << "ERROR loading DEFAULT tile\n";
 
-	if (!customWaterSpritesheet.loadFromFile("ASSETS/Tiles/BetterWaterSpritesheet.png"))
+	if (!customWaterSpritesheet.loadFromFile("ASSETS/Tiles/GrassWaterSpritesheet.png"))
 		std::cout << "ERROR loading CustomWaterSpritesheet.png\n";
 }
 
@@ -380,8 +389,13 @@ void TileGrid::updateTileTexture(int t_tileNum, int t_depth)
 
 	if (tileType == 0)
 	{
-		sprite.setTexture(defaultTileTexture);
-		sprite.setTextureRect(sf::IntRect(0, 0, 64, 64));
+		sprite.setTexture(customWaterSpritesheet);
+		int tilesPerRow = 10;
+		int tileWidth = 64;
+		int tileHeight = 64;
+		int x = (38 % tilesPerRow) * tileWidth;
+		int y = (38 / tilesPerRow) * tileHeight;
+		sprite.setTextureRect(sf::IntRect(x, y, tileWidth, tileHeight));
 	}
 	else if (tileType == 2)
 	{
