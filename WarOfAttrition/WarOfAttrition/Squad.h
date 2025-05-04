@@ -77,6 +77,7 @@ private:
 	void steerAroundObstacle(sf::Vector2f t_formationPosition,sf::Time t_deltaTime);
 	void takeLeadersPath(sf::Vector2f t_formationPosition,sf::Time t_deltaTime);
 	void breakFormation(sf::Vector2f t_formationPosition,sf::Time t_deltaTime);
+	void setUnitToTroopContainer();
 	bool checkFormationPointValid(sf::Vector2f t_formationPosition);
 
 	sf::RectangleShape troopContainer;
@@ -104,6 +105,7 @@ private:
 	int reachedTargetCooldown = 0;
 	int movementSwapCooldown = 0;
 	sf::Vector2f lastDirection = { 0.0f, -1.0f };
+	sf::Vector2f currentCellPosition;
 
 	sf::Vector2f worldTileOffset = sf::Vector2f(TILE_SIZE/2, TILE_SIZE/2);
 	std::vector<int> allInvalidTiles;
@@ -113,6 +115,8 @@ private:
 	bool cellCenterReached = false;
 	bool wallSlidingRight = false;
 	bool propellersActive = false;
+	bool takeCurrentCell = false;
+	bool takeCellAttemptPassed = false;
 
 	/*int moveSpeed = 100;
 	int teamNum=0;

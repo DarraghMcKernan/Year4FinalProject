@@ -310,7 +310,11 @@ void Squad::moveToFormationPosition(sf::Vector2f t_formationPosition, sf::Time& 
 		moveToFormation(t_formationPosition, t_deltaTime);
 		break;
 	case SteerAroundObstacle:
-		steerAroundObstacle(t_formationPosition, t_deltaTime);
+		if (takeCurrentCell == false)
+		{
+			steerAroundObstacle(t_formationPosition, t_deltaTime);
+		}
+		else steerAroundObstacle(currentCellPosition, t_deltaTime);
 		break;
 	case TakeLeadersPath:
 		takeLeadersPath(t_formationPosition, t_deltaTime);
@@ -477,6 +481,8 @@ void Squad::checkIfTargetReached()
 void Squad::stopMovement()
 {
 	movementAllowed = false;
+	takeCurrentCell = false;
+	takeCellAttemptPassed = false;
 }
 
 void Squad::passInvalidTiles(std::vector<int> t_invalidTiles)
@@ -763,22 +769,8 @@ void Squad::moveToFormation(sf::Vector2f t_formationPosition,sf::Time t_deltaTim
 		}
 		currentCell = (row * TILE_COLUMNS) + column;
 
-		UnitSprite.setPosition(troopContainer.getPosition());
-		horizontalHitbox.setPosition(troopContainer.getPosition());
-		verticalHitbox.setPosition(troopContainer.getPosition());
-		teamOutlineSprite.setPosition(troopContainer.getPosition());
-		if (extraSpriteNeeded == true)
-		{
-			unitSpriteExtras.setPosition(troopContainer.getPosition());
-			
-			unitSpriteExtraOutline.setPosition(troopContainer.getPosition());
-			
-			if (propellersActive == false)
-			{
-				unitSpriteExtras.setRotation(rotation);
-				unitSpriteExtraOutline.setRotation(rotation);
-			}
-		}
+		setUnitToTroopContainer();
+
 		if (formationLeader == false)
 		{
 			UnitSprite.setRotation(rotation);
@@ -790,18 +782,18 @@ void Squad::moveToFormation(sf::Vector2f t_formationPosition,sf::Time t_deltaTim
 void Squad::steerAroundObstacle(sf::Vector2f t_formationPosition, sf::Time t_deltaTime)
 {
 	bool outcome = checkFormationPointValid(t_formationPosition);
-	if (outcome == false)
-	{
-		currentMovementState = SquadMovementState::TakeLeadersPath;
-		std::cout << "Take leaders path\n";
-		return;
-	}
-
-	if (formationLeaderReachedGoal == true)
+	if (formationLeaderReachedGoal == true && outcome == false && takeCurrentCell == false)
 	{
 		pathToTarget.clear();
 		currentMovementState = SquadMovementState::BreakFormation;
 		std::cout << "leader reached point, stand still\n";
+		return;
+	}
+
+	if (outcome == false && takeCurrentCell == false)
+	{
+		currentMovementState = SquadMovementState::TakeLeadersPath;
+		std::cout << "Take leaders path\n";
 		return;
 	}
 
@@ -849,9 +841,12 @@ void Squad::steerAroundObstacle(sf::Vector2f t_formationPosition, sf::Time t_del
 		if (frontCollider.getGlobalBounds().intersects(invalidTileAvoidance[i].getGlobalBounds()))
 		{
 			frontBlocked = true;
-			movementSwapCooldown = 60;
-			currentMovementState = SquadMovementState::TakeLeadersPath;
-			return;
+			if (takeCurrentCell == false)
+			{
+				movementSwapCooldown = 60;
+				currentMovementState = SquadMovementState::TakeLeadersPath;
+				return;
+			}
 		}
 		if (rightCollider.getGlobalBounds().intersects(invalidTileAvoidance[i].getGlobalBounds()))
 		{
@@ -869,6 +864,15 @@ void Squad::steerAroundObstacle(sf::Vector2f t_formationPosition, sf::Time t_del
 
 	if (distance <= 2.1)
 	{
+		if (takeCurrentCell == true)
+		{
+			troopContainer.setPosition(t_formationPosition);
+			setUnitToTroopContainer();
+			formationActive = false;
+			targetReached = true;
+			std::cout << "backup position reached\n";
+			return;
+		}
 		currentMovementState = SquadMovementState::MoveToFormationPoint;
 		return;
 	}
@@ -935,14 +939,7 @@ void Squad::steerAroundObstacle(sf::Vector2f t_formationPosition, sf::Time t_del
 		}
 	}
 
-	UnitSprite.setPosition(troopContainer.getPosition());
-	UnitSprite.setRotation(troopContainer.getRotation());
-	horizontalHitbox.setPosition(troopContainer.getPosition());
-	horizontalHitbox.setRotation(troopContainer.getRotation());
-	verticalHitbox.setPosition(troopContainer.getPosition());
-	verticalHitbox.setRotation(troopContainer.getRotation());
-	teamOutlineSprite.setPosition(troopContainer.getPosition());
-	teamOutlineSprite.setRotation(troopContainer.getRotation());
+	setUnitToTroopContainer();
 
 	if (extraSpriteNeeded)
 	{
@@ -965,6 +962,20 @@ void Squad::takeLeadersPath(sf::Vector2f t_formationPosition, sf::Time t_deltaTi
 {
 	if (formationLeader == false && reachedTargetCooldown ==0)
 	{
+		if (takeCurrentCell == true)
+		{
+			t_formationPosition = normaliser.convertCellNumToCoords(currentCell);
+		}
+
+		bool outcome = checkFormationPointValid(t_formationPosition);
+		if (formationLeaderReachedGoal == true && outcome == false)
+		{
+			pathToTarget.clear();
+			currentMovementState = SquadMovementState::BreakFormation;
+			std::cout << "leader reached point, stand still\n";
+			return;
+		}
+
 		if (currentPositionOnLeaderPath == pathToTarget.size())
 		{
 			currentMovementState = SquadMovementState::MoveToFormationPoint;
@@ -1003,22 +1014,7 @@ void Squad::takeLeadersPath(sf::Vector2f t_formationPosition, sf::Time t_deltaTi
 		{
 			float speed = (moveSpeed / 2) * t_deltaTime.asSeconds();
 			troopContainer.move(vectorToTarget.x * speed, vectorToTarget.y * speed);
-			UnitSprite.setPosition(troopContainer.getPosition());
-			teamOutlineSprite.setPosition(troopContainer.getPosition());
-			if (extraSpriteNeeded == true)
-			{
-				unitSpriteExtras.setPosition(troopContainer.getPosition());
-				
-
-				unitSpriteExtraOutline.setPosition(troopContainer.getPosition());
-				
-
-				if (propellersActive == false)
-				{
-					unitSpriteExtras.setRotation(rotation);
-					unitSpriteExtraOutline.setRotation(rotation);
-				}
-			}
+			setUnitToTroopContainer();
 			if (formationLeader == false)
 			{
 				UnitSprite.setRotation(rotation);
@@ -1076,8 +1072,34 @@ void Squad::breakFormation(sf::Vector2f t_formationPosition, sf::Time t_deltaTim
 	//ignore formation and pick a tile near the target and just move to it
 	if (requestPath == false && pathToTarget.size() == 0)
 	{
+		if ((rand() % 10) < 5 && takeCellAttemptPassed == false)//30% pick the cell in front and just move to that
+		{
+			takeCellAttemptPassed = true;
+			sf::Vector2f direction = t_formationPosition - troopContainer.getPosition();
+
+			if (std::fabs(direction.x) > std::fabs(direction.y))//normalise to cardinal direction for clean tile selection
+			{
+				direction = direction.x > 0 ? sf::Vector2f(1.0f, 0.0f) : sf::Vector2f(-1.0f, 0.0f);
+			}
+			else
+			{
+				direction = direction.y > 0 ? sf::Vector2f(0.0f, 1.0f) : sf::Vector2f(0.0f, -1.0f);
+			}
+
+			float distance = sqrt((direction.x * direction.x) + (direction.y * direction.y));
+			sf::Vector2f vectorToTarget = direction / distance;
+			vectorToTarget *= TILE_SIZE;
+
+			currentCellPosition = normaliser.normalizeToTileCenter(troopContainer.getPosition() + vectorToTarget);
+
+			takeCurrentCell = true;
+			currentMovementState = SquadMovementState::SteerAroundObstacle;
+			return;
+		}
+
 		requestPath = true;
-		currentPos = UnitSprite.getPosition();
+		//currentPos = UnitSprite.getPosition();
+		currentPos = t_formationPosition;
 		currentPos = normaliser.normalizeToTileCenter(currentPos);
 		sf::Vector2f chosenCell = currentPos;
 
@@ -1114,14 +1136,8 @@ void Squad::breakFormation(sf::Vector2f t_formationPosition, sf::Time t_deltaTim
 			}
 			else {
 				troopContainer.setPosition(targetPos);
-				UnitSprite.setPosition(troopContainer.getPosition());
-				teamOutlineSprite.setPosition(troopContainer.getPosition());
-				if (extraSpriteNeeded)
-				{
-					unitSpriteExtras.setPosition(troopContainer.getPosition());
-					unitSpriteExtraOutline.setPosition(troopContainer.getPosition());
-				}
 
+				setUnitToTroopContainer();
 
 				formationActive = false;
 				targetReached = true;
@@ -1156,7 +1172,33 @@ void Squad::breakFormation(sf::Vector2f t_formationPosition, sf::Time t_deltaTim
 	else std::cout << "path was not given\n";
 }
 
-// if its invalid move the tile left and right of current heading to see if they are available and use that for steering
+void Squad::setUnitToTroopContainer()
+{
+	UnitSprite.setPosition(troopContainer.getPosition());
+	UnitSprite.setRotation(troopContainer.getRotation());
+	horizontalHitbox.setPosition(troopContainer.getPosition());
+	horizontalHitbox.setRotation(troopContainer.getRotation());
+	verticalHitbox.setPosition(troopContainer.getPosition());
+	verticalHitbox.setRotation(troopContainer.getRotation());
+	teamOutlineSprite.setPosition(troopContainer.getPosition());
+	teamOutlineSprite.setRotation(troopContainer.getRotation());
+
+	if (extraSpriteNeeded)
+	{
+		unitSpriteExtras.setPosition(troopContainer.getPosition());
+		unitSpriteExtras.setRotation(troopContainer.getRotation());
+		unitSpriteExtraOutline.setPosition(troopContainer.getPosition());
+		unitSpriteExtraOutline.setRotation(troopContainer.getRotation());
+
+		//if (propellersActive == false)
+		//{
+		//	unitSpriteExtras.setRotation(rotation);
+		//	unitSpriteExtraOutline.setRotation(rotation);
+		//}
+	}
+}
+
+//if its invalid move the tile left and right of current heading to see if they are available and use that for steering
 bool Squad::checkFormationPointValid(sf::Vector2f t_formationPosition)
 {
 	sf::Vector2f positionOfPoint = normaliser.normalizeToTileCenter(t_formationPosition);

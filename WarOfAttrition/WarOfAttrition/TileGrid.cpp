@@ -381,6 +381,7 @@ void TileGrid::updateTileTexture(int t_tileNum, int t_depth)
 	if (tileType == 0)
 	{
 		sprite.setTexture(defaultTileTexture);
+		sprite.setTextureRect(sf::IntRect(0, 0, 64, 64));
 	}
 	else if (tileType == 2)
 	{
@@ -414,7 +415,7 @@ int TileGrid::checkSurroundingTiles(int t_tileNum)
 
 	//check if the cell at specified offset is the same as the current cell so we know if we need to connect to it or not
 	auto matchesType = [&](int rowOffset, int colOffset) -> bool 
-		{
+	{
 		int neighborRow = row + rowOffset;
 		int neighborCol = col + colOffset;
 

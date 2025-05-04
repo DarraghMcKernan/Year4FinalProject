@@ -66,12 +66,10 @@ void GameManager::updateLoop()
 
 		displayClean(window, viewport);
 
-		//worldTiles.update(deltaTime);
+		userControls(viewport, deltaTime);
 
 		if (menuOpen == false && worldEditingEnabled == false)
 		{
-			userControls(viewport, deltaTime);
-
 			updatePlayers(deltaTime);
 
 			worldTiles.update(deltaTime);
