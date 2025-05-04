@@ -8,8 +8,8 @@ void Tile::init(sf::Vector2f t_position, int t_cellNum)
 	tileShape.setOrigin(sf::Vector2f(TILE_SIZE/2, TILE_SIZE/2));
 	//cellShape.setFillColor(sf::Color(0, (cellNumber % TILE_COLUMNS) * 5, (cellNumber % TILE_COLUMNS) * 5, 200));
 	tileShape.setFillColor(sf::Color(255, 255, 255, 0));
-	tileShape.setOutlineColor(sf::Color::White);
-	tileShape.setOutlineThickness(1.5f);
+	//tileShape.setOutlineColor(sf::Color::White);
+	//tileShape.setOutlineThickness(1.5f);
 	tileShape.setPosition({ t_position.x + (TILE_SIZE / 2),t_position.y + (TILE_SIZE / 2) });
 }
 

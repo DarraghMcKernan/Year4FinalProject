@@ -124,6 +124,11 @@ void GameManager::updateLoop()
 				worldTilesModified = false;
 				worldTilesDataUpdated = false;
 			}
+			if (clickTimer > 0)
+			{
+				clickTimer--;
+			}
+
 			handleCollisions();
 			menuInteractions();
 			gameUI.fixedUpdate();
@@ -438,7 +443,13 @@ void GameManager::menuInteractions()
 		}
 		else if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 		{
-			worldTiles.updateTileType(editingTerrainType);
+			worldTiles.updateTileType(2);
+			worldTilesModified = true;
+			//clickTimer = 5;
+		}
+		else if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
+		{
+			worldTiles.updateTileType(0);
 			worldTilesModified = true;
 			//clickTimer = 5;
 		}

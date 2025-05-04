@@ -3,6 +3,7 @@
 #include "globals.h"
 #include <queue>
 #include <fstream>
+#include <unordered_map>
 class TileGrid
 {
 public:
@@ -54,39 +55,42 @@ private:
 
 	sf::Texture defaultTileTexture;
 
-	sf::Texture waterN;
-	sf::Texture waterNW;
-	sf::Texture waterW;
-	sf::Texture waterSW;
-	sf::Texture waterS;
-	sf::Texture waterSE;
-	sf::Texture waterE;
-	sf::Texture waterNE;
+	sf::Texture waterSpritesheet;
+	sf::Texture customWaterSpritesheet;
 
-	sf::Texture waterNA;//north nothing on sides
-	sf::Texture waterWA;
-	sf::Texture waterSA;
-	sf::Texture waterEA;
+	//sf::Texture waterN;
+	//sf::Texture waterNW;
+	//sf::Texture waterW;
+	//sf::Texture waterSW;
+	//sf::Texture waterS;
+	//sf::Texture waterSE;
+	//sf::Texture waterE;
+	//sf::Texture waterNE;
 
-	sf::Texture waterC;//surrounded by water 9 tiles
-	sf::Texture waterA;//by itself
-	sf::Texture waterCI;//Surrounded N E S W only
+	//sf::Texture waterNA;//north nothing on sides
+	//sf::Texture waterWA;
+	//sf::Texture waterSA;
+	//sf::Texture waterEA;
 
-	sf::Texture waterNWI;//northwest interior
-	sf::Texture waterNEI;
-	sf::Texture waterSWI;
-	sf::Texture waterSEI;
+	//sf::Texture waterC;//surrounded by water 9 tiles
+	//sf::Texture waterA;//by itself
+	//sf::Texture waterCI;//Surrounded N E S W only
 
-	sf::Texture waterSEINW;//diagonal corners
-	sf::Texture waterSWINE;
+	//sf::Texture waterNWI;//northwest interior
+	//sf::Texture waterNEI;
+	//sf::Texture waterSWI;
+	//sf::Texture waterSEI;
 
-	sf::Texture waterSEF;//1 corner filled
-	sf::Texture waterSWF;
-	sf::Texture waterNEF;
-	sf::Texture waterNWF;
+	//sf::Texture waterSEINW;//diagonal corners
+	//sf::Texture waterSWINE;
 
-	sf::Texture waterNEC;//NE turn corner cutout 
-	sf::Texture waterNWC;
-	sf::Texture waterSWC;
-	sf::Texture waterSEC;
+	//sf::Texture waterSEF;//1 corner filled
+	//sf::Texture waterSWF;
+	//sf::Texture waterNEF;
+	//sf::Texture waterNWF;
+
+	//sf::Texture waterNEC;//NE turn corner cutout 
+	//sf::Texture waterNWC;
+	//sf::Texture waterSWC;
+	//sf::Texture waterSEC;
 };

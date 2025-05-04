@@ -37,10 +37,11 @@ void TileGrid::init()
 
 	for (int index : tileSetAsWalls)
 	{
-		tiles[index].setType(1);
+		tiles[index].setType(2);
+		updateTileTexture(index, 0);
 	}
-
 	allInvalidTiles = tileSetAsWalls;
+	//updateTileType(2);
 }
 
 void TileGrid::update(sf::Time& t_deltaTime)
@@ -120,7 +121,7 @@ void TileGrid::deactiveateAllTiles()
 {
 	for (int index = 0; index < TILE_ROWS * TILE_COLUMNS; index++)
 	{
-		if (tiles[index].getType() != 1)//wall
+		if (tiles[index].getType() != 2)//water
 		{
 			tiles[index].setTarget(false);
 			tiles[index].setType(0);
@@ -226,7 +227,7 @@ bool TileGrid::checkIfWall(int t_tileNum)
 {
 	for (int index = 0; index < tileSetAsWalls.size(); index++)
 	{
-		if (tiles[tileSetAsWalls.at(index)].getType() == 1 && tileSetAsWalls.at(index) == t_tileNum)
+		if (tiles[tileSetAsWalls.at(index)].getType() == 2 && tileSetAsWalls.at(index) == t_tileNum)
 		{
 			return true;
 		}
@@ -244,7 +245,7 @@ void TileGrid::updateTileType(int t_type)
 	tileSetAsWalls.clear();
 	for (int index = 0; index < TILE_ROWS * TILE_COLUMNS; index++)
 	{
-		if (tiles[index].getType() == 1)//wall
+		if (tiles[index].getType() == 2)//water
 		{
 			wallsData << index <<"\n";
 			tileSetAsWalls.push_back(index);
@@ -358,234 +359,47 @@ int TileGrid::preventOutOfBoundsCheck(int index)
 	return -999;
 }
 
-
 void TileGrid::setupTextures()
 {
 	if (!defaultTileTexture.loadFromFile("ASSETS/Tiles/Grass/tile_0029_grass6.png"))
 		std::cout << "ERROR loading DEFAULT tile\n";
 
-	if (!waterC.loadFromFile("ASSETS/Tiles/Water/tile_0077_water4.png"))
-		std::cout << "ERROR loading CENTRAL WATER tile\n";
-
-	if (!waterA.loadFromFile("ASSETS/Tiles/Water/Custom/WaterCenter.png"))
-		std::cout << "ERROR loading ALONE WATER tile\n";
-	if (!waterCI.loadFromFile("ASSETS/Tiles/Water/Custom/WaterCenterRoundedInterior.png"))
-		std::cout << "ERROR loading SURROUNDED INVERTED WATER tile\n";
-
-	if (!waterN.loadFromFile("ASSETS/Tiles/Water/tile_0079_water6.png"))
-		std::cout << "ERROR loading NORTH WATER tile\n";
-	if (!waterNW.loadFromFile("ASSETS/Tiles/Water/tile_0076_water3.png"))
-		std::cout << "ERROR loading NORTH WEST WATER tile\n";
-	if (!waterW.loadFromFile("ASSETS/Tiles/Water/tile_0078_water5.png"))
-		std::cout << "ERROR loading WEST WATER tile\n";
-	if (!waterSW.loadFromFile("ASSETS/Tiles/Water/tile_0087_water14.png"))
-		std::cout << "ERROR loading SOUTH WEST WATER tile\n";
-
-	if (!waterS.loadFromFile("ASSETS/Tiles/Water/tile_0088_water15.png"))
-		std::cout << "ERROR loading SOUTH WATER tile\n";
-	if (!waterSE.loadFromFile("ASSETS/Tiles/Water/tile_0089_water16.png"))
-		std::cout << "ERROR loading SOUTH EAST WATER tile\n";
-	if (!waterE.loadFromFile("ASSETS/Tiles/Water/tile_0075_water2.png"))
-		std::cout << "ERROR loading EAST WATER tile\n";
-	if (!waterNE.loadFromFile("ASSETS/Tiles/Water/tile_0080_water7.png"))
-		std::cout << "ERROR loading NORTH EAST WATER tile\n";
-	
-	//straight upwards, nothing on sides
-	if (!waterNA.loadFromFile("ASSETS/Tiles/Water/Custom/WaterNCenter.png"))
-		std::cout << "ERROR loading NORTH ALONE WATER tile\n";
-	if (!waterWA.loadFromFile("ASSETS/Tiles/Water/Custom/WaterWCenter.png"))
-		std::cout << "ERROR loading WEST ALONE WATER tile\n";
-	if (!waterSA.loadFromFile("ASSETS/Tiles/Water/Custom/WaterSCenter.png"))
-		std::cout << "ERROR loading SOUTH ALONE WATER tile\n";
-	if (!waterEA.loadFromFile("ASSETS/Tiles/Water/Custom/WaterECenter.png"))
-		std::cout << "ERROR loading EAST ALONE WATER tile\n";
-
-	//interior corners
-	if (!waterNWI.loadFromFile("ASSETS/Tiles/Water/Custom/WaterNWInteriorCorner.png"))
-		std::cout << "ERROR loading NORTH WEST INTERIOR WATER tile\n";
-	if (!waterNEI.loadFromFile("ASSETS/Tiles/Water/Custom/WaterNEInteriorCorner.png"))
-		std::cout << "ERROR loading NORTH EAST INTERIOR WATER tile\n";
-	if (!waterSWI.loadFromFile("ASSETS/Tiles/Water/Custom/WaterSWInteriorCorner.png"))
-		std::cout << "ERROR loading SOUTH WEST INTERIOR WATER tile\n";
-	if (!waterSEI.loadFromFile("ASSETS/Tiles/Water/Custom/WaterSEInteriorCorner.png"))
-		std::cout << "ERROR loading SOUTH EAST INTERIOR WATER tile\n";
-	//diagonal
-	if (!waterSEINW.loadFromFile("ASSETS/Tiles/Water/Custom/WaterNW&SECornerFilled.png"))
-		std::cout << "ERROR loading SOUTH EAST INTERIOR WITH NORTH WEST WATER tile\n";
-	if (!waterSWINE.loadFromFile("ASSETS/Tiles/Water/Custom/WaterNE&SWCornerFilled.png"))
-		std::cout << "ERROR loading SOUTH WEST INTERIOR WITH NORTH EAST WATER tile\n";
-
-	//1 corner filled
-	if (!waterSEF.loadFromFile("ASSETS/Tiles/Water/Custom/WaterSECornerFilled.png"))
-		std::cout << "ERROR loading SOUTH EAST FILLED tile\n";
-	if (!waterSWF.loadFromFile("ASSETS/Tiles/Water/Custom/WaterSWCornerFilled.png"))
-		std::cout << "ERROR loading SOUTH WEST FILLED tile\n";
-	if (!waterNEF.loadFromFile("ASSETS/Tiles/Water/Custom/WaterNECornerFilled.png"))
-		std::cout << "ERROR loading NORTH EAST FILLED tile\n";
-	if (!waterNWF.loadFromFile("ASSETS/Tiles/Water/Custom/WaterNWCornerFilled.png"))
-		std::cout << "ERROR loading NORTH WEST FILLED tile\n";
-
-	if (!waterNEC.loadFromFile("ASSETS/Tiles/Water/Custom/WaterICornerNE.png"))
-		std::cout << "ERROR loading NORTH EAST TURN INTERIOR CORNER CUT OUT tile\n";
-	if (!waterNWC.loadFromFile("ASSETS/Tiles/Water/Custom/WaterCornerNW.png"))
-		std::cout << "ERROR loading NORTH WEST TURN INTERIOR CORNER CUT OUT tile\n";
-	if (!waterSEC.loadFromFile("ASSETS/Tiles/Water/Custom/WaterCornerSE.png"))
-		std::cout << "ERROR loading SOUTH EAST TURN INTERIOR CORNER CUT OUT tile\n";
-	if (!waterSWC.loadFromFile("ASSETS/Tiles/Water/Custom/WaterCornerSW.png"))
-		std::cout << "ERROR loading SOUTH WEST TURN INTERIOR CORNER CUT OUT tile\n";
+	if (!customWaterSpritesheet.loadFromFile("ASSETS/Tiles/BetterWaterSpritesheet.png"))
+		std::cout << "ERROR loading CustomWaterSpritesheet.png\n";
 }
 
 void TileGrid::updateTileTexture(int t_tileNum, int t_depth)
 {
-	if (t_tileNum < 0 || t_tileNum >= tiles.size())//if its out of bounds stop checking
-	{
+	if (t_tileNum < 0 || t_tileNum >= tiles.size())
 		return;
-	}
 
-	if (tiles[t_tileNum].getType() == 0)//ground tile
+	int tileType = tiles[t_tileNum].getType();
+	int spritesheetNumber = checkSurroundingTiles(t_tileNum);
+
+	sf::Sprite& sprite = worldTileTemp[t_tileNum];
+
+	if (tileType == 0)
 	{
-		checkSurroundingTiles(t_tileNum);
-		worldTileTemp[t_tileNum].setTexture(defaultTileTexture);
+		sprite.setTexture(defaultTileTexture);
 	}
-	else if (tiles[t_tileNum].getType() == 2)//water tile
+	else if (tileType == 2)
 	{
-		if (checkSurroundingTiles(t_tileNum) == 0)//single tile
-		{
-			worldTileTemp[t_tileNum].setTexture(waterA);
-		}
-		else if (checkSurroundingTiles(t_tileNum) == 1)//surrounded by water
-		{
-			worldTileTemp[t_tileNum].setTexture(waterC);
-		}
-		else if (checkSurroundingTiles(t_tileNum) == 6)
-		{
-			worldTileTemp[t_tileNum].setTexture(waterCI);
-		}
-
-		else if (checkSurroundingTiles(t_tileNum) == 2)
-		{
-			worldTileTemp[t_tileNum].setTexture(waterSA);
-		}
-		else if (checkSurroundingTiles(t_tileNum) == 3)
-		{
-			worldTileTemp[t_tileNum].setTexture(waterEA);
-		}
-		else if (checkSurroundingTiles(t_tileNum) == 4)
-		{
-			worldTileTemp[t_tileNum].setTexture(waterWA);
-		}
-		else if (checkSurroundingTiles(t_tileNum) == 5)
-		{
-			worldTileTemp[t_tileNum].setTexture(waterNA);
-		}
-
-		else if (checkSurroundingTiles(t_tileNum) == 7)
-		{
-			worldTileTemp[t_tileNum].setTexture(waterN);
-		}
-		else if (checkSurroundingTiles(t_tileNum) == 8)
-		{
-			worldTileTemp[t_tileNum].setTexture(waterW);
-		}
-		else if (checkSurroundingTiles(t_tileNum) == 9)
-		{
-			worldTileTemp[t_tileNum].setTexture(waterE);
-		}
-		else if (checkSurroundingTiles(t_tileNum) == 10)
-		{
-			worldTileTemp[t_tileNum].setTexture(waterS);
-		}
-
-		else if (checkSurroundingTiles(t_tileNum) == 11)//turn
-		{
-			worldTileTemp[t_tileNum].setTexture(waterNW);
-		}
-		else if (checkSurroundingTiles(t_tileNum) == 12)
-		{
-			worldTileTemp[t_tileNum].setTexture(waterNE);
-		}
-		else if (checkSurroundingTiles(t_tileNum) == 13)
-		{
-			worldTileTemp[t_tileNum].setTexture(waterSW);
-		}
-		else if (checkSurroundingTiles(t_tileNum) == 14)
-		{
-			worldTileTemp[t_tileNum].setTexture(waterSE);
-		}
-
-		//interior corners
-		else if (checkSurroundingTiles(t_tileNum) == 15)
-		{
-			worldTileTemp[t_tileNum].setTexture(waterNWI);
-		}
-		else if (checkSurroundingTiles(t_tileNum) == 16)
-		{
-			worldTileTemp[t_tileNum].setTexture(waterNEI);
-		}
-		else if (checkSurroundingTiles(t_tileNum) == 17)
-		{
-			worldTileTemp[t_tileNum].setTexture(waterSWI);
-		}
-		else if (checkSurroundingTiles(t_tileNum) == 18)
-		{
-			worldTileTemp[t_tileNum].setTexture(waterSEI);
-		}
-
-		//diagonal interior
-		else if (checkSurroundingTiles(t_tileNum) == 20)
-		{
-			worldTileTemp[t_tileNum].setTexture(waterSEINW);
-		}
-		else if (checkSurroundingTiles(t_tileNum) == 19)
-		{
-			worldTileTemp[t_tileNum].setTexture(waterSWINE);
-		}
-
-		//1 corner filled
-		else if (checkSurroundingTiles(t_tileNum) == 23)
-		{
-			worldTileTemp[t_tileNum].setTexture(waterNEF);
-		}
-		else if (checkSurroundingTiles(t_tileNum) == 24)
-		{
-			worldTileTemp[t_tileNum].setTexture(waterNWF);
-		}
-		else if (checkSurroundingTiles(t_tileNum) == 22)
-		{
-			worldTileTemp[t_tileNum].setTexture(waterSWF);
-		}
-		else if (checkSurroundingTiles(t_tileNum) == 21)
-		{
-			worldTileTemp[t_tileNum].setTexture(waterSEF);
-		}
-
-		else if (checkSurroundingTiles(t_tileNum) == 25)
-		{
-			worldTileTemp[t_tileNum].setTexture(waterNEC);
-		}
-		else if (checkSurroundingTiles(t_tileNum) == 26)
-		{
-			worldTileTemp[t_tileNum].setTexture(waterNWC);
-		}
-		else if (checkSurroundingTiles(t_tileNum) == 27)
-		{
-			worldTileTemp[t_tileNum].setTexture(waterSEC);
-		}
-		else if (checkSurroundingTiles(t_tileNum) == 28)
-		{
-			worldTileTemp[t_tileNum].setTexture(waterSWC);
-		}
-
+		sprite.setTexture(customWaterSpritesheet);
+		int tilesPerRow = 10;
+		int tileWidth = 64;
+		int tileHeight = 64;
+		int x = (spritesheetNumber % tilesPerRow) * tileWidth;
+		int y = (spritesheetNumber / tilesPerRow) * tileHeight;
+		sprite.setTextureRect(sf::IntRect(x, y, tileWidth, tileHeight));
 	}
-	if (t_depth == 0)//if this is the orignal tile recall this function on the surronding tiles so they can update themselves too
+
+	if (t_depth == 0)//update all neighbours textures to ensure they are correctly connected after changing current
 	{
 		updateTileTexture(t_tileNum - TILE_COLUMNS - 1, 1);
 		updateTileTexture(t_tileNum - TILE_COLUMNS, 1);
 		updateTileTexture(t_tileNum - TILE_COLUMNS + 1, 1);
-
 		updateTileTexture(t_tileNum - 1, 1);
 		updateTileTexture(t_tileNum + 1, 1);
-
 		updateTileTexture(t_tileNum + TILE_COLUMNS - 1, 1);
 		updateTileTexture(t_tileNum + TILE_COLUMNS, 1);
 		updateTileTexture(t_tileNum + TILE_COLUMNS + 1, 1);
@@ -596,166 +410,79 @@ int TileGrid::checkSurroundingTiles(int t_tileNum)
 {
 	int row = t_tileNum / TILE_COLUMNS;
 	int col = t_tileNum % TILE_COLUMNS;
+	int centerType = preventOutOfBoundsCheck(t_tileNum);
 
-	int NW = preventOutOfBoundsCheck((row - 1) * TILE_COLUMNS + (col - 1));
-	int N = preventOutOfBoundsCheck((row - 1) * TILE_COLUMNS + col);
-	int NE = preventOutOfBoundsCheck((row - 1) * TILE_COLUMNS + (col + 1));
+	//check if the cell at specified offset is the same as the current cell so we know if we need to connect to it or not
+	auto matchesType = [&](int rowOffset, int colOffset) -> bool 
+		{
+		int neighborRow = row + rowOffset;
+		int neighborCol = col + colOffset;
 
-	int W = preventOutOfBoundsCheck(row * TILE_COLUMNS + (col - 1));
-	int thisType = preventOutOfBoundsCheck(t_tileNum);
-	int E = preventOutOfBoundsCheck(row * TILE_COLUMNS + (col + 1));
+		if (neighborRow >= 0 && neighborRow < TILE_ROWS && neighborCol >= 0 && neighborCol < TILE_COLUMNS)
+		{
+			int neighborIndex = neighborRow * TILE_COLUMNS + neighborCol;
+			return preventOutOfBoundsCheck(neighborIndex) == centerType;
+		}
+		return false;
+	};
 
-	int SW = preventOutOfBoundsCheck((row + 1) * TILE_COLUMNS + (col - 1));
-	int S = preventOutOfBoundsCheck((row + 1) * TILE_COLUMNS + col);
-	int SE = preventOutOfBoundsCheck((row + 1) * TILE_COLUMNS + (col + 1));
+	bool N = matchesType(-1, 0);
+	bool W = matchesType(0, -1);
+	bool E = matchesType(0, 1);
+	bool S = matchesType(1, 0);
+	bool NW = matchesType(-1, -1);
+	bool NE = matchesType(-1, 1);
+	bool SW = matchesType(1, -1);
+	bool SE = matchesType(1, 1);
 
-	if (N == thisType && W == thisType && E == thisType && S == thisType &&
-		NW == thisType && NE == thisType && SW == thisType && SE == thisType)
-	{
-		return 1;//surrounded by water on all sides
-	}
-
+	if (N && S && E && W && NE && NW && SE && SW) return 13;//fully surrounded
+	//2 blank corners
+	if (!N && W && E && S && !SW && !SE) return 34;//straight path with 1 offshoot
+	if (N && W && !E && S && !NW && !SW) return 14;
+	if (N && !W && E && S && !NE && !SE) return 24;
+	if (N && W && E && !S && !NW && !NE) return 4;
+	//2 empty corners
+	if (N && W && E && S && NW && NE && !SW && !SE) return 9;
+	if (N && W && E && S && !NW && !NE && SW && SE) return 19;
+	if (N && W && E && S && !NW && NE && !SW && SE) return 29;
+	if (N && W && E && S && NW && !NE && SW && !SE) return 39;
 	//interior corners
-	else if (N == thisType && W == thisType && E == thisType && S == thisType &&
-		NW != thisType && NE == thisType && SW == thisType && SE == thisType)
-	{
-		return 15;// 1 corner piece empty
-	}
-	else if (N == thisType && W == thisType && E == thisType && S == thisType &&
-		NW == thisType && NE != thisType && SW == thisType && SE == thisType)
-	{
-		return 16;
-	}
-	else if (N == thisType && W == thisType && E == thisType && S == thisType &&
-		NW == thisType && NE == thisType && SW != thisType && SE == thisType)
-	{
-		return 17;
-	}
-	else if (N == thisType && W == thisType && E == thisType && S == thisType &&
-		NW == thisType && NE == thisType && SW == thisType && SE != thisType)
-	{
-		return 18;
-	}
+	if (N && W && E && S && !NW && NE && SW && SE) return 7;// 1 corner piece empty
+	if (N && W && E && S && NW && !NE && SW && SE) return 17;
+	if (N && W && E && S && NW && NE && !SW && SE) return 27;
+	if (N && W && E && S && NW && NE && SW && !SE) return 37;
 	//diagonal interior corners
-	else if (N == thisType && W == thisType && E == thisType && S == thisType &&
-		NW != thisType && NE == thisType && SW == thisType && SE != thisType)
-	{
-		return 19;
-	}
-	else if (N == thisType && W == thisType && E == thisType && S == thisType &&
-		NW == thisType && NE != thisType && SW != thisType && SE == thisType)
-	{
-		return 20;
-	}
+	if (N && W && E && S && !NW && NE && SW && !SE) return 8;
+	if (N && W && E && S && NW && !NE && !SW && SE) return 18;
 
-	else if (N == thisType && W == thisType && E == thisType && S == thisType &&
-		NW != thisType && NE != thisType && SW != thisType && SE == thisType)
-	{
-		return 21;//SE filled
-	}
-	else if (N == thisType && W == thisType && E == thisType && S == thisType &&
-		NW != thisType && NE != thisType && SW == thisType && SE != thisType)
-	{
-		return 22;//SW filled
-	}
-	else if (N == thisType && W == thisType && E == thisType && S == thisType &&
-		NW != thisType && NE == thisType && SW != thisType && SE != thisType)
-	{
-		return 23;//NE filled
-	}
-	else if (N == thisType && W == thisType && E == thisType && S == thisType &&
-		NW == thisType && NE != thisType && SW != thisType && SE != thisType)
-	{
-		return 24;//NW filled
-	}
+	if (N && W && E && S && !NW && !NE && !SW && SE) return 36;//SE filled
+	if (N && W && E && S && !NW && !NE && SW && !SE) return 26;//SW filled
+	if (N && W && E && S && !NW && NE && !SW && !SE) return 16;//NE filled
+	if (N && W && E && S && NW && !NE && !SW && !SE) return 6;//NW filled
+	//Turn with interior corner missing
+	if (!N && W && !E && S && !NE && !SW) return 22;
+	if (!N && !W && E && S && !NW && !SE) return 32;
+	if (N && W && !E && !S && !NW && !SE) return 2;
+	if (N && !W && E && !S && !NE && !SW) return 12;
+	//flat on 3 sides
+	if (!N && W && E && S && SW && SE) return 35;
+	if (N && !W && E && S && NE && SE) return 15;
+	if (N && W && !E && S && NW && SW) return 25;
+	if (N && W && E && !S && NW && NE) return 5;
 
-	else if (N != thisType && W == thisType && E != thisType && S == thisType &&
-		NE != thisType && SW != thisType)
-	{
-		return 25;//Turn with interior corner missing
-	}
-	else if (N != thisType && W != thisType && E == thisType && S == thisType &&
-		SE != thisType && NW != thisType)
-	{
-		return 26;
-	}
-	else if (N == thisType && W == thisType && E != thisType && S != thisType &&
-		NW != thisType && SE != thisType)
-	{
-		return 27;
-	}
-	else if (N == thisType && W != thisType && E == thisType && S != thisType &&
-		NE != thisType && SW != thisType)
-	{
-		return 28;
-	}
+	if (!N && !W && E && S && SE) return 31;//nothing up and left
+	if (!N && W && !E && S && SW) return 21;//nothing up and left
+	if (N && !W && E && !S && NE) return 11;//nothing up and left
+	if (N && W && !E && !S && NW) return 1;//nothing up and left
 
-	//flat on 1 side
-	else if (N != thisType && W == thisType && E == thisType && S == thisType &&
-		SW == thisType && SE == thisType)
-	{
-		return 7;
-	}
-	else if (N == thisType && W != thisType && E == thisType && S == thisType &&
-		NE == thisType && SE == thisType)
-	{
-		return 8;
-	}
-	else if (N == thisType && W == thisType && E != thisType && S == thisType &&
-		NW == thisType && SW == thisType)
-	{
-		return 9;
-	}
-	else if (N == thisType && W == thisType && E == thisType && S != thisType &&
-		NW == thisType && NE == thisType)
-	{
-		return 10;
-	}
+	if (N && W && E && S && !NW && !NE && !SW && !SE) return 29;//center no corners
+	if (N && S) return 33;// up and below only
+	if (W && E) return 23;// left and right only
+	//just 1 connection
+	if (N) return 0;
+	if (W) return 10;
+	if (E) return 20;
+	if (S) return 30;
 
-	else if (N != thisType && W != thisType && E == thisType && S == thisType &&
-		 SE == thisType)
-	{
-		return 11;//nothing up and left
-	}
-	else if (N != thisType && W == thisType && E != thisType && S == thisType &&
-		 SW == thisType)
-	{
-		return 12;//nothing up and right
-	}
-	else if (N == thisType && W != thisType && E == thisType && S != thisType &&
-		 NE == thisType)
-	{
-		return 13;//nothing down and left
-	}
-	else if (N == thisType && W == thisType && E != thisType && S != thisType &&
-		NW == thisType)
-	{
-		return 14;//nothing down and right
-	}
-
-	else if (N == thisType && W == thisType && E == thisType && S == thisType &&
-		NW != thisType && NE != thisType && SW != thisType && SE != thisType)
-	{
-		return 6;//center no corners
-	}
-
-	else if (N == thisType)
-	{
-		return 2;
-	}
-	else if (W == thisType)
-	{
-		return 3;
-	}
-	else if (E == thisType)
-	{
-		return 4;
-	}
-	else if (S == thisType)
-	{
-		return 5;
-	}
-
-
-	return 0;
+	return 3;//3rd space on tilesheet - no neighbours
 }
