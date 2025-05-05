@@ -3,6 +3,7 @@
 #include "Squad.h"
 #include "Tower.h"
 #include "FormationManager.h"
+#include "Explosion.h"
 
 class Player
 {
@@ -81,6 +82,7 @@ public:
 	std::vector<int> returnAllSquadPositions();
 
 private:
+	std::vector<Explosion> activeExplosions;
 	std::vector<Tower> playersTowers;
 	std::vector<sf::Text> playersSquadsStrenghts;//used for debugging to display strengths on squads
 	std::vector<int> squadsThatMoved;

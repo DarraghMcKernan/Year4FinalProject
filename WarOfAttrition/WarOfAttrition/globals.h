@@ -50,6 +50,8 @@ static sf::Texture customHeavyTankTexture;
 static sf::Texture customCarTexture;
 static sf::Texture CarOutlineTexture;
 
+static sf::Texture explosionTexture;
+
 struct SquadData
 {
 	int teamNum = 0;

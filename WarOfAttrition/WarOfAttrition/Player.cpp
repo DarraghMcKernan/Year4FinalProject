@@ -35,6 +35,10 @@ void Player::init(int t_teamNum, int t_unitType)
 	tileForColliding.setSize(sf::Vector2f(TILE_SIZE +3, TILE_SIZE+3));//used for making sure player cant select a tile that its own squads are on
 	tileForColliding.setOrigin(sf::Vector2f(TILE_SIZE / 2, TILE_SIZE / 2));
 
+	if (!explosionTexture.loadFromFile("ASSETS/explosion.png"))
+	{
+		std::cout << "error loading explosion effect\n";
+	}
 }
 
 void Player::update(sf::Time& t_deltaTime)
@@ -254,6 +258,18 @@ void Player::updateMovingTexures(sf::Time& t_deltaTime)
 	{
 		playersSquads[index].spinPropeller(t_deltaTime);
 	}
+
+	for (int index = 0; index < activeExplosions.size(); index++)
+	{
+		activeExplosions[index].update(t_deltaTime.asSeconds());
+	}
+	for (int index = 0; index < activeExplosions.size(); index++)
+	{
+		if (activeExplosions[index].isComplete())
+		{
+			activeExplosions.erase(activeExplosions.begin() + index);
+		}
+	}
 }
 
 void Player::fixedUpdate()
@@ -311,10 +327,15 @@ void Player::render(sf::RenderWindow& t_window)
 			t_window.draw(debug[index]);
 		}
 	}
+
+	for (int index = 0; index < activeExplosions.size(); index++)
+	{
+		activeExplosions[index].draw(t_window);
+	}
 }
 
 void Player::setTargetPosition(int t_cellNum)
-{//////////
+{
 	squadSet = false;
 	targetNeeded = false;
 	formationCreationAllowed = false;
@@ -450,6 +471,12 @@ void Player::eliminateUnit(int t_num)
 			money += 50;
 		}
 		//playersSquadsStrenghts.erase(playersSquadsStrenghts.begin() + t_num);
+
+		sf::Vector2f unitPosition = playersSquads[t_num].getTroopContainter().getPosition();
+		float offsetX = static_cast<float>((rand() % 50) - 25);
+		float offsetY = static_cast<float>((rand() % 50) - 25);
+		activeExplosions.emplace_back(unitPosition + sf::Vector2f(offsetX, offsetY));
+
 		playersSquads.erase(playersSquads.begin() + t_num);
 		playerSquadsCount--;
 	}
@@ -728,6 +755,14 @@ void Player::checkForDeadSquads()
 		//playersSquads[index].attacker = false;
 		if (playersSquads[index].getSquadData().health <= 0)
 		{
+			sf::Vector2f unitPosition = playersSquads[index].getTroopContainter().getPosition();
+			for (int i = 0; i < 5; ++i)
+			{
+				float offsetX = static_cast<float>((rand() % 50) - 25);
+				float offsetY = static_cast<float>((rand() % 50) - 25);
+				activeExplosions.emplace_back(unitPosition + sf::Vector2f(offsetX, offsetY));
+			}
+
 			deadSquads.push_back(index);//get units that are dead in order
 		}
 		else if (playersSquads[index].needToMove == true)

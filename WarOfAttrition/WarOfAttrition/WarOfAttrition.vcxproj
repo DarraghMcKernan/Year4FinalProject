@@ -145,6 +145,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Enemy.h" />
+    <ClInclude Include="Explosion.h" />
     <ClInclude Include="FormationManager.h" />
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="globals.h" />
