@@ -67,8 +67,8 @@ void Squad::init(sf::Vector2f t_startingPos, int t_teamNum, int t_unitType)
 
 	setunitType();
 
-	frontCollider.setSize(sf::Vector2f(TILE_SIZE / 1, TILE_SIZE / 2));
-	frontCollider.setOrigin(sf::Vector2f(TILE_SIZE / 2, TILE_SIZE / 4));
+	frontCollider.setSize(sf::Vector2f(TILE_SIZE / 2, TILE_SIZE / 2));
+	frontCollider.setOrigin(sf::Vector2f(TILE_SIZE / 4, TILE_SIZE / 4));
 	frontCollider.setFillColor(sf::Color(0, 255, 0, 50));
 
 	rightCollider.setSize(sf::Vector2f(TILE_SIZE / 1, TILE_SIZE / 4));
@@ -258,7 +258,7 @@ void Squad::render(sf::RenderWindow& t_window)
 	//{
 	//	t_window.draw(invalidTileAvoidance[index]);
 	//}
-	//t_window.draw(frontCollider);
+	t_window.draw(frontCollider);
 	//t_window.draw(leftCollider);
 	//t_window.draw(rightCollider);
 }
@@ -525,6 +525,16 @@ sf::RectangleShape Squad::getHorizontalHitbox()
 sf::RectangleShape Squad::getVerticalHitbox()
 {
 	return verticalHitbox;
+}
+
+void Squad::setCulledFriendlyUnitPositions(std::vector<sf::Vector2f> t_positions)
+{
+	culledFriendlyUnitPositions = t_positions;
+}
+
+void Squad::setFriendlyUnitPositions(std::vector<sf::Vector2f> t_positions)
+{
+	friendlyUnitPositions = t_positions;
 }
 
 void Squad::setunitType()
@@ -817,7 +827,7 @@ void Squad::steerAroundObstacle(sf::Vector2f t_formationPosition, sf::Time t_del
 
 	float colliderOffset = TILE_SIZE / 4.0f;
 
-	sf::Vector2f frontPosition = currentPosition + direction * colliderOffset;
+	sf::Vector2f frontPosition = currentPosition + direction * (colliderOffset * 2);
 	sf::Vector2f rightPosition = currentPosition + sf::Vector2f(-direction.y, direction.x) * colliderOffset;
 	sf::Vector2f leftPosition = currentPosition + sf::Vector2f(direction.y, -direction.x) * colliderOffset;
 
@@ -827,13 +837,31 @@ void Squad::steerAroundObstacle(sf::Vector2f t_formationPosition, sf::Time t_del
 
 	float rotation = 0;
 	if (direction.x < 0)
+	{
 		rotation = 180;
+	}
 	else if (direction.y != 0)
+	{
 		rotation = 90;
+	}
 
 	frontCollider.setRotation(rotation);
 	rightCollider.setRotation(rotation);
 	leftCollider.setRotation(rotation);
+
+	sf::RectangleShape tempCollider;
+	tempCollider.setSize(sf::Vector2f(TILE_SIZE * 0.9, TILE_SIZE * 0.9));
+	tempCollider.setOrigin(tempCollider.getSize().x / 2, tempCollider.getSize().y / 2);
+
+	for (int i = 0; i < culledFriendlyUnitPositions.size(); i++)
+	{
+		tempCollider.setPosition(culledFriendlyUnitPositions[i]);
+		if (frontCollider.getGlobalBounds().intersects(tempCollider.getGlobalBounds()) && tempCollider.getPosition() != troopContainer.getPosition())
+		{
+			//std::cout << "front collider invalid, stop\n";
+			return;
+		}
+	}
 
 	//check for wall collisions
 	for (int i = 0; i < invalidTileAvoidance.size(); i++)
@@ -843,7 +871,6 @@ void Squad::steerAroundObstacle(sf::Vector2f t_formationPosition, sf::Time t_del
 			frontBlocked = true;
 			if (takeCurrentCell == false)
 			{
-				movementSwapCooldown = 60;
 				currentMovementState = SquadMovementState::TakeLeadersPath;
 				return;
 			}
@@ -881,9 +908,13 @@ void Squad::steerAroundObstacle(sf::Vector2f t_formationPosition, sf::Time t_del
 
 	//lock movement along axes if sides blocked
 	if ((leftBlocked || rightBlocked) && normalisedDirection.y == 0)
+	{
 		vectorToTarget.y = 0;
+	}
 	if ((leftBlocked || rightBlocked) && normalisedDirection.x == 0)
+	{
 		vectorToTarget.x = 0;
+	}
 
 	float speed = moveSpeed * t_deltaTime.asSeconds();
 	troopContainer.move(vectorToTarget * (speed * 0.7f));
@@ -895,16 +926,27 @@ void Squad::steerAroundObstacle(sf::Vector2f t_formationPosition, sf::Time t_del
 	float angleDeg = angleToTarget * 180.0f / 3.14159265f;
 
 	//normalize angle to [0, 360)
-	if (angleDeg < 0) angleDeg += 360.0f;
+	if (angleDeg < 0) 
+	{
+		angleDeg += 360.0f;
+	}
 
 	if (angleDeg >= 45 && angleDeg < 135)
+	{
 		snappedDirection.y = 1.0f;//down
+	}
 	else if (angleDeg >= 135 && angleDeg < 225)
+	{
 		snappedDirection.x = -1.0f;//left
+	}
 	else if (angleDeg >= 225 && angleDeg < 315)
+	{
 		snappedDirection.y = -1.0f;//up
+	}
 	else
+	{
 		snappedDirection.x = 1.0f;//right
+	}
 
 	//if not blocked allow smooth rotation
 	if (!leftBlocked && !rightBlocked && !frontBlocked)
@@ -953,8 +995,8 @@ void Squad::steerAroundObstacle(sf::Vector2f t_formationPosition, sf::Time t_del
 			unitSpriteExtras.setRotation(troopContainer.getRotation());
 		}
 	}
-
 	//troopContainer.setRotation(troopContainer.getRotation() + 45);
+	frontCollider.setPosition(-100,-100);
 }
 
 
@@ -980,6 +1022,62 @@ void Squad::takeLeadersPath(sf::Vector2f t_formationPosition, sf::Time t_deltaTi
 		{
 			currentMovementState = SquadMovementState::MoveToFormationPoint;
 			std::cout << "Move to Formation Point\n";
+		}
+
+		if (formationLeaderReachedGoal == false)
+		{
+			sf::Vector2f currentPosition = troopContainer.getPosition();
+			sf::Vector2f direction = t_formationPosition - currentPosition;
+			float distance = sqrt((direction.x * direction.x) + (direction.y * direction.y));
+
+			//normalize to cardinal directions NESW
+			if (std::fabs(direction.x) > std::fabs(direction.y))
+			{
+				direction = direction.x > 0 ? sf::Vector2f(1.0f, 0.0f) : sf::Vector2f(-1.0f, 0.0f);
+			}
+			else
+			{
+				direction = direction.y > 0 ? sf::Vector2f(0.0f, 1.0f) : sf::Vector2f(0.0f, -1.0f);
+			}
+
+			float colliderOffset = TILE_SIZE / 4.0f;
+
+			sf::Vector2f frontPosition = currentPosition + direction * (colliderOffset * 2);
+			sf::Vector2f rightPosition = currentPosition + sf::Vector2f(-direction.y, direction.x) * colliderOffset;
+			sf::Vector2f leftPosition = currentPosition + sf::Vector2f(direction.y, -direction.x) * colliderOffset;
+
+			frontCollider.setPosition(frontPosition);
+			rightCollider.setPosition(rightPosition);
+			leftCollider.setPosition(leftPosition);
+
+			float rotation = 0;
+			if (direction.x < 0)
+			{
+				rotation = 180;
+			}
+			else if (direction.y != 0)
+			{
+				rotation = 90;
+			}
+
+			frontCollider.setRotation(rotation);
+			rightCollider.setRotation(rotation);
+			leftCollider.setRotation(rotation);
+
+			sf::RectangleShape tempCollider;
+			tempCollider.setSize(sf::Vector2f(TILE_SIZE * 0.9, TILE_SIZE * 0.9));
+			tempCollider.setOrigin(tempCollider.getSize().x / 2, tempCollider.getSize().y / 2);
+
+			for (int i = 0; i < culledFriendlyUnitPositions.size(); i++)
+			{
+				tempCollider.setPosition(culledFriendlyUnitPositions[i]);
+				if (frontCollider.getGlobalBounds().intersects(tempCollider.getGlobalBounds()) && tempCollider.getPosition() != troopContainer.getPosition())
+				{
+					//std::cout << "front collider invalid, stop\n";
+					return;
+				}
+			}
+			frontCollider.setPosition(-100, -100);
 		}
 
 		float distance = 9999999;
@@ -1031,7 +1129,6 @@ void Squad::takeLeadersPath(sf::Vector2f t_formationPosition, sf::Time t_deltaTi
 				return;
 			}
 
-
 			troopContainer.setPosition(leaderPathClosest);
 			horizontalHitbox.setPosition(leaderPathClosest);
 			verticalHitbox.setPosition(leaderPathClosest);
@@ -1041,10 +1138,8 @@ void Squad::takeLeadersPath(sf::Vector2f t_formationPosition, sf::Time t_deltaTi
 			{
 				unitSpriteExtras.setPosition(troopContainer.getPosition());
 				
-
 				unitSpriteExtraOutline.setPosition(troopContainer.getPosition());
 				
-
 				if (propellersActive == false)
 				{
 					unitSpriteExtraOutline.setRotation(rotation);
@@ -1109,7 +1204,7 @@ void Squad::breakFormation(sf::Vector2f t_formationPosition, sf::Time t_deltaTim
 		chosenCell = { chosenCell.x + TILE_SIZE * randomX, chosenCell.y + TILE_SIZE * randomY };
 		targetPos = normaliser.normalizeToTileCenter(chosenCell);
 
-		if (targetPos == currentPos)
+		if (targetPos == currentPos)//need to make sure the selected cell isnt already taken
 		{
 			requestPath = false;
 			return;
@@ -1138,6 +1233,15 @@ void Squad::breakFormation(sf::Vector2f t_formationPosition, sf::Time t_deltaTim
 				troopContainer.setPosition(targetPos);
 
 				setUnitToTroopContainer();
+
+				if (ensureNoCollisions(targetPos) == false)
+				{
+					pathToTarget.clear();
+					requestPath = false;
+
+					std::cout << "collision with another unit\n";
+					return;
+				}
 
 				formationActive = false;
 				targetReached = true;
@@ -1207,6 +1311,21 @@ bool Squad::checkFormationPointValid(sf::Vector2f t_formationPosition)
 		sf::Vector2f tempPosFromCell = normaliser.convertCellNumToCoords(allInvalidTiles[index]);
 
 		movableCollider.setPosition(tempPosFromCell);
+		if (movableCollider.getGlobalBounds().contains(positionOfPoint))
+		{
+			//std::cout << "overlap found\n";
+			return false;
+		}
+	}
+	return true;
+}
+
+bool Squad::ensureNoCollisions(sf::Vector2f t_positionToCheck)
+{
+	sf::Vector2f positionOfPoint = normaliser.normalizeToTileCenter(t_positionToCheck);
+	for (int index = 0; index < friendlyUnitPositions.size(); index++)
+	{
+		movableCollider.setPosition(friendlyUnitPositions[index]);
 		if (movableCollider.getGlobalBounds().contains(positionOfPoint))
 		{
 			//std::cout << "overlap found\n";

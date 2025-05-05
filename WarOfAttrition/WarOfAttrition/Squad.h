@@ -66,6 +66,10 @@ public:
 
 	sf::RectangleShape getHorizontalHitbox();
 	sf::RectangleShape getVerticalHitbox();
+
+	void setCulledFriendlyUnitPositions(std::vector<sf::Vector2f> t_positions);
+	void setFriendlyUnitPositions(std::vector<sf::Vector2f> t_positions);
+	bool ensureNoCollisions(sf::Vector2f t_positionToCheck);
 private:
 	SquadData squadData;
 	SquadMovementState currentMovementState = MoveToFormationPoint;
@@ -106,9 +110,12 @@ private:
 	int movementSwapCooldown = 0;
 	sf::Vector2f lastDirection = { 0.0f, -1.0f };
 	sf::Vector2f currentCellPosition;
+	sf::Vector2f normalisedDirection;
 
 	sf::Vector2f worldTileOffset = sf::Vector2f(TILE_SIZE/2, TILE_SIZE/2);
 	std::vector<int> allInvalidTiles;
+	std::vector<sf::Vector2f> culledFriendlyUnitPositions;
+	std::vector<sf::Vector2f> friendlyUnitPositions;
 	std::vector<sf::RectangleShape> invalidTileAvoidance;
 	bool movementAllowed = false;
 	bool extraSpriteNeeded = false;
@@ -117,6 +124,7 @@ private:
 	bool propellersActive = false;
 	bool takeCurrentCell = false;
 	bool takeCellAttemptPassed = false;
+
 
 	/*int moveSpeed = 100;
 	int teamNum=0;

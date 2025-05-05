@@ -107,6 +107,20 @@ void Player::update(sf::Time& t_deltaTime)
 		if (playersSquads[index].formationActive == true && formationMovementUnlocked == true)// && playersSquads[index].formationLeader == false)
 		{
 			playersSquads[index].moveToFormationPosition(formationTemp.getFormationPosition(playersSquads[index].getFormationNum()),t_deltaTime);
+			
+			std::vector<sf::Vector2f> culledFriendlyPositions;
+			std::vector<sf::Vector2f> friendlyPositions;
+			for (int index = 0; index < playerSquadsCount; index++)
+			{
+				friendlyPositions.push_back(playersSquads[index].getTroopContainter().getPosition());
+				if (playersSquads[index].targetReached == false)
+				{
+					culledFriendlyPositions.push_back(playersSquads[index].getTroopContainter().getPosition());
+				}
+				else culledFriendlyPositions.push_back(sf::Vector2f(-100,-100));
+			}
+			playersSquads[index].setCulledFriendlyUnitPositions(culledFriendlyPositions);
+			playersSquads[index].setFriendlyUnitPositions(friendlyPositions);
 			//std::cout << "leader doing something \n";
 		}
 		else {
