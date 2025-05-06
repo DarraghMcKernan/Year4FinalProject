@@ -854,6 +854,11 @@ void Player::upgradeCustomUnit(SquadData t_squadData,int t_selectedSprite)
 	//}
 }
 
+void Player::setUnitToFaceEnemy(int t_unit, sf::Vector2f t_enemy)
+{
+	playersSquads[t_unit].faceEnemy(t_enemy);
+}
+
 void Player::givePathToSquad(std::vector<int> t_path)
 {
 	std::cout << "path generated and passed\n";

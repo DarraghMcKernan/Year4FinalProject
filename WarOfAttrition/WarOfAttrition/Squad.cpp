@@ -50,7 +50,7 @@ void Squad::init(sf::Vector2f t_startingPos, int t_teamNum, int t_unitType)
 	troopContainer.setPosition(t_startingPos.x - (TILE_SIZE / 2), t_startingPos.y - (TILE_SIZE / 2));//spawn player in the center of the map
 	targetPosition = troopContainer.getPosition();
 
-	horizontalHitbox.setSize(sf::Vector2f(TILE_SIZE * 0.75f, TILE_SIZE / 2));
+	horizontalHitbox.setSize(sf::Vector2f(TILE_SIZE * 1.1f, TILE_SIZE / 2));
 	horizontalHitbox.setOutlineColor(sf::Color::Black);
 	horizontalHitbox.setOutlineThickness(1.5);
 	horizontalHitbox.setOrigin(horizontalHitbox.getSize().x / 2, horizontalHitbox.getSize().y / 2);
@@ -58,7 +58,7 @@ void Squad::init(sf::Vector2f t_startingPos, int t_teamNum, int t_unitType)
 
 	verticalHitbox = horizontalHitbox;
 	verticalHitbox.setSize(sf::Vector2f(TILE_SIZE / 2, TILE_SIZE * 1.5f));
-	verticalHitbox.setOrigin(verticalHitbox.getSize().x / 2, verticalHitbox.getSize().y * 0.25f);
+	verticalHitbox.setOrigin(verticalHitbox.getSize().x / 2, verticalHitbox.getSize().y /2.f);
 	verticalHitbox.setPosition(t_startingPos.x - (TILE_SIZE / 2), t_startingPos.y - (TILE_SIZE / 2));
 
 	movableCollider.setSize(sf::Vector2f(TILE_SIZE, TILE_SIZE));
@@ -241,8 +241,8 @@ void Squad::fixedUpdate()
 void Squad::render(sf::RenderWindow& t_window)
 {
 	t_window.draw(troopContainer);
-	//t_window.draw(horizontalHitbox);
-	//t_window.draw(verticalHitbox);
+	t_window.draw(horizontalHitbox);
+	t_window.draw(verticalHitbox);
 	t_window.draw(teamOutlineSprite);
 	if (extraSpriteNeeded == true)
 	{
@@ -258,7 +258,7 @@ void Squad::render(sf::RenderWindow& t_window)
 	//{
 	//	t_window.draw(invalidTileAvoidance[index]);
 	//}
-	t_window.draw(frontCollider);
+	//t_window.draw(frontCollider);
 	//t_window.draw(leftCollider);
 	//t_window.draw(rightCollider);
 }
@@ -1333,4 +1333,21 @@ bool Squad::ensureNoCollisions(sf::Vector2f t_positionToCheck)
 		}
 	}
 	return true;
+}
+
+void Squad::faceEnemy(sf::Vector2f t_enemy)
+{
+	sf::Vector2f currentPos = troopContainer.getPosition();
+	sf::Vector2f direction = t_enemy - currentPos;
+
+	float rotation = std::atan2(direction.y, direction.x) * 180.0f / 3.14159265f - 90.0f;
+
+	UnitSprite.setRotation(rotation);
+	teamOutlineSprite.setRotation(rotation);
+
+	if (extraSpriteNeeded == true && propellersActive == false)
+	{
+		unitSpriteExtras.setRotation(rotation);
+		unitSpriteExtraOutline.setRotation(rotation);
+	}
 }

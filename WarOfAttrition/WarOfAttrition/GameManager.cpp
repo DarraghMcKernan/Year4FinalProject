@@ -214,21 +214,31 @@ void GameManager::updatePlayers(sf::Time& t_deltaTime)
 
 			if (player[index].arrivedAtTarget == true)//if the players turn is over as all units have moved
 			{
-				std::vector<sf::RectangleShape> playerHitboxes = player[whosTurn - 1].returnSquadHorizontalHitboxes();
+				std::vector<sf::RectangleShape> playerHHitboxes = player[whosTurn - 1].returnSquadHorizontalHitboxes();
+				std::vector<sf::RectangleShape> playerVHitboxes = player[whosTurn - 1].returnSquadVerticalHitboxes();
 
-				for (int playerHIndex = 0; playerHIndex < playerHitboxes.size(); playerHIndex++)
+				for (int playerHIndex = 0; playerHIndex < playerHHitboxes.size(); playerHIndex++)
 				{
 					for (int loopPlayerIndex = 0; loopPlayerIndex < MAX_PLAYERS; loopPlayerIndex++)
 					{
 						if (loopPlayerIndex != whosTurn - 1 && player[loopPlayerIndex].playerEliminated == false)
 						{
-							std::vector<sf::RectangleShape> enemyHitboxes = player[loopPlayerIndex].returnSquadHorizontalHitboxes();
-							for (int enemyHIndex = 0; enemyHIndex < enemyHitboxes.size(); enemyHIndex++)
-							{
-								if (playerHitboxes[playerHIndex].getGlobalBounds().intersects(enemyHitboxes[enemyHIndex].getGlobalBounds()) == true)
-								{
-									player[whosTurn - 1].dealDamageToUnit(playerHIndex, player[loopPlayerIndex].getUnitStrength(enemyHIndex));
+							std::vector<sf::RectangleShape> enemyHHitboxes = player[loopPlayerIndex].returnSquadHorizontalHitboxes();
+							std::vector<sf::RectangleShape> enemyVHitboxes = player[loopPlayerIndex].returnSquadVerticalHitboxes();
 
+							for (int enemyHIndex = 0; enemyHIndex < enemyHHitboxes.size(); enemyHIndex++)
+							{
+								if (
+									playerHHitboxes[playerHIndex].getGlobalBounds().intersects(enemyHHitboxes[enemyHIndex].getGlobalBounds()) ||
+									playerHHitboxes[playerHIndex].getGlobalBounds().intersects(enemyVHitboxes[enemyHIndex].getGlobalBounds()) ||
+									playerVHitboxes[playerHIndex].getGlobalBounds().intersects(enemyHHitboxes[enemyHIndex].getGlobalBounds()) ||
+									playerVHitboxes[playerHIndex].getGlobalBounds().intersects(enemyVHitboxes[enemyHIndex].getGlobalBounds())
+									)
+								{
+									player[whosTurn - 1].setUnitToFaceEnemy(playerHIndex, player[loopPlayerIndex].getSquadPosition());
+									player[loopPlayerIndex].setUnitToFaceEnemy(enemyHIndex, playerHHitboxes[playerHIndex].getPosition());
+
+									player[whosTurn - 1].dealDamageToUnit(playerHIndex, player[loopPlayerIndex].getUnitStrength(enemyHIndex));
 									player[loopPlayerIndex].dealDamageToUnit(enemyHIndex, player[whosTurn - 1].getUnitStrength(playerHIndex));
 								}
 							}

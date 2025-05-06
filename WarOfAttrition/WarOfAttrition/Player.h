@@ -69,6 +69,7 @@ public:
 	void turnFirstCheck();
 	void passInvalidTiles(std::vector<int> t_invalidTiles);
 	void upgradeCustomUnit(SquadData t_squadData,int t_selectedSprite);
+	void setUnitToFaceEnemy(int t_unit, sf::Vector2f t_enemy);
 
 	bool formationCreationAllowed = false;
 	bool formationMovementUnlocked = false;
