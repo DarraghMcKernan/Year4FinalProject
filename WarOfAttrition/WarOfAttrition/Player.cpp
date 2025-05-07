@@ -415,7 +415,7 @@ void Player::attemptEndTurn()
 bool Player::squadDistanceValid(sf::Vector2f t_hoveredTile)
 {
 	distanceOK = false;
-	sf::Vector2f temp = t_hoveredTile - getSquadPosition();
+	sf::Vector2f temp = t_hoveredTile - getHoveredUnitPos();
 	float distance = sqrt((temp.x * temp.x) + (temp.y * temp.y));
 	if (distance < (playersSquads[squadBeingControlled].maxMoveDistance) * TILE_SIZE)
 	{
@@ -669,7 +669,7 @@ sf::Vector2f Player::getTargetPosition()
 	//return playersSquads[squadBeingControlled].targetPosition;
 }
 
-sf::Vector2f Player::getSquadPosition()
+sf::Vector2f Player::getHoveredUnitPos()
 {
 	return playersSquads.at(squadBeingControlled).getTroopContainter().getPosition();
 }
@@ -885,4 +885,9 @@ std::vector<int> Player::returnAllSquadPositions()
 	}
 
 	return squadPositions;
+}
+
+sf::Vector2f Player::getSquadsPosition(int t_unit)
+{
+	return playersSquads[t_unit].getSprite().getPosition();
 }

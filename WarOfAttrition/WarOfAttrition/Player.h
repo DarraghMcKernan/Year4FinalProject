@@ -51,7 +51,7 @@ public:
 	bool menuOpen = false;
 	bool playerEliminated = false;
 
-	sf::Vector2f getSquadPosition();
+	sf::Vector2f getHoveredUnitPos();
 
 	SquadData getSquadData(int t_squadNum);
 	void setCustomSquadData(SquadData t_squadData, sf::Vector2f t_unitSpawnPos);
@@ -81,7 +81,7 @@ public:
 	void givePathToSquad(std::vector<int> t_path);
 	std::vector<Squad> playersSquads;//vector to hold the players squads
 	std::vector<int> returnAllSquadPositions();
-
+	sf::Vector2f getSquadsPosition(int t_unit);
 private:
 	std::vector<Explosion> activeExplosions;
 	std::vector<Tower> playersTowers;

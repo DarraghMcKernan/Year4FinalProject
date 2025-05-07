@@ -50,14 +50,14 @@ void Squad::init(sf::Vector2f t_startingPos, int t_teamNum, int t_unitType)
 	troopContainer.setPosition(t_startingPos.x - (TILE_SIZE / 2), t_startingPos.y - (TILE_SIZE / 2));//spawn player in the center of the map
 	targetPosition = troopContainer.getPosition();
 
-	horizontalHitbox.setSize(sf::Vector2f(TILE_SIZE * 1.1f, TILE_SIZE / 2));
+	horizontalHitbox.setSize(sf::Vector2f(TILE_SIZE * 1.1f, TILE_SIZE / 3.f));
 	horizontalHitbox.setOutlineColor(sf::Color::Black);
 	horizontalHitbox.setOutlineThickness(1.5);
 	horizontalHitbox.setOrigin(horizontalHitbox.getSize().x / 2, horizontalHitbox.getSize().y / 2);
 	horizontalHitbox.setPosition(t_startingPos.x - (TILE_SIZE / 2), t_startingPos.y - (TILE_SIZE / 2));
 
 	verticalHitbox = horizontalHitbox;
-	verticalHitbox.setSize(sf::Vector2f(TILE_SIZE / 2, TILE_SIZE * 1.5f));
+	verticalHitbox.setSize(sf::Vector2f(TILE_SIZE / 3.f, TILE_SIZE * 1.5f));
 	verticalHitbox.setOrigin(verticalHitbox.getSize().x / 2, verticalHitbox.getSize().y /2.f);
 	verticalHitbox.setPosition(t_startingPos.x - (TILE_SIZE / 2), t_startingPos.y - (TILE_SIZE / 2));
 

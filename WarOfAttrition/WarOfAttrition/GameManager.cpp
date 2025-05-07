@@ -228,15 +228,13 @@ void GameManager::updatePlayers(sf::Time& t_deltaTime)
 
 							for (int enemyHIndex = 0; enemyHIndex < enemyHHitboxes.size(); enemyHIndex++)
 							{
-								if (
-									playerHHitboxes[playerHIndex].getGlobalBounds().intersects(enemyHHitboxes[enemyHIndex].getGlobalBounds()) ||
+								if (playerHHitboxes[playerHIndex].getGlobalBounds().intersects(enemyHHitboxes[enemyHIndex].getGlobalBounds()) ||
 									playerHHitboxes[playerHIndex].getGlobalBounds().intersects(enemyVHitboxes[enemyHIndex].getGlobalBounds()) ||
 									playerVHitboxes[playerHIndex].getGlobalBounds().intersects(enemyHHitboxes[enemyHIndex].getGlobalBounds()) ||
-									playerVHitboxes[playerHIndex].getGlobalBounds().intersects(enemyVHitboxes[enemyHIndex].getGlobalBounds())
-									)
+									playerVHitboxes[playerHIndex].getGlobalBounds().intersects(enemyVHitboxes[enemyHIndex].getGlobalBounds()))
 								{
-									player[whosTurn - 1].setUnitToFaceEnemy(playerHIndex, player[loopPlayerIndex].getSquadPosition());
-									player[loopPlayerIndex].setUnitToFaceEnemy(enemyHIndex, playerHHitboxes[playerHIndex].getPosition());
+									player[whosTurn - 1].setUnitToFaceEnemy(playerHIndex, player[loopPlayerIndex].getSquadsPosition(enemyHIndex));
+									player[loopPlayerIndex].setUnitToFaceEnemy(enemyHIndex, player[whosTurn - 1].getSquadsPosition(playerHIndex));
 
 									player[whosTurn - 1].dealDamageToUnit(playerHIndex, player[loopPlayerIndex].getUnitStrength(enemyHIndex));
 									player[loopPlayerIndex].dealDamageToUnit(enemyHIndex, player[whosTurn - 1].getUnitStrength(playerHIndex));
