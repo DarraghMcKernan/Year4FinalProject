@@ -692,11 +692,8 @@ void UI::handleMenuInteractions()
 	{
 		openUnitMenuButton.setFillColor(sf::Color(100, 150, 100));
 		clickTimer = 30;
-		if (openCreateTowerMenu == false)
-		{
-			openCreateUnitMenu = true;
-			openCreateTowerMenu = false;
-		}
+		openCreateUnitMenu = true;
+		openCreateTowerMenu = false;
 	}
 	else if ((sf::Mouse::isButtonPressed(sf::Mouse::Left) && openUnitMenuButton.getGlobalBounds().contains({ static_cast<float>(mousePos.x),static_cast<float>(mousePos.y) })) && openCreateUnitMenu == true && clickTimer == 0)
 	{
@@ -709,12 +706,8 @@ void UI::handleMenuInteractions()
 	{
 		openTowerMenuButton.setFillColor(sf::Color(100, 100, 150));
 		clickTimer = 30;
-		if (openCreateUnitMenu == false)
-		{
-			openCreateTowerMenu = true;
-			openCreateUnitMenu = false;
-		}
-		
+		openCreateTowerMenu = true;
+		openCreateUnitMenu = false;
 	}
 	else if ((sf::Mouse::isButtonPressed(sf::Mouse::Left) && openTowerMenuButton.getGlobalBounds().contains({ static_cast<float>(mousePos.x),static_cast<float>(mousePos.y) })) && openCreateTowerMenu == true && clickTimer == 0)
 	{
@@ -892,6 +885,11 @@ void UI::handleMenuInteractions()
 	{
 		upgradeMenuOpen = false;
 		clickTimer = 30;
+	}
+	if (upgradeMenuOpen == true)
+	{
+		openCreateUnitMenu = false;
+		openCreateTowerMenu = false;
 	}
 
 	clickTimer--;
