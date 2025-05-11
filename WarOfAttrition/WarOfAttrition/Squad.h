@@ -71,6 +71,7 @@ public:
 	void setFriendlyUnitPositions(std::vector<sf::Vector2f> t_positions);
 	bool ensureNoCollisions(sf::Vector2f t_positionToCheck);
 	void faceEnemy(sf::Vector2f t_enemy);
+	void resetFormationData();
 private:
 	SquadData squadData;
 	SquadMovementState currentMovementState = MoveToFormationPoint;

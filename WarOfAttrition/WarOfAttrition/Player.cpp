@@ -98,6 +98,7 @@ void Player::update(sf::Time& t_deltaTime)
 					if (playersSquads[currentFormationLeader].formationLeader == false)
 					{
 						playersSquads[currentFormationLeader].formationLeader = true;
+						formationTemp.clearData();
 						std::cout << currentFormationLeader << " is now the temp leader\n";
 						playersSquads[currentFormationLeader].setFormationNum(formationTemp.getPositionInFormation());
 						formationCreated = true;
@@ -570,6 +571,7 @@ void Player::resetMovedUnitsAfterFight(int t_unit)//should be the last function 
 		playersSquads[index].attacker = false;
 		playersSquads[index].formationLeader = false;
 		playersSquads[index].stopMovement();
+		playersSquads[index].resetFormationData();
 	}
 }
 
@@ -583,6 +585,7 @@ void Player::playerLateTurnEnd()
 		playersSquads[index].positionOnPath = 0;
 		playersSquads[index].nextPlaceOnPath = sf::Vector2f(0, 0);
 		playersSquads[index].stopMovement();
+		playersSquads[index].resetFormationData();
 	}
 
 	targetPosition = sf::Vector2f(0, 0);
@@ -724,6 +727,7 @@ void Player::resetPlayerForThisTurn()
 		playersSquads[index].formationLeaderReachedGoal = false;
 		playersSquads[index].resetColour();
 		playersSquads[index].stopMovement();
+		playersSquads[index].resetFormationData();
 	}
 	currentFormationLeader = -1;
 	squadBeingControlled = 1;

@@ -240,7 +240,7 @@ void Squad::fixedUpdate()
 
 void Squad::render(sf::RenderWindow& t_window)
 {
-	//t_window.draw(troopContainer);
+	t_window.draw(troopContainer);
 	//t_window.draw(horizontalHitbox);
 	//t_window.draw(verticalHitbox);
 	t_window.draw(teamOutlineSprite);
@@ -323,6 +323,11 @@ void Squad::updateFormationUnit(sf::Vector2f t_formationPosition, sf::Time& t_de
 		breakFormation(t_formationPosition, t_deltaTime);
 		break;
 	}
+
+	//moveToFormation(t_formationPosition, t_deltaTime);//unit moves to formation position
+	//steerAroundObstacle(t_formationPosition, t_deltaTime);//unit will steer to position
+	//takeLeadersPath(t_formationPosition, t_deltaTime);//unit will follow the leaders path
+	//breakFormation(t_formationPosition, t_deltaTime);//unit will stop and break away from the formation
 }
 
 void Squad::placeOnRecentCell()
@@ -1345,4 +1350,25 @@ void Squad::faceEnemy(sf::Vector2f t_enemy)
 		unitSpriteExtras.setRotation(rotation);
 		unitSpriteExtraOutline.setRotation(rotation);
 	}
+}
+
+void Squad::resetFormationData()
+{
+	formationActive = false;
+	formationLeader = false;
+	formationLeaderReachedGoal = false;
+	formationFrontReachedGoal = false;
+	posInFormation = -1;
+	pathToTarget.clear();
+	currentPositionOnLeaderPath = 0;
+	nextPlaceOnPath = { 0, 0 };
+	positionOnPath = 0;
+	currentMovementState = SquadMovementState::MoveToFormationPoint;
+	takeCurrentCell = false;
+	takeCellAttemptPassed = false;
+	requestPath = false;
+	targetSet = false;
+	targetReached = false;
+	cellCenterReached = false;
+	currentCellPosition = { 0, 0 };
 }

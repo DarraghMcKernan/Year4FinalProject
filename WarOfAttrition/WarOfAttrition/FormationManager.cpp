@@ -247,10 +247,34 @@ void Formation::updateLeaderCopy(sf::Sprite t_leaderSprite)
 
 void Formation::clearData()
 {
-	formationPositions[0] = -1;
-	formationPositions[1] = -1;
-	formationPositions[2] = -1;
-	formationPositions[3] = -1;
+	for (int i = 0; i < MAX_FORMATION_SIZE; ++i)
+	{
+		formationPositions[i] = -1;
+	}
+
+	leaderTargetReached = false;
+	formationMovingActive = false;
+	leaderInfoSet = false;
+	turning = true;
+	rotateRight = true;
+	goalReached = false;
+
+	placeOnPath = 0;
+	pathToTarget.clear();
+	nextPlaceOnPath = { 0.0f, 0.0f };
+
+	leaderPosition = { 0.0f, 0.0f };
+	formationFront = { 0.0f, 0.0f };
+	targetPosition = { 0.0f, 0.0f };
+	startPosition = { 0.0f, 0.0f };
+
+	formationCircleDebugLeader.setPosition(0.f, 0.f);
+	formationCircleDebug1.setPosition(0.f, 0.f);
+	formationCircleDebug2.setPosition(0.f, 0.f);
+	formationCircleDebug3.setPosition(0.f, 0.f);
+
+	leaderRotation = 0.0f;
+	leaderCopy = sf::Sprite();
 }
 
 float Formation::updatedLeaderRotation()
