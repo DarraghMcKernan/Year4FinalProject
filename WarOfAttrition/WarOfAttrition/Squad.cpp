@@ -302,7 +302,7 @@ void Squad::setPosition(sf::Vector2f t_debugPosition)
 	}
 }
 
-void Squad::moveToFormationPosition(sf::Vector2f t_formationPosition, sf::Time& t_deltaTime)
+void Squad::updateFormationUnit(sf::Vector2f t_formationPosition, sf::Time& t_deltaTime)
 {
 	switch (currentMovementState)
 	{
@@ -723,11 +723,6 @@ void Squad::moveToFormation(sf::Vector2f t_formationPosition,sf::Time t_deltaTim
 {
 	if (t_formationPosition != sf::Vector2f(0, 0))
 	{
-		/*if (formationLeaderReachedGoal == true)
-		{
-			std::cout << "leader reached point, stand still\n";
-			return;
-		}*/
 		if (formationLeader == false)
 		{
 			bool outcome = checkFormationPointValid(t_formationPosition);

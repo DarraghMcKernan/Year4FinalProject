@@ -176,17 +176,10 @@ sf::Vector2f Formation::getFormationPosition(int t_posInFormation)
 		offset = sf::Vector2f(standardOffset.x * formationXSpread, -standardOffset.y * formationYSpread);
 	}
 
-	sf::Vector2f tempPos = offset;
-
-	//if (leaderCopy.getRotation() > 90 && leaderCopy.getRotation() < 270)
-	//{
-	//	tempPos.y = -tempPos.y;
-	//}
-
 	float cosTheta = std::cos(radians);
 	float sinTheta = std::sin(radians);
 
-	sf::Vector2f actualFormationPoint = sf::Vector2f(tempPos.x * cosTheta - tempPos.y * sinTheta, tempPos.x * sinTheta + tempPos.y * cosTheta);
+	sf::Vector2f actualFormationPoint = sf::Vector2f(offset.x * cosTheta - offset.y * sinTheta, offset.x * sinTheta + offset.y * cosTheta);
 
 	actualFormationPoint += formationFront;
 

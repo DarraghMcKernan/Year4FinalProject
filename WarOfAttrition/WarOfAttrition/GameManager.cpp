@@ -53,6 +53,13 @@ void GameManager::updateLoop()
 		timeSinceLastUpdate += deltaTime;
 		timeSinceLastFixedUpdate += deltaTime;
 
+		sf::Event event;
+		while (window.pollEvent(event))
+		{
+			if (event.type == sf::Event::Closed)
+				window.close();
+		}
+
 		//debugging - will end up as a setting later
 		frameCount++;//count how many frames have passed since last second
 		elapsedTime += deltaTime.asSeconds();
@@ -432,22 +439,7 @@ void GameManager::menuInteractions()
 {
 	if (worldEditingEnabled == true)
 	{
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1) && clickTimer == 0)
-		{
-			editingTerrainType = 0;
-			std::cout << "Ground tile selected\n";
-		}
-		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2) && clickTimer == 0)
-		{
-			editingTerrainType = 1;
-			std::cout << "Wall tile selected\n";
-		}
-		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3) && clickTimer == 0)
-		{
-			editingTerrainType = 2;
-			std::cout << "Water tile selected\n";
-		}
-		else if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 		{
 			worldTiles.updateTileType(2);
 			worldTilesModified = true;

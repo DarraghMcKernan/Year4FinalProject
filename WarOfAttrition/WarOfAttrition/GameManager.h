@@ -1,8 +1,6 @@
 #pragma once
-#include "globals.h"
 #include "Player.h"
 #include "TileGrid.h"
-#include "Enemy.h"
 #include "UI.h"
 
 

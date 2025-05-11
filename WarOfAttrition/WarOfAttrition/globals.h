@@ -2,11 +2,11 @@
 #include <iostream>
 #include <SFML/Graphics.hpp> 
 
-const float SCREEN_WIDTH = 1000.0f;//must be a multiple of the TILE_SIZE
-const float SCREEN_HEIGHT = 800.0f;
+const float SCREEN_WIDTH = 1500.0f;//must be a multiple of the TILE_SIZE
+const float SCREEN_HEIGHT = 1000.0f;
 
-const float VIEWPORT_WIDTH = 600.0f;//can be any size
-const float VIEWPORT_HEIGHT = 500.0f;
+const float VIEWPORT_WIDTH = 900.0f;//can be any size
+const float VIEWPORT_HEIGHT = 600.0f;
 
 const float TILE_SIZE = 50.0f;//define the size of the square tiles that make up the world
 const static float SPEED_MULTIPLIER = 0.6f;//allows the entire games units to be sped up or slowed down
@@ -65,7 +65,8 @@ struct SquadData
 class PositionNormaliser {
 public:
 
-    virtual sf::Vector2f normalizeToTileCenter(const sf::Vector2f& position) const {
+    virtual sf::Vector2f normalizeToTileCenter(const sf::Vector2f& position) const 
+	{
         float tileSize = 50.0f;
 
         float tileX = std::floor(position.x / tileSize) * tileSize;
@@ -74,7 +75,8 @@ public:
         return sf::Vector2f(tileX + tileSize / 2.0f, tileY + tileSize / 2.0f);
     }
 
-    virtual sf::Vector2f convertCellNumToCoords(const int t_cellNum) const {
+    virtual sf::Vector2f convertCellNumToCoords(const int t_cellNum) const 
+	{
 		int row = t_cellNum / TILE_COLUMNS;
 		int column = t_cellNum % TILE_COLUMNS;
 

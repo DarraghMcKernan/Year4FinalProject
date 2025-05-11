@@ -23,11 +23,10 @@ void Player::init(int t_teamNum, int t_unitType)
 	for (int index = 0; index < playerSquadsCount; index++)
 	{
 		playersSquads.push_back(newSquad);
-		startPos = { ((150 + index) % TILE_COLUMNS) * TILE_SIZE, ((150 + index + t_teamNum) / TILE_COLUMNS) * TILE_SIZE };
+
+		startPos = { ((250 + index) % TILE_COLUMNS) * TILE_SIZE, ((150 + index + t_teamNum) / TILE_COLUMNS) * TILE_SIZE };
 		startPos.y += t_teamNum * (TILE_SIZE * 3);
 		playersSquads[index].init(startPos, t_teamNum,0);
-		startPos = { ((150 + (index + 1)) % TILE_COLUMNS) * TILE_SIZE, ((150 + (index+1) + t_teamNum) / TILE_COLUMNS) * TILE_SIZE };
-		startPos.y += t_teamNum * (TILE_SIZE * 3);
 	}
 
 	//setCustomSquadData(tempSquadData,startPos);
@@ -110,7 +109,7 @@ void Player::update(sf::Time& t_deltaTime)
 		}
 		if (playersSquads[index].formationActive == true && formationMovementUnlocked == true)// && playersSquads[index].formationLeader == false)
 		{
-			playersSquads[index].moveToFormationPosition(formationTemp.getFormationPosition(playersSquads[index].getFormationNum()),t_deltaTime);
+			playersSquads[index].updateFormationUnit(formationTemp.getFormationPosition(playersSquads[index].getFormationNum()),t_deltaTime);
 			
 			std::vector<sf::Vector2f> culledFriendlyPositions;
 			std::vector<sf::Vector2f> friendlyPositions;
@@ -350,49 +349,6 @@ void Player::setTargetPosition(int t_cellNum)
 	}
 }
 
-std::vector<int> Player::collisionCheckerDamage(std::vector<sf::RectangleShape> targetToCheck, std::vector<SquadData> t_strength)
-{
-	std::vector<int> damageTaken;
-	int currentStrength = 0;
-
-	for (int enemySquadsIndex = 0; enemySquadsIndex < targetToCheck.size(); enemySquadsIndex++)
-	{
-		damageTaken.push_back(0);
-	}
-
-	for (int enemySquadsIndex = 0; enemySquadsIndex < targetToCheck.size(); enemySquadsIndex++)
-	{
-		for (int index = 0; index < playerSquadsCount; index++)
-		{
-			if (playersSquads[index].getTroopContainter().getGlobalBounds().intersects(targetToCheck[enemySquadsIndex].getGlobalBounds()))
-			{
-				int damage = t_strength[enemySquadsIndex].squadStrength;
-
-				int randomChance = rand() % 100;
-				if (randomChance < 30)
-				{
-					damage = damage * 0.9f;
-					std::cout << "Damage reduced\n";
-				}
-				else if (randomChance > 70)
-				{
-					damage = damage * 1.1f;
-					std::cout << "Damage increased\n";
-				}
-				currentStrength++;
-
-				int outcome = playersSquads[index].getSquadData().health - damage;
-				playersSquads[index].setHealth(outcome);
-
-				damageTaken[enemySquadsIndex] = damage;
-				//damageTaken.push_back(damage);
-			}
-		}
-	}
-
-	return damageTaken;//no targets found no damage done
-}
-
 bool Player::checkIfContained(sf::Vector2f t_pointToCheck)
 {
 	for (int index = 0; index < playerSquadsCount; index++)
@@ -489,36 +445,6 @@ void Player::eliminateUnit(int t_num)
 void Player::turnActive()
 {
 	squadsThatMoved.clear();
-}
-
-void Player::dealDamage(std::vector<int> t_damage)
-{
-	for (int index = 0; index < t_damage.size(); index++)
-	{
-		if (t_damage[index] != 0)
-		{
-			int randomChance = rand() % 100;
-			if (randomChance < 30)
-			{
-				t_damage[index] = t_damage[index] * 0.9f;
-				std::cout << "Damage reduced\n";
-			}
-			else if (randomChance > 70)
-			{
-				t_damage[index] = t_damage[index] * 1.1f;
-				std::cout << "Damage increased\n";
-			}
-
-			int outcome = playersSquads[squadsThatMoved[index]].getSquadData().health - t_damage[index];
-			playersSquads[squadsThatMoved[index]].setHealth(outcome);
-		}
-
-		//playersSquadsStrenghts[index].setString(std::to_string(playersSquads[index].getStrength()));
-	/*	if (playersSquads[squadsThatMoved[index]].getStrength() <= 0)
-		{
-			eliminateUnit(squadsThatMoved[index]);
-		}*/
-	}
 }
 
 void Player::dealDamageToUnit(int t_unit, int t_damage)

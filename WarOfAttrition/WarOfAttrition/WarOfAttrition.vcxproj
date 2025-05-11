@@ -131,11 +131,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="FormationManager.cpp" />
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Menu.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Squad.cpp" />
     <ClCompile Include="TileGrid.cpp" />
@@ -144,18 +142,15 @@
     <ClCompile Include="WorldTile.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Enemy.h" />
     <ClInclude Include="Explosion.h" />
     <ClInclude Include="FormationManager.h" />
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="globals.h" />
-    <ClInclude Include="Menu.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Squad.h" />
     <ClInclude Include="TileGrid.h" />
     <ClInclude Include="Tower.h" />
     <ClInclude Include="UI.h" />
-    <ClInclude Include="WorldEditor.h" />
     <ClInclude Include="WorldTile.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

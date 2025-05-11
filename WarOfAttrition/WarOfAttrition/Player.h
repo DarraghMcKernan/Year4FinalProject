@@ -19,7 +19,6 @@ public:
 	void fixedUpdate();
 	void render(sf::RenderWindow& t_window);
 	void setTargetPosition(int t_cellNum);//assign the cell set in worldTile to the squad currently being assigned
-	std::vector<int> collisionCheckerDamage(std::vector<sf::RectangleShape> targetToCheck, std::vector<SquadData> t_strength);//return damage dealt if any
 	bool checkIfContained(sf::Vector2f t_pointToCheck);//check if given coordinates is on a tile shared by one of the squads
 	void attemptEndTurn();
 	bool squadDistanceValid(sf::Vector2f t_hoveredTile);
@@ -27,7 +26,6 @@ public:
 	void generateNewTower(int t_type, int t_teamNum, sf::Vector2f t_position);
 	void eliminateUnit(int t_num);
 	void turnActive();
-	void dealDamage(std::vector<int> t_damage);
 	void dealDamageToUnit(int t_unit, int t_damage);
 	int getUnitStrength(int t_unit);
 	std::vector<sf::RectangleShape> returnSquadVerticalHitboxes();

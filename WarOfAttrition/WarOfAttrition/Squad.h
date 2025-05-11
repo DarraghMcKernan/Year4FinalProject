@@ -21,7 +21,7 @@ public:
 	sf::RectangleShape getTroopContainter();
 	void setTargetPosition(sf::Vector2f t_targetPos);
 	void setPosition(sf::Vector2f t_debugPosition);
-	void moveToFormationPosition(sf::Vector2f t_formationPosition, sf::Time& t_deltaTime);
+	void updateFormationUnit(sf::Vector2f t_formationPosition, sf::Time& t_deltaTime);
 	void placeOnRecentCell();
 	bool movingAllowed();
 	bool targetReached = true;

@@ -7,8 +7,6 @@ void TileGrid::init()
 	setupTextures();
 
 	sf::Sprite tempSprite;
-	tempSprite.setTexture(defaultTileTexture);
-
 	tempSprite.setTexture(customWaterSpritesheet);
 	int tilesPerRow = 10;
 	int tileWidth = 64;

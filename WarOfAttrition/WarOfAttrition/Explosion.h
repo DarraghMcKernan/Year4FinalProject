@@ -3,9 +3,9 @@
 
 class Explosion {
 public:
-    Explosion(sf::Vector2f spawnPos)
+    Explosion(sf::Vector2f t_spawnPos)
     {
-        position = spawnPos;
+        position = t_spawnPos;
         totalLifetime = static_cast<float>((rand() % 40) + 60) / 100.0f;//0.6 to 1 second
         delay = static_cast<float>(rand() % 60) / 100.0f;//0 to 0.6 seconds
         currentTime = 0.0f;
