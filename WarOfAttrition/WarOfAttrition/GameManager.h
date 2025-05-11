@@ -23,7 +23,6 @@ private:
 	void addUnit(int t_playerNum);
 	void removeUnit(int t_playerNum);
 	void updateUnitDataDisplay();
-	void setToFaceEnemy(sf::Sprite t_enemy);
 
 	static const int MAX_PLAYERS = 2;//maximum players in a game
 
