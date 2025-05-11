@@ -62,4 +62,8 @@ private:
 	bool worldTilesDataUpdated = false;
 	bool upgradeUnitMenuOpen = false;
 	bool customUnitModified = false;
+
+	float currentZoom = 1.0f;
+	float minZoom = 0.75f;
+	float maxZoom = 1.25f;
 };

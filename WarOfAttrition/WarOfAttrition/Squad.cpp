@@ -240,9 +240,9 @@ void Squad::fixedUpdate()
 
 void Squad::render(sf::RenderWindow& t_window)
 {
-	t_window.draw(troopContainer);
-	t_window.draw(horizontalHitbox);
-	t_window.draw(verticalHitbox);
+	//t_window.draw(troopContainer);
+	//t_window.draw(horizontalHitbox);
+	//t_window.draw(verticalHitbox);
 	t_window.draw(teamOutlineSprite);
 	if (extraSpriteNeeded == true)
 	{

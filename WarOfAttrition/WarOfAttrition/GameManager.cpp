@@ -298,69 +298,82 @@ void GameManager::updatePlayers(sf::Time& t_deltaTime)
 
 void GameManager::userControls(sf::View& t_viewport,sf::Time& t_deltaTime)
 {
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))//move viewport around the screen
+	sf::Vector2f movement(0.f, 0.f);
+	float moveSpeed = 400.f * t_deltaTime.asSeconds();
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) 
 	{
-		t_viewport.move(0, -400*t_deltaTime.asSeconds());
-		if (t_viewport.getCenter().y < TILE_SIZE * 4.975)
-		{
-			t_viewport.setCenter(t_viewport.getCenter().x, TILE_SIZE * 4.975);
-		}
+		movement.y -= moveSpeed;
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
 	{
-		t_viewport.move(0, 400 * t_deltaTime.asSeconds());
-		if (t_viewport.getCenter().y > (TILE_SIZE * TILE_COLUMNS) - (TILE_SIZE * 7.9))
-		{
-			t_viewport.setCenter(t_viewport.getCenter().x, (TILE_SIZE * TILE_COLUMNS) - (TILE_SIZE * 7.9));
-		}
+		movement.y += moveSpeed;
 	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) 
 	{
-		t_viewport.move(-400 * t_deltaTime.asSeconds(), 0);
-		if (t_viewport.getCenter().x < TILE_SIZE * 5.975)
-		{
-			t_viewport.setCenter(TILE_SIZE * 5.975, t_viewport.getCenter().y);
-		}
+		movement.x -= moveSpeed;
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 	{
-		t_viewport.move(400 * t_deltaTime.asSeconds(), 0);
-		if (t_viewport.getCenter().x > (TILE_SIZE * TILE_COLUMNS) - (TILE_SIZE * 5.975))
-		{
-			t_viewport.setCenter((TILE_SIZE * TILE_COLUMNS) - (TILE_SIZE * 5.975), t_viewport.getCenter().y);
-		}
+		movement.x += moveSpeed;
 	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)&& sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))//fast zoom
-	{
-		t_viewport.zoom(0.99);
-	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))//standard zoom
-	{
-		t_viewport.zoom(0.999);
-	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) && sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
-	{
-		t_viewport.zoom(1.01);
-	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
-	{
-		t_viewport.zoom(1.001);
-	}
-	//else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1) && clickTimer == 0)//debug
-	//{
-	//	clickTimer = 30;
-	//	player[0].eliminateUnit(0);
-	//}
-	//else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2) && clickTimer == 0)//debug
-	//{
-	//	clickTimer = 30;
-	//	player[1].eliminateUnit(0);
-	//}
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::C) && clickTimer == 0)
+	t_viewport.move(movement);
+
+	sf::Vector2f viewportCenter = t_viewport.getCenter();
+	sf::Vector2f viewportSize = t_viewport.getSize();
+
+	float halfViewportWidth = viewportSize.x / 2.0f;
+	float halfViewportHeight = viewportSize.y / 2.0f;
+
+	float xPosMaxDistance = TILE_COLUMNS * TILE_SIZE - halfViewportWidth;
+	float xViewportWidth = halfViewportWidth;
+	float yPosMaxDistance = (TILE_ROWS + 1.5f) * TILE_SIZE - halfViewportHeight;
+	float yViewportWidth = halfViewportHeight;
+
+	if (viewportCenter.x < xViewportWidth)
 	{
-		clickTimer = 30;
-		std::cout << "Mouse pos X: " << mousePosFloat.x << " Y: " << mousePosFloat.y << "\n";
+		viewportCenter.x = xViewportWidth;
+	}
+	if (viewportCenter.x > xPosMaxDistance) 
+	{
+		viewportCenter.x = xPosMaxDistance;
+	}
+	if (viewportCenter.y < yViewportWidth) 
+	{
+		viewportCenter.y = yViewportWidth;
+	}
+	if (viewportCenter.y > yPosMaxDistance) 
+	{
+		viewportCenter.y = yPosMaxDistance;
+	}
+
+	t_viewport.setCenter(viewportCenter);
+
+	float zoomFactor = 1.0f;
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && sf::Keyboard::isKeyPressed(sf::Keyboard::LShift)) // fast zoom in
+	{
+		zoomFactor = 0.99f;
+	}
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) // standard zoom in
+	{
+		zoomFactor = 0.999f;
+	}
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) && sf::Keyboard::isKeyPressed(sf::Keyboard::LShift)) // fast zoom out
+	{
+		zoomFactor = 1.01f;
+	}
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) // standard zoom out
+	{
+		zoomFactor = 1.001f;
+	}
+
+	float nextZoom = currentZoom * zoomFactor;
+	if (nextZoom >= minZoom && nextZoom <= maxZoom)
+	{
+		t_viewport.zoom(zoomFactor);
+		currentZoom = nextZoom;
 	}
 
 	if (createUnitActive == true || createTowerActive == true)

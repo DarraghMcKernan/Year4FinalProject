@@ -117,7 +117,7 @@ void UI::init()
 	playerTurnDisplay.setCharacterSize(60);//increase size and then downscale to prevent blurred text
 	playerTurnDisplay.setFillColor(sf::Color(0, 0, 255));
 	playerTurnDisplay.setOutlineThickness(2);
-	playerTurnDisplay.setScale(0.75, 0.75);
+	//playerTurnDisplay.setScale(0.85, 0.85);
 	playerTurnDisplay.setOrigin(0, 10);
 	playerTurnDisplay.setPosition(SCREEN_WIDTH / 50, SCREEN_HEIGHT - (SCREEN_HEIGHT / 6.5) / 2);
 
@@ -214,7 +214,7 @@ void UI::init()
 	moneyDisplay.setFont(font);
 	moneyDisplay.setCharacterSize(50);//increase size and then downscale to prevent blurred text
 	moneyDisplay.setFillColor(sf::Color::Black);
-	moneyDisplay.setScale(0.75, 0.75);
+	//moneyDisplay.setScale(0.85, 0.85);
 	moneyDisplay.setOrigin({ (moneyDisplay.getGlobalBounds().getSize().x / 2),(moneyDisplay.getGlobalBounds().getSize().y / 2) });
 	moneyDisplay.setPosition((SCREEN_WIDTH / 2) - SCREEN_WIDTH / 5, SCREEN_HEIGHT - (SCREEN_HEIGHT / 12.5));
 	moneyDisplay.setString(std::to_string(1000));
@@ -226,7 +226,7 @@ void UI::init()
 	moneyIcon.setTexture(moneyIconTexture);
 	moneyIcon.setOrigin(moneyIcon.getGlobalBounds().width / 2, moneyIcon.getGlobalBounds().height / 2);
 	moneyIcon.setPosition((SCREEN_WIDTH / 2) - SCREEN_WIDTH / 4.5, SCREEN_HEIGHT - (SCREEN_HEIGHT / 20));
-	moneyIcon.setScale(3, 3);
+	moneyIcon.setScale(3.5, 3.5);
 
 	framerateText.setFont(font);
 
@@ -385,20 +385,20 @@ void UI::init()
 	closeMenuX.setPosition({ (SCREEN_WIDTH / 2) - (upgradeMenuX / 2.3f),(upgradeUnitMenuBacking.getPosition().y) - (upgradeMenuY / 2.25f) });
 
 	chooseUnitSpriteText.setFont(font);
-	chooseUnitSpriteText.setCharacterSize(30);//increase size and then downscale to prevent blurred text
+	chooseUnitSpriteText.setCharacterSize(40);//increase size and then downscale to prevent blurred text
 	chooseUnitSpriteText.setFillColor(sf::Color::Black);
 	chooseUnitSpriteText.setScale(1, 1);
 	chooseUnitSpriteText.setString("Change Custom Unit Sprite");
 	chooseUnitSpriteText.setOrigin({ (chooseUnitSpriteText.getGlobalBounds().getSize().x / 2),(chooseUnitSpriteText.getGlobalBounds().getSize().y / 2)});
-	chooseUnitSpriteText.setPosition({ SCREEN_WIDTH / 2,(SCREEN_HEIGHT / 2) + (SCREEN_WIDTH / 12) });
+	chooseUnitSpriteText.setPosition({ SCREEN_WIDTH / 2,(SCREEN_HEIGHT / 2) + (SCREEN_WIDTH / 10.75f) });
 
 	arrowIconText.setFont(font);
-	arrowIconText.setCharacterSize(100);//increase size and then downscale to prevent blurred text
+	arrowIconText.setCharacterSize(110);//increase size and then downscale to prevent blurred text
 	arrowIconText.setFillColor(sf::Color::Black);
 	arrowIconText.setScale(1, 1);
-	arrowIconText.setString("<       >");
+	arrowIconText.setString("<          >");
 	arrowIconText.setOrigin({ (arrowIconText.getGlobalBounds().getSize().x / 2),(arrowIconText.getGlobalBounds().getSize().y / 2) });
-	arrowIconText.setPosition({ SCREEN_WIDTH / 2,(SCREEN_HEIGHT / 2) + (SCREEN_WIDTH / 8.6f) });
+	arrowIconText.setPosition({ (SCREEN_WIDTH / 2) - (SCREEN_WIDTH / 350.f),(SCREEN_HEIGHT / 2) + (SCREEN_WIDTH / 8.2f) });
 
 	customUnitSpriteBacking.setSize({ SCREEN_WIDTH / 2.5,SCREEN_HEIGHT / 6 });//
 	customUnitSpriteBacking.setOrigin({ customUnitSpriteBacking.getSize().x / 2,customUnitSpriteBacking.getSize().y / 2 });
@@ -573,14 +573,14 @@ void UI::render(sf::RenderWindow& t_window, bool t_squadData, bool t_createUnit,
 	t_window.draw(endTurnButton);
 	t_window.draw(openUnitMenuButton);
 	t_window.draw(openTowerMenuButton);
-	t_window.draw(resetTurnButton);
+	//t_window.draw(resetTurnButton);
 	t_window.draw(playerTurnDisplay);
 	t_window.draw(endTurnText);
 	t_window.draw(createUnitText);
 	t_window.draw(createTowerText);
 	t_window.draw(moneyDisplay);
 	t_window.draw(moneyIcon);
-	t_window.draw(framerateText);
+	//t_window.draw(framerateText);
 
 	if (t_squadData == true && upgradeMenuOpen == false)
 	{
@@ -715,12 +715,12 @@ void UI::handleMenuInteractions()
 		clickTimer = 30;
 		openCreateTowerMenu = false;
 	}
-	else if ((sf::Mouse::isButtonPressed(sf::Mouse::Left) && resetTurnButton.getGlobalBounds().contains({ static_cast<float>(mousePos.x),static_cast<float>(mousePos.y) })) && clickTimer == 0)
-	{
-		resetTurnButton.setFillColor(sf::Color(150, 50, 50));
-		clickTimer = 30;
-		resetPlayerForThisTurn = true;
-	}
+	//else if ((sf::Mouse::isButtonPressed(sf::Mouse::Left) && resetTurnButton.getGlobalBounds().contains({ static_cast<float>(mousePos.x),static_cast<float>(mousePos.y) })) && clickTimer == 0)
+	//{
+	//	resetTurnButton.setFillColor(sf::Color(150, 50, 50));
+	//	clickTimer = 30;
+	//	resetPlayerForThisTurn = true;
+	//}
 	else if ((sf::Mouse::isButtonPressed(sf::Mouse::Left) && createTankUnit.getGlobalBounds().contains({ static_cast<float>(mousePos.x),static_cast<float>(mousePos.y) })) && openCreateUnitMenu == true && clickTimer == 0)
 	{
 		clickTimer = 30;

@@ -6,7 +6,7 @@ const float SCREEN_WIDTH = 1500.0f;//must be a multiple of the TILE_SIZE
 const float SCREEN_HEIGHT = 1000.0f;
 
 const float VIEWPORT_WIDTH = 900.0f;//can be any size
-const float VIEWPORT_HEIGHT = 600.0f;
+const float VIEWPORT_HEIGHT = 725.0f;
 
 const float TILE_SIZE = 50.0f;//define the size of the square tiles that make up the world
 const static float SPEED_MULTIPLIER = 0.6f;//allows the entire games units to be sped up or slowed down

@@ -24,9 +24,18 @@ void Player::init(int t_teamNum, int t_unitType)
 	{
 		playersSquads.push_back(newSquad);
 
-		startPos = { ((250 + index) % TILE_COLUMNS) * TILE_SIZE, ((150 + index + t_teamNum) / TILE_COLUMNS) * TILE_SIZE };
-		startPos.y += t_teamNum * (TILE_SIZE * 3);
-		playersSquads[index].init(startPos, t_teamNum,0);
+		if (t_teamNum == 0)
+		{
+			startPos.x = (6 + index) * TILE_SIZE;
+			startPos.y = 6 * TILE_SIZE;
+		}
+		else if (t_teamNum == 1)
+		{
+			startPos.x = (TILE_COLUMNS - 6 - index) * TILE_SIZE;
+			startPos.y = (TILE_ROWS - 6) * TILE_SIZE;
+		}
+
+		playersSquads[index].init(startPos, t_teamNum, 0);
 	}
 
 	//setCustomSquadData(tempSquadData,startPos);
